@@ -1,0 +1,145 @@
+\chapter{Marco Teórico}
+
+\section{Computación en la nube (Cloud Computing)}
+
+\subsection{Definición de computación en la nube}
+
+La computación en la nube se define como un modelo que permite el acceso ubicuo, conveniente y bajo demanda, mediante red, a un conjunto compartido de recursos computacionales configurables que pueden aprovisionarse y liberarse rápidamente con un mínimo esfuerzo administrativo o interacción con el proveedor del servicio \parencite{Mell2011}.
+
+\subsubsection{Características principales}
+
+De acuerdo con MELL y GRANCE (2011), la computación en la nube posee cinco características esenciales que permiten diferenciar este modelo de otros enfoques tradicionales de provisión de recursos informáticos. En primer lugar, el autoservicio bajo demanda permite que los usuarios aprovisionen recursos de manera automática según sus necesidades, sin requerir intervención directa del proveedor. En segundo lugar, el acceso amplio a la red posibilita utilizar los servicios desde distintos dispositivos conectados a Internet. A su vez, la agrupación de recursos permite compartir infraestructura física entre múltiples usuarios mediante mecanismos de virtualización, optimizando el uso de los recursos disponibles. Otra característica es la elasticidad rápida, que permite aumentar o disminuir dinámicamente la capacidad disponible en función de la demanda. Finalmente, el servicio medido habilita el monitoreo y control del consumo de recursos, permitiendo modelos de facturación basados en el uso efectivo del servicio. Estas características contribuyen a mejorar la eficiencia operativa y la flexibilidad en la gestión de infraestructura tecnológica.
+
+\subsection{Modelos de servicio}
+
+Según MELL y GRANCE (2011), la computación en la nube se estructura en tres modelos principales de servicio: Software as a Service (SaaS), donde el usuario utiliza aplicaciones alojadas por el proveedor; Platform as a Service (PaaS), que permite desarrollar y desplegar aplicaciones utilizando una plataforma administrada; e Infrastructure as a Service (IaaS), que ofrece acceso a recursos de infraestructura como procesamiento, almacenamiento y redes.
+
+\subsection{Modelos de despliegue}
+
+Según MELL y GRANCE (2011), la computación en la nube puede implementarse mediante distintos modelos de despliegue: nube privada (private cloud), destinada al uso exclusivo de una organización; nube comunitaria (community cloud), compartida por organizaciones con intereses o requisitos comunes; nube pública (public cloud), disponible para uso abierto del público general; y nube híbrida (hybrid cloud), que combina dos o más infraestructuras de nube manteniendo interoperabilidad entre ellas.
+
+En síntesis, la computación en la nube constituye un paradigma orientado a la provisión flexible de recursos tecnológicos mediante Internet. Sus características, modelos de servicio y formas de despliegue permiten adaptar la infraestructura a distintos contextos organizacionales \parencite{Mell2011}.
+
+\section{Arquitectura y administración de infraestructura cloud}
+
+\subsection{Concepto de infraestructura cloud}
+
+La infraestructura cloud se compone de un conjunto de recursos computacionales configurables y compartidos, entre los que se incluyen capacidades de procesamiento, almacenamiento, redes y otros servicios tecnológicos accesibles mediante Internet. Estos recursos pueden aprovisionarse y liberarse rápidamente de acuerdo con la demanda, permitiendo una mayor flexibilidad y escalabilidad respecto de modelos tradicionales basados en infraestructura física local \parencite{Mell2011}.
+
+En entornos empresariales, la provisión de infraestructura cloud suele ser ofrecida por plataformas especializadas que permiten desplegar y administrar recursos tecnológicos bajo demanda, reduciendo la necesidad de mantener infraestructura propia. Entre los principales proveedores de servicios cloud se encuentran plataformas comerciales ampliamente utilizadas en el mercado, como Amazon Web Services (AWS), Microsoft Azure, Google Cloud Platform (GCP) y Huawei Cloud.
+
+Amazon Web Services define la computación en la nube como la entrega bajo demanda de recursos de TI mediante Internet con un modelo de pago por consumo \parencite{AWS2024}.
+
+\subsection{Administración de infraestructura cloud}
+
+La administración de infraestructura cloud comprende el conjunto de actividades orientadas al aprovisionamiento, configuración, supervisión y optimización de recursos computacionales ofrecidos por plataformas de servicios en la nube. A través de mecanismos de administración centralizada, automatización y escalabilidad dinámica, los proveedores cloud permiten crear, modificar y eliminar recursos de infraestructura según las necesidades operativas de cada organización, reduciendo la dependencia del mantenimiento directo del hardware físico \parencite{Mell2011, AWS2023}.
+
+Entre las principales actividades involucradas en la administración de infraestructura cloud se encuentran la gestión de servidores virtuales, la configuración de redes y sistemas de almacenamiento, el monitoreo del consumo de recursos, la escalabilidad de servicios en función de la demanda, el control de costos operativos y la automatización de despliegues \parencite{AWS2026}. Estas prácticas permiten mejorar la disponibilidad y el rendimiento de los servicios, optimizar el uso de los recursos tecnológicos y favorecer una mayor flexibilidad operativa dentro de los entornos cloud.
+
+\section{Escalabilidad y elasticidad}
+
+La capacidad de adaptación frente a cambios en la demanda constituye una de las principales ventajas de las arquitecturas basadas en computación en la nube. En este contexto, la escalabilidad y la elasticidad permiten ajustar el consumo de recursos y mantener niveles adecuados de rendimiento, disponibilidad y eficiencia operativa.
+
+La escalabilidad hace referencia a la capacidad de un sistema para incrementar o reducir los recursos disponibles con el objetivo de responder a variaciones en la carga de trabajo manteniendo niveles aceptables de desempeño. En entornos cloud, esta capacidad puede implementarse mediante mecanismos de escalado vertical, aumentando la capacidad de recursos existentes, o mediante escalado horizontal, incorporando nuevas instancias o componentes dentro de la infraestructura. Esta propiedad permite que los sistemas puedan adaptarse al crecimiento o disminución de la demanda sin comprometer su funcionamiento \parencite{Ullah2018}.
+
+Por otra parte, la elasticidad corresponde a la capacidad de aprovisionar y liberar recursos de manera rápida y adaptable frente a cambios en la demanda, generando para el consumidor la percepción de contar con recursos prácticamente ilimitados disponibles cuando sean requeridos \parencite{Mell2011}.
+
+Si bien ambos conceptos se encuentran estrechamente relacionados, presentan diferencias conceptuales. Mientras que la escalabilidad se orienta principalmente al crecimiento o reducción de capacidad para soportar variaciones en la carga del sistema, la elasticidad incorpora además la capacidad de realizar dichos ajustes de forma dinámica y en correspondencia temporal con la demanda efectiva, buscando optimizar el uso de recursos disponibles \parencite{Ullah2018, Mell2011}.
+
+\section{Monitoreo}
+
+\subsection{Concepto de monitoreo}
+
+El monitoreo comprende el conjunto de actividades orientadas a recopilar, procesar y analizar información sobre el estado y comportamiento de sistemas e infraestructura con el objetivo de evaluar su rendimiento, disponibilidad y funcionamiento operativo. En entornos de computación en la nube, el monitoreo adquiere mayor relevancia debido a características como la escalabilidad, la elasticidad y el aprovisionamiento dinámico de recursos, requiriendo mecanismos capaces de obtener información continua para facilitar la administración y toma de decisiones sobre la infraestructura \parencite{Ward2014}.
+
+El monitoreo de infraestructura cloud comprende el conjunto de procesos orientados a recopilar, procesar y analizar información sobre el estado y comportamiento de los recursos desplegados en entornos de computación en la nube con el objetivo de evaluar su rendimiento, disponibilidad y funcionamiento operativo. De acuerdo con Ward y Barker (2014), el proceso de monitoreo se compone principalmente de tres etapas: la recolección de datos, el análisis de la información obtenida y la toma de decisiones basada en los resultados del análisis. Para llevar adelante estas actividades, las plataformas de monitoreo emplean mecanismos como agentes distribuidos, servidores de monitoreo, sistemas de recolección mediante consultas o envío de métricas, almacenamiento de estados del sistema, generación de alertas y herramientas de visualización. También pueden utilizar métricas de rendimiento, utilización de recursos, disponibilidad, registros de eventos y otros indicadores operativos para facilitar la administración y el control de entornos cloud \parencite{Ward2014}.
+
+El monitoreo en entornos cloud puede realizarse sobre diferentes niveles de la infraestructura y los servicios desplegados. De acuerdo con Ward y Barker (2014), las estrategias de monitoreo suelen abarcar componentes físicos y virtuales, recursos computacionales, redes, almacenamiento, aplicaciones y servicios ofrecidos al usuario final. Esta organización multinivel permite obtener una visión más completa del comportamiento del entorno y facilita la identificación de problemas de rendimiento, disponibilidad o utilización de recursos dentro de arquitecturas distribuidas \parencite{Ward2014}.
+
+En consecuencia, el monitoreo adquiere un rol central dentro de la administración de infraestructura cloud, ya que permite obtener visibilidad sobre el comportamiento de recursos y servicios en entornos caracterizados por cambios dinámicos y distribución de componentes. Debido a la complejidad y variabilidad de estos entornos, las estrategias de monitoreo deben combinar distintos mecanismos de recolección y análisis de información para adaptarse a los objetivos operativos y facilitar la gestión eficiente de la infraestructura. En este contexto, el monitoreo constituye una base fundamental para tareas posteriores de optimización, automatización y mejora continua de los sistemas desplegados en la nube \parencite{Ward2014}.
+
+\section{Observabilidad}
+
+La observabilidad corresponde a la capacidad de comprender el estado interno y el comportamiento de un sistema a partir del análisis de las señales que éste genera externamente. En entornos cloud y arquitecturas distribuidas, la observabilidad amplía el alcance del monitoreo tradicional al no limitarse únicamente a detectar eventos previamente definidos, sino que busca proporcionar información suficiente para investigar comportamientos inesperados y comprender el origen de incidentes. Para ello, las plataformas de observabilidad suelen apoyarse en la recopilación y correlación de tres fuentes principales de información: métricas, que permiten representar el comportamiento del sistema mediante indicadores cuantitativos; registros de eventos (logs), que aportan detalle sobre sucesos ocurridos; y trazabilidad distribuida (distributed tracing), que permite reconstruir el recorrido de solicitudes entre múltiples componentes del sistema \parencite{Kratzke2022}.
+
+En este sentido, mientras que el monitoreo se orienta principalmente al seguimiento continuo del estado de la infraestructura y la generación de alertas, la observabilidad busca proporcionar el nivel de información necesario para interpretar el comportamiento del sistema y facilitar el diagnóstico de problemas complejos \parencite{Kratzke2022}.
+
+\section{Gestión y optimización de costos cloud}
+
+La gestión y optimización de costos en entornos de computación en la nube comprende el conjunto de prácticas orientadas a supervisar, analizar y controlar el consumo de recursos tecnológicos con el objetivo de maximizar el valor generado por la infraestructura utilizada. Debido al modelo de consumo bajo demanda característico de la nube, las organizaciones requieren mecanismos que permitan mantener visibilidad sobre el uso de recursos, comprender el impacto económico de las decisiones técnicas y ajustar el gasto en función de objetivos operativos y de negocio \parencite{FinOps2026}.
+
+En este contexto surge FinOps, entendido como un marco operativo y una práctica organizacional orientada a maximizar el valor del uso de tecnologías mediante la colaboración entre equipos técnicos, financieros y de negocio. A diferencia de enfoques tradicionales centrados únicamente en la reducción de costos, FinOps propone generar responsabilidad financiera compartida y favorecer la toma de decisiones basada en datos para equilibrar variables como velocidad, calidad y gasto operativo \parencite{FinOps2026}.
+
+De acuerdo con el FinOps Framework, la gestión financiera de la nube se desarrolla como un proceso iterativo compuesto por tres etapas principales: Inform, orientada a generar visibilidad y comprensión del consumo y los costos; Optimize, enfocada en identificar oportunidades de eficiencia y reducción del desperdicio; y Operate, destinada a incorporar métricas, gobierno y procesos continuos para sostener la optimización en el tiempo. Entre las prácticas asociadas se incluyen la asignación de costos, presupuestación, análisis del consumo, definición de indicadores y establecimiento de mecanismos de control y seguimiento del gasto tecnológico \parencite{FinOpsFramework2026}.
+
+La optimización de recursos cloud comprende el conjunto de prácticas orientadas a asignar, ajustar y administrar los recursos computacionales de manera eficiente con el objetivo de maximizar el rendimiento, mantener niveles adecuados de disponibilidad y reducir el desperdicio de capacidad y costos operativos. En entornos cloud, este proceso busca alinear el aprovisionamiento de infraestructura con las necesidades reales de las cargas de trabajo mediante mecanismos como el ajuste de capacidad (rightsizing), el escalado automático, la redistribución de cargas y el monitoreo continuo del consumo de recursos. Asimismo, la optimización requiere visibilidad permanente sobre el comportamiento del entorno para identificar recursos subutilizados o sobreaprovisionados y favorecer decisiones que permitan equilibrar desempeño, eficiencia y costo dentro de la infraestructura \parencite{IBM2026, FinOpsFramework2026}.
+
+La optimización de recursos complementa las prácticas de gestión y optimización de costos, ya que no se orienta únicamente a disminuir el gasto económico, sino también a asegurar que los recursos consumidos generen valor operativo y se encuentren alineados con los objetivos del negocio \parencite{IBM2026, FinOps2026}.
+
+\section{Infrastructure as Code (IaC)}
+
+\subsection{Concepto de Infrastructure as Code}
+
+La Infraestructura como Código (Infrastructure as Code -- IaC) corresponde a una práctica orientada a definir, aprovisionar y administrar infraestructura tecnológica mediante archivos de configuración y procesos automatizados en lugar de realizar configuraciones manuales sobre los recursos. Bajo este enfoque, la infraestructura es tratada de forma similar al código fuente de una aplicación, permitiendo aplicar mecanismos como control de versiones, reutilización, pruebas y despliegues repetibles para mejorar la consistencia y reducir errores operativos. Asimismo, IaC busca evitar diferencias entre entornos y favorecer una administración más eficiente de recursos en arquitecturas modernas y entornos cloud \parencite{Microsoft2025}.
+
+\subsection{Terraform}
+
+Entre las herramientas utilizadas para implementar este enfoque se encuentra Terraform, una herramienta de Infraestructura como Código desarrollada por HashiCorp que permite definir y administrar recursos mediante archivos declarativos reutilizables. Terraform posibilita automatizar el aprovisionamiento y administración de infraestructura tanto en entornos locales como en múltiples proveedores cloud utilizando un flujo consistente para desplegar y mantener recursos a lo largo de su ciclo de vida \parencite{HashiCorp2026}.
+
+En este sentido, IaC contribuye a incrementar la estandarización y reproducibilidad de la infraestructura, facilitando procesos de automatización y reduciendo la dependencia de configuraciones manuales dentro de entornos de computación en la nube \parencite{Microsoft2025, HashiCorp2026}.
+
+\section{Machine Learning aplicado a infraestructura cloud}
+
+\subsection{Concepto de Machine Learning}
+
+El Machine Learning (aprendizaje automático) corresponde a una rama de la inteligencia artificial orientada al desarrollo de modelos capaces de identificar patrones y generar predicciones o decisiones a partir del análisis de datos, sin requerir que todas las reglas de comportamiento sean definidas explícitamente mediante programación tradicional. A través del entrenamiento sobre conjuntos de datos, los algoritmos de aprendizaje automático ajustan sus parámetros internos con el objetivo de mejorar progresivamente su desempeño frente a una determinada tarea \parencite{Mishra2023}.
+
+\subsection{Aprendizaje supervisado y no supervisado}
+
+Dentro de las principales categorías de Machine Learning se encuentran el aprendizaje supervisado y el aprendizaje no supervisado. El aprendizaje supervisado se basa en el uso de conjuntos de datos etiquetados, donde cada dato de entrada se encuentra asociado a un resultado esperado, permitiendo que el modelo aprenda relaciones entre variables para realizar tareas de clasificación o predicción. Por el contrario, el aprendizaje no supervisado trabaja con datos sin etiquetar y busca descubrir patrones, agrupamientos o estructuras presentes en los datos sin contar previamente con resultados conocidos \parencite{Mishra2023}.
+
+\section{Algoritmo Isolation Forest}
+
+Isolation Forest es un algoritmo de aprendizaje automático no supervisado orientado a la detección de anomalías mediante el aislamiento de observaciones que presentan comportamientos diferentes respecto del conjunto de datos analizado. A diferencia de enfoques tradicionales basados en medidas de distancia o densidad, Isolation Forest identifica anomalías construyendo múltiples árboles de decisión aleatorios (Isolation Trees) que separan progresivamente los datos mediante particiones sucesivas. Bajo este enfoque, las observaciones anómalas tienden a requerir una menor cantidad de divisiones para quedar aisladas respecto de los datos considerados normales, permitiendo asignar una puntuación de anomalía a cada observación \parencite{Chen2023}.
+
+Entre las principales ventajas de Isolation Forest se encuentran su baja complejidad computacional, la capacidad de operar eficientemente sobre conjuntos de datos de gran volumen y alta dimensionalidad, y el hecho de no requerir datos previamente etiquetados para su entrenamiento. Estas características favorecen su aplicación en escenarios donde los eventos anómalos son poco frecuentes o difíciles de identificar previamente. Además, al no depender directamente de cálculos de distancia entre observaciones, el algoritmo puede reducir el costo computacional respecto de otros enfoques tradicionales de detección de anomalías \parencite{Chen2023}.
+
+En el contexto de sistemas e infraestructura tecnológica, Isolation Forest puede contribuir a la detección de anomalías mediante el análisis del comportamiento histórico y operativo del entorno con el objetivo de identificar desviaciones respecto de patrones considerados normales. Para ello, el algoritmo puede utilizar información proveniente de métricas, registros de eventos (logs), utilización de recursos, tráfico de red o indicadores de rendimiento para detectar comportamientos inusuales que puedan asociarse con fallos operativos, degradación del servicio, incidentes de seguridad o utilización anómala de recursos. De esta manera, el modelo permite complementar estrategias tradicionales de monitoreo y favorecer mecanismos más proactivos de supervisión del sistema \parencite{Chen2023}.
+
+\section{Interfaces gráficas y visualización de datos}
+
+La visualización de datos comprende el proceso de representar información mediante elementos gráficos con el objetivo de facilitar su interpretación, exploración y análisis por parte de los usuarios. A través de mecanismos como gráficos, paneles de control (dashboards), indicadores visuales y representaciones interactivas, la visualización permite transformar grandes volúmenes de datos en información más comprensible y útil para la toma de decisiones \parencite{Munzner2014}.
+
+En entornos de computación en la nube, la visualización adquiere especial relevancia debido a la cantidad de información generada por métricas de consumo, monitoreo, utilización de recursos y costos operativos. La representación visual de estos datos permite identificar patrones de uso, detectar comportamientos anómalos y comprender el impacto de las decisiones sobre la infraestructura, favoreciendo procesos de optimización y gestión del entorno tecnológico \parencite{Munzner2014}.
+
+Por otra parte, la experiencia del usuario (User Experience -- UX) aplicada a la visualización busca diseñar mecanismos que permitan a los usuarios interpretar información de manera eficiente y reducir la carga cognitiva asociada al análisis de datos. En este contexto, el uso adecuado de elementos visuales, jerarquías de información, interacción y organización de contenidos puede mejorar la velocidad de comprensión y favorecer una toma de decisiones más efectiva sobre sistemas complejos \parencite{Shneiderman1996}.
+
+\section{DevOps y Automatización}
+
+\subsection{Concepto de DevOps}
+
+DevOps corresponde a un enfoque organizacional y técnico orientado a integrar las actividades de desarrollo de software (Development) y operaciones de infraestructura (Operations) con el objetivo de mejorar la velocidad, confiabilidad y calidad en la entrega de soluciones tecnológicas. Este enfoque promueve la colaboración entre equipos, la automatización de procesos y la adopción de prácticas que permitan reducir el tiempo entre el desarrollo y la puesta en producción de cambios, manteniendo la estabilidad y disponibilidad de los servicios \parencite{GoogleCloud2026}.
+
+Dentro de este contexto, el profesional DevOps participa en el diseño, implementación y mantenimiento de procesos que permitan automatizar y optimizar el ciclo de vida del software y la infraestructura. Entre sus responsabilidades suelen incluirse la construcción y administración de pipelines de integración y entrega continua (CI/CD), la administración de infraestructura cloud, la automatización del aprovisionamiento mediante Infraestructura como Código (IaC), el monitoreo de servicios, la gestión de despliegues y el análisis de incidentes operativos \parencite{GoogleCloud2026}.
+
+Las investigaciones del programa DevOps Research and Assessment (DORA) indican que la adopción de capacidades técnicas y organizacionales asociadas a DevOps contribuye a mejorar el rendimiento de entrega de software y el desempeño general de las organizaciones. Entre dichas capacidades se incluyen la automatización, la integración continua, la entrega continua, la administración eficiente de infraestructura cloud y el monitoreo continuo de los servicios \parencite{GoogleCloud2026}.
+
+\subsection{Automatización de procesos}
+
+La automatización corresponde al uso de procesos, herramientas y mecanismos tecnológicos destinados a ejecutar tareas de forma automática con mínima o nula intervención manual. En entornos de infraestructura y computación en la nube, la automatización busca reducir actividades repetitivas y operativas mediante la definición de reglas, configuraciones y flujos de trabajo capaces de aprovisionar, administrar y mantener recursos tecnológicos de manera consistente y reproducible \parencite{RedHat2026}.
+
+Dentro de la administración de infraestructura cloud, la automatización puede aplicarse sobre actividades como el aprovisionamiento de recursos, despliegue de aplicaciones, configuración de entornos, monitoreo, recuperación ante fallos, escalabilidad y optimización del consumo de recursos. Este enfoque contribuye a disminuir errores derivados de configuraciones manuales, mejorar la velocidad de entrega de cambios y aumentar la capacidad de respuesta frente a variaciones en la demanda del sistema \parencite{RedHat2026}.
+
+La automatización constituye uno de los principios fundamentales dentro de las prácticas DevOps, permitiendo integrar procesos de desarrollo y operaciones mediante mecanismos como integración continua (Continuous Integration -- CI), entrega continua (Continuous Delivery -- CD), Infraestructura como Código (Infrastructure as Code -- IaC) y despliegues repetibles. Estas prácticas favorecen ciclos de entrega más rápidos y una administración más eficiente de los entornos tecnológicos \parencite{GoogleCloud2026}.
+
+En consecuencia, la automatización permite transformar procesos tradicionalmente manuales en procesos controlados y reproducibles, contribuyendo a incrementar la eficiencia operativa, mejorar la calidad de los despliegues y facilitar la administración de entornos cloud modernos \parencite{RedHat2026, GoogleCloud2026}.
+
+\subsection{Integración entre automatización y monitoreo}
+
+El monitoreo y la automatización constituyen prácticas complementarias dentro de la administración de infraestructura y operaciones en entornos cloud. Mientras que el monitoreo se orienta a recopilar, procesar y analizar información sobre el estado y comportamiento de los sistemas, la automatización utiliza dicha información como entrada para ejecutar acciones de manera automática sobre la infraestructura o los servicios administrados.
+
+En este contexto, los datos obtenidos mediante métricas, registros de eventos y alertas generadas por los mecanismos de monitoreo pueden utilizarse para activar procesos automatizados orientados a responder ante determinadas condiciones operativas. Entre estas acciones pueden encontrarse el aprovisionamiento dinámico de recursos, el escalado automático de infraestructura, la recuperación ante fallos, la ejecución de despliegues o la optimización del consumo de recursos \parencite{Ward2014, RedHat2026}.
+
+La integración entre monitoreo y automatización permite reducir la intervención manual sobre tareas operativas repetitivas y favorecer una administración más dinámica de los entornos tecnológicos. Asimismo, esta relación contribuye a disminuir tiempos de respuesta frente a incidentes y facilita la adaptación del sistema ante cambios en la demanda o en las condiciones de operación \parencite{GoogleCloud2026}.
+
+En consecuencia, el monitoreo proporciona la visibilidad necesaria para comprender el comportamiento del entorno, mientras que la automatización transforma dicha información en acciones ejecutables que permitan mantener el funcionamiento eficiente y continuo de la infraestructura.
