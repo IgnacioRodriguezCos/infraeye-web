@@ -1,0 +1,176 @@
+\chapter{Análisis de los resultados de la encuesta}
+
+Con el objetivo de relevar la percepción de los usuarios respecto de la
+administración y optimización de recursos en entornos de computación en
+la nube, se realizó una encuesta mediante Google Forms. Se obtuvieron un
+total de 48 respuestas. El cuestionario permitió recopilar información
+tanto de usuarios con experiencia práctica en la administración de
+infraestructura cloud como de personas sin experiencia directa,
+diferenciando posteriormente ambos grupos para evitar que la falta de
+experiencia condicionara el análisis de las preguntas de carácter
+técnico. Los resultados completos y las respuestas individuales se
+presentan en el Anexo correspondiente.
+
+En primer lugar, se analizó la existencia de dificultades relacionadas
+con la utilización eficiente de los recursos cloud. De los 48
+participantes, 15 manifestaron contar con experiencia práctica en la
+administración de infraestructura en la nube. Dentro de este grupo, 10
+participantes indicaron haber experimentado gastos inesperados o
+sobrecostos asociados al uso de servicios cloud, mientras que los 5
+restantes indicaron no haber atravesado esta situación. En consecuencia,
+aproximadamente el 66,7 \% de los participantes con experiencia práctica
+manifestó haber experimentado algún grado de sobrecosto. Este resultado
+permite observar que los costos derivados de una utilización ineficiente
+de los recursos constituyen una problemática presente entre los usuarios
+con experiencia en este tipo de infraestructura.
+
+Se consultó a los participantes con experiencia sobre la dificultad para
+identificar recursos ineficientes dentro de una infraestructura cloud,
+utilizando una escala de 1 a 5. Las respuestas se concentraron
+principalmente en los valores intermedios y altos, obteniéndose un
+promedio de 3,56 sobre 5. Esto permite caracterizar la identificación de
+recursos ineficientes como una tarea de dificultad moderada a elevada.
+
+En relación con las métricas utilizadas para evaluar el estado de los
+recursos, los costos fueron el indicador mencionado con mayor frecuencia
+entre los participantes con experiencia, seguido por el uso de CPU y el
+almacenamiento. La memoria RAM también presentó una frecuencia elevada,
+mientras que variables como la disponibilidad, el tráfico de red y el
+uso de contenedores tuvieron una presencia menor. Estos resultados
+respaldan la selección inicial de métricas consideradas por la solución
+propuesta, particularmente aquellas relacionadas con el consumo de CPU,
+memoria y almacenamiento, complementadas por información económica
+asociada a los recursos.
+
+Por otra parte, se relevó qué herramientas utilizan actualmente los
+participantes con experiencia práctica para monitorear, administrar y
+optimizar sus infraestructuras cloud. Entre las soluciones mencionadas
+se encontraron herramientas ampliamente reconocidas en el mercado, como
+Grafana, Amazon CloudWatch, Datadog, Prometheus, Kubernetes Dashboard,
+New Relic y Terraform. Resulta particularmente relevante que varios de
+los participantes con experiencia práctica indicaron utilizar
+herramientas que constituyen alternativas o competidores directos
+respecto de distintas funcionalidades contempladas en la solución
+propuesta. Por ejemplo, Datadog y New Relic ofrecen capacidades de
+monitoreo y observabilidad, mientras que Amazon CloudWatch proporciona
+servicios de monitoreo sobre infraestructura de AWS. La presencia de
+estas herramientas entre las respuestas permite considerar que una parte
+de la muestra posee conocimiento y experiencia real con soluciones
+existentes en el mercado, por lo que sus respuestas aportan una
+perspectiva relevante para evaluar las necesidades y limitaciones de las
+alternativas actuales. A su vez, la diversidad de herramientas
+utilizadas evidencia que los usuarios recurren a diferentes soluciones
+para cubrir necesidades específicas de monitoreo, visualización,
+administración e infraestructura como código. Esta posible fragmentación
+resulta relevante para la propuesta desarrollada, que busca integrar en
+una misma plataforma el análisis de utilización de recursos, la
+detección de ineficiencias, la generación de recomendaciones de
+optimización y la automatización mediante infraestructura como código.
+
+Respecto de las principales limitaciones percibidas en las herramientas
+utilizadas actualmente, la complejidad fue el aspecto mencionado con
+mayor frecuencia, seguida por los costos elevados y la poca capacidad de
+visualización. También se identificaron dificultades relacionadas con la
+integración entre herramientas y con la utilidad de algunas de las
+recomendaciones proporcionadas por las soluciones existentes. Estos
+resultados permiten observar que la problemática no se limita
+exclusivamente a la disponibilidad de métricas, sino que también
+comprende la capacidad de interpretar dicha información y transformarla
+en acciones concretas de optimización. En este sentido, una solución que
+únicamente presente métricas o detecte anomalías podría resultar
+insuficiente si no proporciona información que facilite la toma de
+decisiones.
+
+La encuesta también permitió analizar el interés de los participantes
+respecto de las funcionalidades que podría ofrecer una plataforma
+orientada a la optimización de recursos cloud. Las funcionalidades
+seleccionadas con mayor frecuencia fueron el monitoreo del uso de
+recursos y la generación de recomendaciones para optimizar costos, ambas
+mencionadas por 27 participantes. A continuación, se ubicó la detección
+automática de desperdicio de recursos, seleccionada por 20
+participantes. También se identificó interés en funcionalidades
+relacionadas con la generación de reportes y visualizaciones, la
+automatización de despliegues y las alertas. Estos resultados presentan
+una correspondencia directa con los objetivos de la solución propuesta,
+dado que las principales funcionalidades demandadas pueden organizarse
+en un flujo compuesto por la observación del comportamiento de los
+recursos, la detección de situaciones ineficientes y la generación de
+recomendaciones orientadas a su optimización.
+
+Un aspecto particularmente relevante fue la valoración general de una
+plataforma destinada a administrar recursos cloud de manera más
+eficiente. Sobre el total de 48 participantes, 37 calificaron su
+utilidad con un valor de 4 o 5 sobre 5, lo que representa
+aproximadamente el 77,1 \% de la muestra, mientras que la valoración
+promedio obtenida fue de 4 sobre 5. Entre los 15 participantes que
+declararon contar con experiencia práctica en la administración de
+infraestructura cloud, 12 calificaron la utilidad de la plataforma con 4
+o 5, lo que representa el 80 \% de este grupo. Por otro lado, las cinco
+valoraciones más bajas, correspondientes a valores de 1 o 2, provinieron
+tanto de participantes con experiencia como de participantes sin
+experiencia, por lo que no se observa que el rechazo hacia la propuesta
+esté concentrado exclusivamente en alguno de estos grupos. En conjunto,
+estos resultados evidencian un nivel elevado de interés potencial en una
+solución orientada a facilitar la administración eficiente de recursos
+cloud.
+
+Sin embargo, la aceptación de las recomendaciones automatizadas presentó
+un comportamiento más moderado. La confianza promedio declarada por los
+participantes fue de 3,44 sobre 5, mientras que el 50 \% de la muestra
+otorgó una valoración de 4 o 5. Al analizar específicamente a los
+participantes con experiencia práctica en infraestructura cloud, este
+porcentaje se incrementó al 66,7 \%. Esto permite identificar una
+diferencia entre el interés por utilizar una herramienta de optimización
+y la disposición a delegar decisiones de infraestructura en un sistema
+automatizado. En consecuencia, los resultados sugieren que la
+automatización constituye una funcionalidad valorada, pero debe estar
+acompañada por mecanismos que permitan al usuario comprender, revisar y
+controlar las acciones recomendadas.
+
+La seguridad se identificó como el principal factor que condiciona la
+confianza en las recomendaciones automatizadas, siendo mencionada por 24
+participantes. Otros factores señalados fueron el riesgo de errores, la
+experiencia previa, los costos y la falta de transparencia. Este
+resultado tiene implicancias directas sobre el diseño de la solución
+propuesta. En lugar de plantear una modificación automática e
+irreversible de la infraestructura, resulta conveniente adoptar un
+enfoque basado en recomendaciones explicables y controladas por el
+usuario. Bajo este enfoque, el sistema puede detectar una situación
+potencialmente ineficiente, explicar los datos que justifican la
+recomendación, proponer una acción de optimización y, posteriormente,
+permitir al usuario decidir si desea aplicarla.
+
+Esta consideración resulta especialmente relevante para la integración
+con Terraform planteada en el proyecto. En lugar de modificar
+directamente los recursos productivos, la plataforma puede utilizar los
+resultados del análisis para generar una propuesta de infraestructura
+como código optimizada. De esta manera, el usuario conserva el control
+sobre el cambio y puede revisar el código generado antes de aplicarlo.
+Este mecanismo permite combinar automatización con supervisión humana,
+reduciendo el riesgo asociado a modificaciones automáticas sobre
+infraestructura crítica.
+
+En conjunto, los resultados obtenidos permiten identificar tres aspectos
+principales. En primer lugar, existe evidencia de que los usuarios con
+experiencia en infraestructura cloud enfrentan problemas relacionados
+con sobrecostos y con la identificación de recursos ineficientes. En
+segundo lugar, las funcionalidades consideradas más relevantes por los
+participantes monitoreo, optimización de costos y detección automática
+de desperdicio presentan una correspondencia directa con los objetivos
+de la solución propuesta. Finalmente, aunque existe una valoración
+positiva hacia una plataforma de este tipo, la confianza en las
+recomendaciones automatizadas se encuentra condicionada principalmente
+por cuestiones de seguridad y transparencia.
+
+Por lo tanto, los resultados de la encuesta proporcionan evidencia
+favorable para continuar con el desarrollo de una plataforma orientada a
+la detección de ineficiencias en infraestructuras cloud y a la
+generación de recomendaciones de optimización. Al mismo tiempo, permiten
+establecer criterios de diseño que trascienden la detección de
+anomalías: las recomendaciones deben ser comprensibles, justificables y
+revisables por el usuario, y las acciones de modificación de
+infraestructura deberían mantener un mecanismo de supervisión antes de
+su aplicación. De esta manera, la encuesta no solo contribuye a validar
+la problemática abordada, sino que también aporta evidencia para definir
+las características funcionales y de seguridad de la solución
+desarrollada.
