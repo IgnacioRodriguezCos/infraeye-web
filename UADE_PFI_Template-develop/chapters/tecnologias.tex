@@ -1,0 +1,230 @@
+\chapter{Tecnologías}
+
+\section{Lenguaje de programación: Python}
+
+Python constituye el lenguaje de programación principal de la solución
+propuesta debido a su amplio ecosistema para el desarrollo de
+aplicaciones web, procesamiento de datos y aprendizaje automático. En el
+proyecto se emplea para implementar la lógica de negocio, el
+procesamiento de métricas provenientes de la infraestructura cloud, el
+entrenamiento y ejecución del modelo de detección de anomalías basado en
+Isolation Forest, así como el desarrollo de los módulos encargados del
+análisis de datos, la automatización de procesos y la validación
+mediante pruebas unitarias. La elección de este lenguaje responde a su
+versatilidad y a la disponibilidad de bibliotecas especializadas que
+simplifican la implementación de soluciones de inteligencia artificial.
+
+\section{Framework de desarrollo web: Flask}
+
+El backend de la aplicación fue desarrollado utilizando Flask, un
+framework web ligero para Python que permite construir aplicaciones
+modulares con una baja sobrecarga de configuración. En esta solución,
+Flask se utiliza para implementar la API REST que actúa como
+intermediaria entre la interfaz web y los módulos de procesamiento,
+facilitando la recepción de solicitudes, la ejecución del análisis de
+las infraestructuras cloud y la devolución de los resultados al usuario.
+Asimismo, el framework administra las rutas de la aplicación y la
+renderización de las vistas utilizadas por el dashboard. La extensión
+Flask-CORS complementa esta funcionalidad al habilitar el intercambio
+seguro de información entre el frontend y el backend mediante la
+configuración de políticas Cross-Origin Resource Sharing (CORS).
+
+\section{Bibliotecas para aprendizaje automático y análisis de datos}
+
+El desarrollo del sistema se apoya en un conjunto de bibliotecas
+especializadas para el procesamiento de datos y la implementación del
+modelo de inteligencia artificial. La biblioteca Scikit-learn constituye
+el núcleo del sistema de detección de anomalías, ya que proporciona la
+implementación del algoritmo Isolation Forest utilizado para identificar
+patrones de utilización inusuales en los recursos de infraestructura.
+Adicionalmente, esta biblioteca incorpora herramientas para la
+normalización de características mediante StandardScaler y para la
+evaluación del desempeño del modelo durante la etapa experimental.
+
+Por otra parte, NumPy proporciona las estructuras de datos y operaciones
+matemáticas necesarias para el procesamiento eficiente de grandes
+volúmenes de información, permitiendo realizar cálculos vectorizados,
+estadísticas descriptivas y percentiles sobre las métricas obtenidas de
+las instancias cloud. Complementariamente, Pandas se utiliza para la
+carga, limpieza, transformación y agregación de los datos provenientes
+del conjunto Alibaba Cluster Trace 2018, además de facilitar la
+generación de las características que posteriormente son utilizadas por
+el modelo de aprendizaje automático. Finalmente, Matplotlib permite
+representar gráficamente la distribución de las métricas, el
+comportamiento de las anomalías detectadas y los resultados obtenidos
+durante la evaluación experimental del sistema. Para reducir los tiempos
+de ejecución, la persistencia del modelo entrenado y de los objetos de
+preprocesamiento se realiza mediante Joblib, evitando la necesidad de
+reentrenar el algoritmo en cada ejecución.
+
+\section{Configuración del sistema}
+
+La configuración dinámica del sistema se implementa mediante archivos en
+formato YAML procesados a través de la biblioteca PyYAML. Esta solución
+permite desacoplar los parámetros de configuración del código fuente,
+facilitando la modificación de reglas de recomendación, umbrales de
+detección y definiciones de los distintos tipos de instancias sin
+necesidad de recompilar o alterar la lógica del sistema. Esta separación
+favorece la mantenibilidad y la extensibilidad de la plataforma.
+
+\section{Validación y aseguramiento de la calidad}
+
+Con el objetivo de garantizar el correcto funcionamiento de los
+diferentes módulos desarrollados, se emplea el framework Pytest para la
+construcción de pruebas unitarias y de integración. Estas pruebas
+permiten verificar el comportamiento del motor de recomendaciones, la
+clasificación de anomalías y la correcta implementación de las reglas de
+negocio. Adicionalmente, la extensión Pytest-cov se utiliza para medir
+la cobertura del código fuente, identificando componentes que requieren
+una mayor validación durante el proceso de desarrollo.
+
+\section{Integración con Huawei Cloud}
+
+La comunicación con la infraestructura cloud se realiza mediante los SDK
+oficiales de Huawei Cloud, los cuales proporcionan acceso programático a
+los distintos servicios utilizados por la plataforma. A través de estas
+bibliotecas es posible consultar la información de las instancias
+Elastic Cloud Server (ECS), recuperar métricas de monitoreo mediante
+Cloud Eye, obtener información sobre los volúmenes administrados por
+Elastic Volume Service (EVS) y acceder a la configuración de la red
+virtual (VPC). Esta integración constituye la fuente principal de
+información utilizada durante la etapa de inferencia del modelo,
+permitiendo obtener las métricas necesarias para detectar anomalías y
+generar recomendaciones de optimización sobre infraestructuras reales.
+
+\section{Tecnologías del frontend}
+
+La interfaz de usuario se desarrolla utilizando tecnologías web estándar
+conformadas por HTML5, CSS3 y JavaScript. HTML5 proporciona la
+estructura del dashboard y de las diferentes vistas utilizadas por la
+aplicación, mientras que CSS3 se emplea para definir el diseño visual,
+la adaptación a distintos tamaños de pantalla y la representación
+gráfica del estado de las instancias analizadas. Por su parte,
+JavaScript implementa la lógica del cliente, permitiendo consumir las
+APIs REST desarrolladas en Flask, actualizar dinámicamente la
+información mostrada al usuario e incorporar mecanismos de interacción
+que facilitan la exploración de los resultados obtenidos durante el
+análisis de la infraestructura.
+
+\section{Algoritmo de detección de anomalías}
+
+El componente central del sistema corresponde al algoritmo Isolation
+Forest, una técnica de aprendizaje automático no supervisado diseñada
+para detectar observaciones anómalas mediante la construcción de árboles
+binarios generados aleatoriamente.
+
+El componente de detección de anomalías tiene como objetivo identificar
+instancias cuya utilización de recursos presenta un comportamiento
+significativamente diferente respecto del patrón de utilización
+aprendido a partir de un conjunto de datos de referencia. La finalidad
+de esta etapa no consiste directamente en determinar qué recurso debe
+ser redimensionado, sino en reducir el universo de instancias que
+posteriormente serán evaluadas por el motor de recomendaciones. De esta
+manera, el modelo de aprendizaje automático funciona como una primera
+etapa de filtrado, mientras que la determinación de una posible acción
+de optimización queda a cargo del módulo de recomendaciones.
+
+El modelo utiliza como fuente de entrenamiento el conjunto de datos
+Alibaba Cluster Trace 2018, que contiene información de utilización de
+recursos obtenida a partir de una infraestructura de producción. A
+partir de las métricas disponibles se construye una representación de
+cada instancia que posteriormente será utilizada como entrada del
+algoritmo.
+
+Las variables consideradas corresponden a la utilización de CPU,
+memoria, disco, tráfico de red entrante y tráfico de red saliente.
+Debido a que las métricas originales representan observaciones
+individuales obtenidas a lo largo del tiempo, se realiza una etapa de
+transformación que permite representar el comportamiento de cada
+instancia mediante características estadísticas.
+
+Para cada una de las métricas se calculan tres características: media,
+percentil 5 y percentil 95. La media permite representar el nivel
+habitual de utilización del recurso, mientras que los percentiles
+permiten incorporar información sobre los niveles bajo y alto de
+utilización sin depender exclusivamente de valores extremos. De esta
+forma, cada instancia queda representada mediante un conjunto de
+características que describe tanto su utilización habitual como los
+niveles de utilización que alcanza en situaciones de menor y mayor
+demanda.
+
+Con cinco métricas y tres características derivadas para cada una, la
+representación final utilizada por el modelo está compuesta por 15
+variables. Esta transformación permite que Isolation Forest trabaje con
+una representación homogénea de las instancias y no directamente con las
+series temporales originales.
+
+Una vez construidas y normalizadas las características, se procede al
+entrenamiento del modelo Isolation Forest. El algoritmo construye un
+conjunto de árboles de aislamiento mediante particiones aleatorias del
+espacio de características.
+
+El modelo utilizado se configura con 100 árboles, buscando obtener una
+representación estable del espacio de características a partir de
+múltiples particiones aleatorias. Asimismo, se establece una semilla
+aleatoria fija para garantizar que los experimentos puedan ser
+reproducidos bajo las mismas condiciones.
+
+Durante el entrenamiento se establece el parámetro contamination,
+utilizado por Isolation Forest para determinar la proporción esperada de
+observaciones anómalas dentro del conjunto de entrenamiento.
+
+Una vez finalizada la etapa de entrenamiento, el modelo Isolation Forest
+queda disponible para analizar nuevas infraestructuras sin necesidad de
+volver a entrenarse para cada análisis. Durante la etapa de inferencia,
+el sistema obtiene las métricas de utilización correspondientes a las
+instancias de la infraestructura que se desea evaluar. Estas métricas
+constituyen los datos de entrada sobre los cuales se aplicará el modelo
+previamente entrenado.
+
+El proceso de inferencia comienza aplicando a los datos obtenidos el
+mismo procedimiento de transformación utilizado durante el
+entrenamiento. Para cada instancia se calculan las características
+correspondientes a las métricas de CPU, memoria, disco, tráfico de red
+entrante y tráfico de red saliente. A partir de cada métrica se obtienen
+la media, el percentil 5 y el percentil 95, generando nuevamente las 15
+características que representan el comportamiento de la instancia.
+
+Una vez completado el preprocesamiento, las características normalizadas
+son introducidas en el modelo Isolation Forest. El algoritmo recorre los
+árboles construidos durante la etapa de entrenamiento y determina qué
+tan fácilmente puede aislar cada observación respecto del conjunto de
+referencia.
+
+Isolation Forest asigna a cada instancia un anomaly score, que
+representa el grado en que su comportamiento se diferencia del patrón
+aprendido durante el entrenamiento. Este valor permite establecer una
+medida continua de anomalía antes de realizar la clasificación final.
+
+En la implementación devuelve el puntaje de cada observación. Los
+valores más bajos representan observaciones con un comportamiento más
+susceptible de ser considerado anómalo, mientras que valores
+relativamente mayores corresponden a observaciones más próximas al
+comportamiento considerado normal.
+
+A partir de los puntajes obtenidos, cada instancia es clasificada como
+normal o anómala. Para realizar esta clasificación se utiliza el umbral
+asociado al modelo, determinado durante su configuración y entrenamiento
+en función del parámetro contamination.
+
+Una instancia cuyo puntaje se encuentra por debajo del umbral
+establecido es clasificada como anomalía, mientras que aquellas cuyo
+puntaje se encuentra por encima del límite son consideradas normales.
+Esta separación permite transformar el resultado continuo producido por
+Isolation Forest en una decisión binaria que puede ser utilizada por las
+etapas posteriores del sistema.
+
+\section{Arquitectura del software}
+
+La aplicación adopta una arquitectura modular que organiza sus
+componentes según su responsabilidad funcional. Los módulos de
+adquisición y preprocesamiento de datos son responsables de obtener y
+preparar las métricas para su análisis, mientras que el módulo de
+aprendizaje automático implementa la detección de anomalías mediante
+Isolation Forest. De forma complementaria, el motor de recomendaciones
+procesa exclusivamente las instancias identificadas como anómalas y
+genera propuestas de optimización de recursos. Finalmente, el sistema
+incorpora módulos de integración con Huawei Cloud, generación de
+reportes y una aplicación web desarrollada en Flask para la interacción
+con el usuario. Esta organización modular favorece la mantenibilidad,
+escalabilidad y reutilización de los distintos componentes del sistema.
