@@ -1,0 +1,847 @@
+﻿\chapter{Requerimientos}
+
+\section{Actores}
+
+\subsection*{Actor principal}
+
+Administrador de Infraestructura (o Ingeniero DevOps/Cloud Engineer). Es la persona que utilizará la aplicación.
+
+\subsection*{Actor secundario}
+
+API de Huawei Cloud.
+
+\section{Casos de uso}
+
+\subsection{CU01 - Iniciar sesión}
+
+\subsubsection*{Objetivo}
+
+Permitir que el usuario acceda a la aplicación.
+
+\subsubsection*{Flujo}
+
+\begin{enumerate}
+\item El usuario ingresa usuario y contraseña.
+\item El sistema valida las credenciales.
+\item El sistema crea la sesión.
+\item Se muestra el panel principal.
+\end{enumerate}
+
+\subsection{CU02 - Vincular cuenta de Huawei Cloud}
+
+\subsubsection*{Objetivo}
+
+Permitir que el usuario autorice a la aplicación a acceder a los recursos de Huawei Cloud.
+
+\subsubsection*{Flujo}
+
+\begin{enumerate}
+\item El usuario ingresa las credenciales o API Key.
+\item El sistema valida la conexión.
+\item Se almacena la configuración.
+\item Se confirma la conexión.
+\end{enumerate}
+
+\subsubsection*{Resultado}
+
+La aplicación ya puede consultar métricas.
+
+\subsection{CU03 - Obtener y modelar la infraestructura cloud}
+
+\subsubsection*{Objetivo}
+
+Permitir que el sistema recupere la información de la infraestructura desplegada en Huawei Cloud y la transforme en un modelo interno equivalente, que posteriormente será convertido a una representación en Terraform para su análisis y modificación.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item Existe una conexión válida con Huawei Cloud.
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la opción \textbf{Recuperar Infraestructura y modelar}.
+\item El sistema verifica que exista una conexión válida con Huawei Cloud.
+\item El sistema consulta las APIs de Huawei Cloud para obtener la información de la infraestructura desplegada.
+\item El sistema recupera información de los recursos disponibles.
+\item El sistema valida que la información obtenida esté completa y sea consistente.
+\item El sistema construye un modelo interno de la infraestructura, estableciendo las relaciones entre los recursos (por ejemplo, qué instancia pertenece a qué red o qué volumen está asociado a qué máquina).
+\item El sistema traduce ese modelo interno a una representación equivalente en Terraform (archivos .tf o un modelo intermedio que luego pueda exportarse como Terraform).
+\item El sistema almacena la representación obtenida para que pueda ser utilizada durante el análisis.
+\item El caso de uso finaliza dejando disponible la infraestructura para su análisis y posterior modificación.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 - Error de autenticación}
+
+En el paso 2:
+
+\begin{itemize}
+\item Las credenciales son inválidas.
+\item El sistema informa el error.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\paragraph{A2 - Error al consultar la API}
+
+En el paso 3:
+
+\begin{itemize}
+\item Huawei Cloud no responde.
+\item El sistema informa el problema.
+\item Registra el error.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\paragraph{A3 - Recursos incompletos}
+
+En el paso 5:
+
+Si algunos recursos no pueden recuperarse:
+
+\begin{itemize}
+\item El sistema informa cuáles no pudieron obtenerse.
+\item Continúa con los recursos disponibles siempre que el análisis siga siendo posible.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el sistema dispone de:
+
+\begin{itemize}
+\item Una representación completa de la infraestructura del usuario.
+\item Las relaciones entre los distintos recursos cloud.
+\item Un modelo equivalente en Terraform listo para ser utilizado por los siguientes módulos.
+\item Las métricas necesarias para ejecutar el análisis de anomalías.
+\end{itemize}
+
+\subsection{CU04 -- Analizar infraestructura}
+
+\subsubsection*{Objetivo}
+
+Analizar la infraestructura cloud del usuario mediante un modelo de aprendizaje automático basado en Isolation Forest para detectar recursos con comportamientos anómalos que puedan afectar el rendimiento, la disponibilidad o el costo de la arquitectura.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item Existe una conexión válida con Huawei Cloud.
+\item La infraestructura fue obtenida y modelada en Terraform (CU03).
+\item El modelo de Isolation Forest se encuentra previamente entrenado.
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la opción \textbf{Analizar infraestructura}.
+\item El sistema carga la representación de la infraestructura generada durante el CU03.
+\item El sistema recupera las métricas asociadas a cada recurso de la infraestructura (CPU, memoria, disco, red u otras configuradas).
+\item El sistema realiza el preprocesamiento de las métricas:
+  \begin{itemize}
+  \item elimina registros inválidos;
+  \item normaliza los datos cuando corresponde;
+  \item selecciona las variables necesarias para el modelo.
+  \end{itemize}
+\item El sistema construye el conjunto de características (\emph{feature vector}) correspondiente a cada recurso de la infraestructura.
+\item El sistema carga el modelo previamente entrenado de Isolation Forest.
+\item El sistema ejecuta el modelo sobre las características obtenidas.
+\item El modelo clasifica cada recurso como:
+  \begin{itemize}
+  \item comportamiento normal; o
+  \item comportamiento anómalo.
+  \end{itemize}
+\item El sistema obtiene el puntaje (\emph{anomaly score}) asociado a cada recurso.
+\item El sistema identifica los recursos cuyo puntaje supera el umbral definido como anomalía.
+\item El sistema almacena los resultados del análisis para su posterior consulta.
+\item El sistema presenta al usuario el listado de recursos analizados, indicando aquellos que fueron identificados como anómalos junto con su nivel de criticidad.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 -- No existen métricas suficientes}
+
+En el paso 3:
+
+\begin{itemize}
+\item No se encuentran métricas para uno o más recursos.
+\item El sistema informa la situación.
+\item Continúa el análisis únicamente con los recursos que poseen información suficiente.
+\end{itemize}
+
+\paragraph{A2 -- Error durante el análisis}
+
+En el paso 7:
+
+\begin{itemize}
+\item El modelo no puede completar la evaluación.
+\item El sistema registra el error.
+\item Informa al usuario que el análisis no pudo finalizar.
+\end{itemize}
+
+\paragraph{A3 -- No se detectan anomalías}
+
+En el paso 10:
+
+\begin{itemize}
+\item Ningún recurso presenta comportamiento anómalo.
+\item El sistema informa que no se detectaron anomalías y finaliza el análisis.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el sistema dispone de:
+
+\begin{itemize}
+\item La clasificación de todos los recursos analizados.
+\item El puntaje de anomalía asociado a cada recurso.
+\item El listado de recursos con comportamiento anómalo.
+\item Los resultados almacenados para ser utilizados por el caso de uso \textbf{CU05 -- Generar recomendaciones}.
+\end{itemize}
+
+\subsection{CU05 -- Generar recomendaciones de optimización}
+
+\subsubsection*{Objetivo}
+
+Generar recomendaciones de optimización para la infraestructura cloud a partir de las anomalías detectadas, proponiendo modificaciones sobre la representación de la infraestructura en Terraform.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item La infraestructura se encuentra modelada en Terraform (CU03).
+\item El análisis mediante Isolation Forest ha finalizado correctamente (CU04).
+\item Existen resultados del análisis disponibles.
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la opción \textbf{Generar recomendaciones}.
+\item El sistema carga:
+  \begin{itemize}
+  \item la representación de la infraestructura en Terraform;
+  \item los resultados del análisis realizado por Isolation Forest.
+  \end{itemize}
+\item El sistema identifica los recursos clasificados como anómalos.
+\item Para cada recurso anómalo, el sistema analiza:
+  \begin{itemize}
+  \item el tipo de recurso;
+  \item las métricas que originaron la anomalía;
+  \item el nivel de criticidad;
+  \item la configuración actual del recurso.
+  \end{itemize}
+\item El sistema consulta la base de reglas de recomendación para determinar las posibles acciones de optimización aplicables.
+\item El sistema genera una o más recomendaciones para cada recurso analizado. Por ejemplo:
+  \begin{itemize}
+  \item aumentar o reducir el tamaño de una instancia;
+  \item modificar la capacidad de almacenamiento;
+  \item redistribuir la carga entre recursos;
+  \item reemplazar un tipo de instancia por otro más adecuado;
+  \item eliminar recursos ociosos.
+  \end{itemize}
+\item El sistema aplica las recomendaciones sobre una copia de la representación de la infraestructura, generando una nueva versión del modelo en Terraform.
+\item El sistema valida que las modificaciones propuestas sean consistentes y no afecten las dependencias entre los recursos.
+\item El sistema genera un informe que incluye:
+  \begin{itemize}
+  \item los recursos afectados;
+  \item las anomalías detectadas;
+  \item las recomendaciones realizadas;
+  \item los cambios propuestos en Terraform.
+  \end{itemize}
+\item El sistema presenta al usuario el informe y la nueva versión del archivo Terraform para su revisión.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 -- No existen anomalías}
+
+En el paso 3:
+
+\begin{itemize}
+\item No se detectan recursos anómalos.
+\item El sistema informa que no es necesario realizar modificaciones.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\paragraph{A2 -- No existe una regla para una anomalía}
+
+En el paso 5:
+
+\begin{itemize}
+\item El sistema no encuentra una recomendación aplicable.
+\item Registra la situación.
+\item Informa que el recurso requiere revisión manual.
+\item Continúa procesando los demás recursos.
+\end{itemize}
+
+\paragraph{A3 -- Error al generar el Terraform}
+
+En el paso 8:
+
+\begin{itemize}
+\item Se detecta una inconsistencia en las modificaciones propuestas.
+\item El sistema descarta los cambios sobre ese recurso.
+\item Informa el problema al usuario.
+\item Continúa con los recursos restantes.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el sistema dispone de:
+
+\begin{itemize}
+\item Un conjunto de recomendaciones de optimización para la infraestructura.
+\item Una nueva versión del modelo de infraestructura en Terraform con las modificaciones sugeridas.
+\item Un informe que justifica cada recomendación y los recursos sobre los que se propone actuar.
+\item La información necesaria para que el usuario revise y decida si aplica los cambios propuestos.
+\end{itemize}
+
+\subsection{CU06 -- Revisar y aprobar recomendaciones}
+
+\subsubsection*{Objetivo}
+
+Permitir que el usuario revise las recomendaciones generadas por el sistema y decida cuáles desea incorporar a la nueva versión de la infraestructura.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item El sistema ha finalizado el análisis de la infraestructura (CU04).
+\item El sistema ha generado las recomendaciones de optimización (CU05).
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la opción \textbf{Revisar recomendaciones}.
+\item El sistema presenta el listado de recomendaciones generadas, indicando para cada una:
+  \begin{itemize}
+  \item el recurso afectado;
+  \item la anomalía detectada;
+  \item la recomendación propuesta;
+  \item la justificación de la recomendación;
+  \item el nivel de criticidad.
+  \end{itemize}
+\item El usuario revisa las recomendaciones presentadas.
+\item El usuario selecciona cuáles recomendaciones desea aplicar y cuáles desea descartar.
+\item El sistema registra la decisión del usuario para cada recomendación.
+\item El sistema genera una nueva versión del modelo de infraestructura incorporando únicamente las recomendaciones aprobadas.
+\item El sistema actualiza la representación de la infraestructura en Terraform con los cambios seleccionados.
+\item El sistema presenta un resumen de las modificaciones que serán incluidas en la nueva versión del Terraform.
+\item El caso de uso finaliza dejando disponible el Terraform actualizado para su exportación o despliegue.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 -- El usuario rechaza todas las recomendaciones}
+
+En el paso 4:
+
+\begin{itemize}
+\item El usuario decide no aplicar ninguna recomendación.
+\item El sistema conserva la versión original del Terraform.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\paragraph{A2 -- El usuario aprueba solo algunas recomendaciones}
+
+En el paso 6:
+
+\begin{itemize}
+\item El sistema incorpora únicamente las recomendaciones seleccionadas.
+\item El resto queda descartado.
+\end{itemize}
+
+\paragraph{A3 -- Existen recomendaciones incompatibles}
+
+En el paso 6:
+
+\begin{itemize}
+\item El sistema detecta que dos recomendaciones aprobadas generan un conflicto.
+\item Informa el conflicto al usuario.
+\item Solicita que seleccione una de las alternativas antes de continuar.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el sistema dispone de:
+
+\begin{itemize}
+\item Un conjunto de recomendaciones aprobadas por el usuario.
+\item Un modelo de infraestructura actualizado únicamente con los cambios aceptados.
+\item Una nueva versión del archivo Terraform lista para ser exportada o utilizada en un despliegue.
+\end{itemize}
+
+\subsection{CU07 -- Consultar historial de análisis y recomendaciones}
+
+\subsubsection*{Objetivo}
+
+Permitir que el usuario consulte los análisis realizados previamente, junto con las anomalías detectadas, las recomendaciones generadas y las decisiones tomadas sobre cada una de ellas.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item Existen análisis almacenados en el sistema.
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la opción \textbf{Historial de análisis}.
+\item El sistema recupera el listado de análisis almacenados.
+\item El sistema presenta para cada análisis la siguiente información:
+  \begin{itemize}
+  \item fecha y hora de ejecución;
+  \item infraestructura analizada;
+  \item cantidad de recursos evaluados;
+  \item cantidad de anomalías detectadas;
+  \item cantidad de recomendaciones generadas.
+  \end{itemize}
+\item El usuario selecciona uno de los análisis.
+\item El sistema muestra el detalle del análisis seleccionado, incluyendo:
+  \begin{itemize}
+  \item recursos analizados;
+  \item anomalías detectadas;
+  \item puntaje de anomalía de cada recurso;
+  \item recomendaciones generadas;
+  \item recomendaciones aceptadas y rechazadas por el usuario;
+  \item versión del Terraform generada.
+  \end{itemize}
+\item El usuario consulta la información presentada.
+\item El caso de uso finaliza.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 -- No existen análisis registrados}
+
+En el paso 2:
+
+\begin{itemize}
+\item El sistema informa que no existen análisis almacenados.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\paragraph{A2 -- El análisis seleccionado no está disponible}
+
+En el paso 5:
+
+\begin{itemize}
+\item El sistema informa que el análisis ya no se encuentra disponible.
+\item Regresa al listado de análisis.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el usuario puede consultar el historial completo de los análisis realizados, las recomendaciones generadas, las decisiones tomadas sobre ellas y las versiones de Terraform asociadas, facilitando el seguimiento y la trazabilidad de la infraestructura.
+
+\subsection{CU08 -- Exportar informe de análisis}
+
+\subsubsection*{Objetivo}
+
+Permitir que el usuario exporte un informe con los resultados de un análisis de infraestructura, incluyendo las anomalías detectadas, las recomendaciones generadas y las modificaciones propuestas sobre la infraestructura.
+
+\subsubsection*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item Existe al menos un análisis almacenado en el sistema.
+\end{itemize}
+
+\subsubsection*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona un análisis desde el historial.
+\item El usuario selecciona la opción \textbf{Exportar informe}.
+\item El sistema solicita el formato de exportación (por ejemplo, PDF).
+\item El usuario selecciona el formato deseado.
+\item El sistema recopila la información correspondiente al análisis, incluyendo:
+  \begin{itemize}
+  \item datos generales del análisis;
+  \item infraestructura evaluada;
+  \item recursos analizados;
+  \item anomalías detectadas;
+  \item puntajes de anomalía;
+  \item recomendaciones generadas;
+  \item recomendaciones aprobadas y rechazadas;
+  \item resumen de los cambios propuestos en Terraform.
+  \end{itemize}
+\item El sistema genera el informe en el formato seleccionado.
+\item El sistema almacena temporalmente el archivo generado.
+\item El sistema pone el informe a disposición del usuario para su descarga.
+\item El caso de uso finaliza.
+\end{enumerate}
+
+\subsubsection*{Flujos alternativos}
+
+\paragraph{A1 -- Error durante la generación del informe}
+
+En el paso 6:
+
+\begin{itemize}
+\item El sistema detecta un error al generar el documento.
+\item Informa el inconveniente al usuario.
+\item Finaliza el caso de uso sin generar el archivo.
+\end{itemize}
+
+\paragraph{A2 -- El análisis no contiene resultados}
+
+En el paso 5:
+
+\begin{itemize}
+\item El sistema informa que el análisis seleccionado no posee información suficiente para generar un informe.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\subsubsection*{Resultado}
+
+Al finalizar el caso de uso el usuario obtiene un informe exportable con el detalle del análisis realizado, las anomalías detectadas, las recomendaciones propuestas, las decisiones tomadas sobre ellas y el resumen de los cambios sugeridos para la infraestructura.
+
+\section{Requerimientos Funcionales}
+
+\subsection{RF01 -- Autenticación de usuarios}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá permitir que los usuarios registrados inicien sesión mediante sus credenciales, validando su identidad antes de habilitar el acceso a las funcionalidades disponibles.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU01 -- Iniciar sesión.
+
+\subsection{RF02 -- Conexión con Huawei Cloud}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá permitir al usuario registrar y validar las credenciales necesarias para establecer una conexión segura con Huawei Cloud, posibilitando la consulta de la infraestructura y de las métricas asociadas.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU02 -- Vincular cuenta de Huawei Cloud.
+
+\subsection{RF03 -- Descubrimiento de infraestructura}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá consultar los servicios de Huawei Cloud para obtener la información de la infraestructura desplegada por el usuario, incluyendo los recursos disponibles y las relaciones existentes entre ellos.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU03 -- Obtener y modelar la infraestructura.
+
+\subsection{RF04 -- Generación del modelo Terraform}
+
+\noindent \textbf{Descripción:}
+
+A partir de la información obtenida desde Huawei Cloud, el sistema deberá construir una representación equivalente de la infraestructura utilizando Terraform, preservando tanto la configuración de los recursos como las relaciones existentes entre ellos.
+
+El modelo generado será utilizado posteriormente como base para la generación de recomendaciones y modificaciones propuestas por el sistema.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU03 -- Obtener y modelar la infraestructura.
+
+\subsection{RF05 -- Obtención de métricas de utilización}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá consultar las métricas de utilización de los recursos cloud necesarios para realizar el análisis, incluyendo información histórica de CPU, memoria, almacenamiento, red u otras métricas soportadas por Huawei Cloud.
+
+Las métricas recuperadas deberán asociarse con los recursos correspondientes dentro del modelo de infraestructura.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU04 -- Analizar infraestructura.
+
+\subsection{RF06 -- Preparación de datos para el análisis}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá procesar las métricas obtenidas realizando las tareas de limpieza, validación y transformación necesarias para construir el conjunto de características (\emph{feature vectors}) requerido por el modelo de aprendizaje automático.
+
+Este proceso incluirá la eliminación de registros inválidos, la normalización de los datos cuando corresponda y la selección de las variables utilizadas durante el entrenamiento del modelo.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU04 -- Analizar infraestructura.
+
+\subsection{RF07 -- Detección de anomalías}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá analizar las métricas procesadas mediante un modelo previamente entrenado utilizando el algoritmo Isolation Forest, clasificando cada recurso como normal o anómalo según su comportamiento.
+
+Adicionalmente, el sistema deberá calcular el puntaje de anomalía asociado a cada recurso.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU04 -- Analizar infraestructura.
+
+\subsection{RF08 -- Clasificación de anomalías}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá clasificar las anomalías detectadas según su nivel de criticidad utilizando el puntaje generado por el modelo de aprendizaje automático.
+
+Esta clasificación permitirá priorizar los recursos que requieren atención inmediata.
+
+\noindent \textbf{Prioridad:}
+
+Media.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU04 -- Analizar infraestructura.
+
+\subsection{RF09 -- Generación de recomendaciones}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá generar recomendaciones de optimización para los recursos identificados como anómalos, utilizando un conjunto de reglas de decisión basado en las características de la infraestructura y en las anomalías detectadas.
+
+Las recomendaciones podrán incluir modificaciones en la configuración de los recursos, cambios de capacidad, redistribución de cargas o eliminación de recursos innecesarios.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU05 -- Generar recomendaciones.
+
+\subsection{RF10 -- Generación del Terraform optimizado}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá construir una nueva versión del modelo Terraform incorporando únicamente las modificaciones correspondientes a las recomendaciones seleccionadas por el usuario.
+
+La versión original del modelo deberá conservarse sin modificaciones para permitir la comparación entre ambas configuraciones.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU05 -- Generar recomendaciones.
+
+CU06 -- Revisar y aprobar recomendaciones.
+
+\subsection{RF11 -- Aprobación de recomendaciones}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá permitir que el usuario acepte o rechace individualmente cada recomendación generada antes de incorporarla a la nueva versión del modelo Terraform.
+
+Las decisiones tomadas deberán almacenarse para futuras consultas.
+
+\noindent \textbf{Prioridad:}
+
+Alta.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU06 -- Revisar y aprobar recomendaciones.
+
+\subsection{RF12 -- Gestión del historial}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá almacenar los resultados de cada análisis realizado, incluyendo las anomalías detectadas, las recomendaciones generadas, las decisiones tomadas por el usuario y las versiones de Terraform asociadas.
+
+\noindent \textbf{Prioridad:}
+
+Media.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU07 -- Consultar historial.
+
+\subsection{RF13 -- Consulta del historial}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá permitir consultar los análisis almacenados, visualizando el detalle de las anomalías detectadas, las recomendaciones emitidas, las decisiones del usuario y las versiones del modelo Terraform generadas para cada análisis.
+
+\noindent \textbf{Prioridad:}
+
+Media.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU07 -- Consultar historial.
+
+\subsection{RF14 -- Exportación de informes}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá permitir generar y exportar informes con los resultados de los análisis realizados, incluyendo información sobre la infraestructura evaluada, las anomalías detectadas, las recomendaciones generadas y las modificaciones propuestas sobre el modelo Terraform.
+
+\noindent \textbf{Prioridad:}
+
+Media.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU08 -- Exportar informe.
+
+\section{Requerimientos no funcionales}
+
+\subsection{RNF01 -- Seguridad de la información}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá garantizar la confidencialidad de las credenciales utilizadas para acceder a Huawei Cloud, evitando su almacenamiento en texto plano y utilizando mecanismos seguros para su protección.
+
+\noindent \textbf{Justificación:}
+
+Las credenciales permiten acceder a la infraestructura cloud del usuario y deben protegerse contra accesos no autorizados.
+
+\subsection{RNF02 -- Comunicación segura}
+
+\noindent \textbf{Descripción:}
+
+Toda comunicación entre la aplicación y los servicios de Huawei Cloud deberá realizarse mediante protocolos seguros (HTTPS/TLS).
+
+\noindent \textbf{Justificación:}
+
+Garantiza la integridad y confidencialidad de la información intercambiada durante la consulta de recursos y métricas.
+
+\subsection{RNF03 -- Rendimiento}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá procesar la información de la infraestructura y ejecutar el análisis utilizando Isolation Forest en un tiempo adecuado al tamaño de la infraestructura analizada, evitando demoras que afecten la experiencia del usuario.
+
+\noindent \textbf{Justificación:}
+
+El tiempo de respuesta debe permitir realizar análisis de forma práctica incluso sobre infraestructuras de gran tamaño.
+
+\subsection{RNF04 -- Escalabilidad}
+
+\noindent \textbf{Descripción:}
+
+La arquitectura del sistema deberá permitir incorporar nuevos tipos de recursos cloud y aumentar la cantidad de recursos analizados sin requerir modificaciones significativas en el diseño de la aplicación.
+
+\noindent \textbf{Justificación:}
+
+Las infraestructuras cloud evolucionan constantemente, por lo que el sistema debe adaptarse a su crecimiento.
+
+\subsection{RNF05 -- Mantenibilidad}
+
+\noindent \textbf{Descripción:}
+
+La aplicación deberá desarrollarse utilizando una arquitectura modular que permita modificar o reemplazar componentes de forma independiente, como el algoritmo de detección de anomalías o el motor de recomendaciones.
+
+\noindent \textbf{Justificación:}
+
+Facilita la evolución del sistema y reduce el costo de mantenimiento.
+
+\subsection{RNF06 -- Portabilidad}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá diseñarse de manera que permita incorporar soporte para otros proveedores cloud, como AWS o Microsoft Azure, sin modificar el funcionamiento general de la aplicación.
+
+\noindent \textbf{Justificación:}
+
+Aunque la implementación se centre en Huawei Cloud, la arquitectura debe facilitar futuras extensiones.
+
+\subsection{RNF07 -- Disponibilidad}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá detectar e informar al usuario cualquier inconveniente que impida establecer comunicación con Huawei Cloud o recuperar la información necesaria para realizar el análisis.
+
+\noindent \textbf{Justificación:}
+
+Permite identificar rápidamente problemas externos que afecten el funcionamiento del sistema.
+
+\subsection{RNF08 -- Usabilidad}
+
+\noindent \textbf{Descripción:}
+
+La interfaz deberá presentar de forma clara las anomalías detectadas, las recomendaciones generadas y los cambios propuestos sobre la infraestructura, facilitando la comprensión de los resultados por parte del usuario.
+
+\noindent \textbf{Justificación:}
+
+La información obtenida mediante el modelo de aprendizaje automático debe ser fácilmente interpretable.
+
+\subsection{RNF09 -- Trazabilidad}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá conservar un registro histórico de los análisis realizados, incluyendo las anomalías detectadas, las recomendaciones generadas, las decisiones tomadas por el usuario y las versiones de Terraform asociadas.
+
+\noindent \textbf{Justificación:}
+
+Permite realizar auditorías, comparar análisis históricos y dar seguimiento a la evolución de la infraestructura.
+
+\subsection{RNF10 -- Confiabilidad}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá validar la consistencia de la información obtenida desde Huawei Cloud antes de ejecutar el análisis, evitando que datos incompletos o inconsistentes afecten los resultados del modelo de aprendizaje automático.
+
+\noindent \textbf{Justificación:}
+
+La calidad de los datos influye directamente en la precisión de las anomalías detectadas.
+
+\subsection{RNF11 -- Integridad de la infraestructura}
+
+\noindent \textbf{Descripción:}
+
+El sistema no deberá modificar directamente la infraestructura desplegada en Huawei Cloud. Las recomendaciones deberán implementarse únicamente sobre una representación equivalente en Terraform y requerir la aprobación del usuario antes de su utilización.
+
+\noindent \textbf{Justificación:}
+
+Garantiza que el sistema actúe como una herramienta de apoyo a la toma de decisiones, evitando modificaciones automáticas sobre entornos productivos.
+
+\subsection{RNF12 -- Reproducibilidad del análisis}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá garantizar que un mismo análisis ejecutado sobre la misma versión de la infraestructura, utilizando el mismo conjunto de métricas y la misma versión del modelo de aprendizaje automático, produzca resultados consistentes.
+
+\noindent \textbf{Justificación:}
+
+Al tratarse de una solución basada en aprendizaje automático, la reproducibilidad de los resultados es un aspecto fundamental para validar experimentalmente la propuesta y permitir la comparación entre distintas ejecuciones.
+
+
+
+
+
+
+
