@@ -26,16 +26,16 @@ Esta investigación contribuye al campo de la gestión de infraestructura cloud 
 
 \subsection{Objetivo General}
 
-El objetivo general de este trabajo es diseñar y desarrollar una plataforma de monitoreo y optimización que permita recolectar métricas, logs y trazas de un sistema, detectar anomalías y predecir posibles fallas, incorporando una interfaz gráfica para la visualización y análisis de la información.
+El objetivo general de este trabajo es diseñar y desarrollar una plataforma de optimización de infraestructura cloud que permita detectar recursos ineficientes mediante el algoritmo Isolation Forest, generar recomendaciones de optimización orientadas a reducir costos y mejorar la utilización de recursos, y proponer cambios de infraestructura mediante código de Terraform.
 
 \subsection{Objetivos Específicos}
 
 \begin{itemize}
-\item Definir la arquitectura del sistema de monitoreo y optimización contemplando la recolección de telemetría en sus tres dimensiones principales: métricas, logs y trazas.
-\item Implementar mecanismos de instrumentación sobre una aplicación de prueba que simule un entorno productivo.
-\item Desarrollar un módulo de ingesta y almacenamiento de datos que permita centralizar la información recolectada, habilitando su procesamiento y análisis posterior.
-\item Implementar un componente de análisis que permita identificar patrones anómalos en el comportamiento del sistema, tales como picos de latencia, errores recurrentes o degradaciones en el rendimiento.
-\item Incorporar un modelo de predicción que permita anticipar posibles fallas a partir del comportamiento histórico del sistema.
-\item Desarrollar una interfaz gráfica que permita visualizar métricas en tiempo real, explorar logs y trazas, y gestionar alertas generadas por el sistema.
-\item Validar el funcionamiento del prototipo mediante pruebas en un entorno controlado, evaluando la capacidad del sistema para detectar anomalías y anticipar fallas.
+\item Definir la arquitectura de la plataforma de optimización contemplando la recolección de métricas de consumo y rendimiento de recursos cloud.
+\item Implementar mecanismos de recolección de datos sobre infraestructura desplegada en Huawei Cloud que permitan obtener información de utilización de recursos.
+\item Desarrollar un módulo de análisis basado en el algoritmo Isolation Forest que permita detectar anomalías en el consumo de recursos, identificando instancias subutilizadas, sobredimensionadas o con patrones de uso ineficientes.
+\item Implementar un componente de generación de recomendaciones que, a partir de las anomalías detectadas, proponga acciones concretas de optimización (rightsizing, eliminación de recursos ociosos, ajuste de configuraciones).
+\item Desarrollar un módulo de integración con Terraform que permita generar código de infraestructura como código para implementar las recomendaciones de optimización propuestas.
+\item Implementar una interfaz gráfica que permita visualizar el estado de la infraestructura, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto.
+\item Validar el funcionamiento del prototipo mediante pruebas en un entorno controlado, evaluando la capacidad del sistema para detectar ineficiencias y generar recomendaciones efectivas de optimización.
 \end{itemize}
