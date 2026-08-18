@@ -6,35 +6,37 @@ El mercado de herramientas de gestión y optimización cloud ha experimentado un
 
 \subsection{Amazon CloudWatch y AWS Cost Explorer}
 
-Amazon CloudWatch es un servicio de monitoreo y observabilidad proporcionado por Amazon Web Services que permite recopilar y supervisar métricas, registros (logs) y eventos generados por aplicaciones, servicios e infraestructura desplegada en la nube. La plataforma ofrece funcionalidades de visualización mediante paneles de control, generación de alertas y análisis del comportamiento de los recursos con el objetivo de facilitar la supervisión operativa y la detección de incidentes \parencite{AWS2026}.
+El ecosistema de Amazon Web Services ofrece un conjunto integrado de herramientas para monitoreo y gestión financiera que representa un referente en el mercado cloud. Amazon CloudWatch constituye el núcleo de observabilidad del ecosistema AWS, implementando un modelo de recopilación de telemetría que abarca métricas, registros y eventos provenientes de la infraestructura desplegada. La arquitectura de CloudWatch se fundamenta en un enfoque centralizado de visualización y alertamiento, permitiendo la construcción de paneles de control personalizados y la definición de umbrales para la detección de condiciones anómalas \parencite{AWS2026}.
 
-Complementariamente, AWS Cost Explorer es una herramienta orientada al análisis y administración de costos que permite visualizar el consumo de servicios cloud, identificar tendencias de gasto, generar reportes y realizar estimaciones de costos futuros. Este servicio proporciona recomendaciones relacionadas con la optimización del consumo dentro del ecosistema AWS \parencite{AWS2026}.
+Desde una perspectiva de análisis, CloudWatch exhibe fortalezas en la integración nativa con el ecosistema AWS, eliminando la necesidad de configuración compleja para servicios gestionados. Sin embargo, esta misma integración constituye una limitación: la portabilidad hacia otros proveedores cloud resulta prácticamente nula, y la extensibilidad del modelo de métricas se encuentra constreñida a los namespaces predefinidos por AWS. El modelo de pricing basado en volumen de métricas y consultas puede generar costos significativos en entornos de alta cardinalidad, representando una consideración económica relevante para implementaciones a escala \parencite{AWS2026}.
 
-AWS Trusted Advisor es una herramienta que analiza la configuración y utilización de los recursos desplegados en AWS con el objetivo de proporcionar recomendaciones relacionadas con optimización de costos, rendimiento, seguridad, tolerancia a fallos y límites de servicio. Para ello, evalúa la infraestructura mediante un conjunto de verificaciones predefinidas (checks) y genera sugerencias orientadas a identificar recursos subutilizados, configuraciones mejorables o posibles riesgos operativos \parencite{AWS2026}.
+AWS Cost Explorer complementa el monitoreo operativo con capacidades de análisis financiero, permitiendo la visualización temporal del gasto, la identificación de tendencias y la proyección de costos futuros. La herramienta genera recomendaciones de optimización fundamentadas en patrones de uso históricos, sugiriendo la adopción de instancias reservadas, savings plans o la eliminación de recursos ociosos. No obstante, el alcance de estas recomendaciones se limita a optimizaciones financieras, sin abordar dimensiones técnicas como la degradación de rendimiento o la subutilización funcional de los recursos \parencite{AWS2026}.
 
-En conjunto, Amazon CloudWatch, AWS Cost Explorer y AWS Trusted Advisor proporcionan capacidades de monitoreo, análisis de costos y generación de recomendaciones para la administración de recursos dentro del ecosistema AWS. Mientras CloudWatch permite supervisar métricas, registros y eventos operativos, Cost Explorer facilita el análisis del gasto asociado al consumo de servicios cloud y Trusted Advisor complementa estas funcionalidades mediante verificaciones y recomendaciones predefinidas sobre la infraestructura. Sin embargo, las recomendaciones disponibles dependen de los controles implementados por la plataforma y se encuentran asociadas específicamente a los servicios y recursos soportados por AWS \parencite{AWS2026}.
+AWS Trusted Advisor opera como un mecanismo de auditoría automática, evaluando la infraestructura contra un catálogo de verificaciones predefinidas que abarcan optimización de costos, rendimiento, seguridad, tolerancia a fallos y límites de servicio. El sistema genera sugerencias puntuales orientadas a identificar recursos subutilizados, configuraciones subóptimas o riesgos operativos. Críticamente, Trusted Advisor implementa un modelo de recomendaciones basado en reglas estáticas definidas por AWS, sin incorporar mecanismos de aprendizaje automático que permitan adaptar las sugerencias a patrones específicos de cada organización. Esta característica limita la capacidad de detectar anomalías sutiles o comportamientos inusuales que no se corresponden con los patrones predefinidos en las reglas del sistema \parencite{AWS2026}.
+
+La articulación de estas tres herramientas conforma una solución integral para la administración de recursos AWS, pero presenta limitaciones estructurales: la dependencia del ecosistema AWS restringe la aplicabilidad en escenarios multi-cloud, el modelo de recomendaciones basado en reglas carece de adaptabilidad a contextos organizacionales específicos, y la separación entre detección de ineficiencias e implementación de correcciones requiere intervención manual o integración con herramientas externas de automatización.
 
 \subsection{Google Cloud Operations Suite}
 
-Google Cloud Operations Suite es el conjunto de herramientas de monitoreo, registro y diagnóstico de Google Cloud destinado a supervisar aplicaciones, servicios e infraestructura desplegados en la nube. La plataforma integra funcionalidades de monitoreo de métricas, gestión de registros (logging), trazabilidad distribuida (tracing), generación de alertas y análisis del rendimiento de sistemas, permitiendo obtener visibilidad sobre el comportamiento operativo de los recursos y facilitar la identificación de incidentes \parencite{GoogleCloud2026}.
+Google Cloud Operations Suite representa la apuesta de Google por una plataforma de observabilidad unificada que integre monitoreo de infraestructura, gestión de registros, trazabilidad distribuida y análisis de rendimiento en una solución cohesiva. La arquitectura de la suite refleja la filosofía de Google de correlación automática de telemetría, aprovechando la integración nativa con servicios gestionados como Google Kubernetes Engine, Cloud Run y BigQuery para proporcionar visibilidad sin configuración explícita \parencite{GoogleCloud2026}.
 
-La suite proporciona capacidades de observabilidad orientadas a recopilar y correlacionar información proveniente de distintos componentes de la infraestructura, contribuyendo al análisis del estado de los sistemas y al diagnóstico de problemas de rendimiento y disponibilidad. Entre sus funcionalidades se incluyen paneles de visualización, monitoreo de aplicaciones, análisis de eventos y herramientas para la administración de alertas \parencite{GoogleCloud2026}.
+El componente distintivo del ecosistema Google Cloud es Active Assist, un sistema de recomendación que incorpora técnicas de aprendizaje automático para analizar el comportamiento de la infraestructura y generar sugerencias contextualizadas. Active Assist implementa un enfoque proactivo, evaluando continuamente métricas operativas y configuraciones para identificar oportunidades de optimización antes de que se manifiesten como problemas. Los recommenders especializados abordan dimensiones específicas: identificación de máquinas virtuales ociosas, detección de configuraciones de seguridad subóptimas, recomendaciones de dimensionamiento de bases de datos y sugerencias de optimización de costos \parencite{GoogleCloud2026}.
 
-Google Cloud Active Assist es un conjunto de herramientas de análisis y recomendación que utiliza datos operativos y técnicas de aprendizaje automático para ayudar a los usuarios a optimizar recursos, mejorar el rendimiento, reforzar la seguridad y administrar costos dentro de Google Cloud. La plataforma analiza continuamente el comportamiento de la infraestructura y genera recomendaciones sobre distintos servicios, incluyendo máquinas virtuales, bases de datos, cuotas de recursos e identidades y accesos, con el objetivo de favorecer una utilización más eficiente de los recursos disponibles. Entre sus funcionalidades se encuentran la identificación de recursos ociosos o sobredimensionados, la detección de configuraciones que podrían afectar el rendimiento de los sistemas y la generación de sugerencias orientadas a la reducción de costos operativos. Estas recomendaciones son presentadas al usuario mediante interfaces integradas dentro de Google Cloud, facilitando la toma de decisiones sobre la infraestructura desplegada \parencite{GoogleCloud2026}.
+Desde una perspectiva crítica, Google Cloud Operations Suite presenta ventajas en la correlación automática de telemetría y la integración con el ecosistema de contenedores de Google, donde Kubernetes constituye un ciudadano de primera clase. Sin embargo, la efectividad de Active Assist depende críticamente de la disponibilidad de un historial de métricas suficientemente extenso, limitando su aplicabilidad en despliegues recientes o entornos con retención de datos acotada. Adicionalmente, los modelos de machine learning subyacentes permanecen como cajas negras, sin proporcionar al usuario visibilidad sobre los criterios de decisión ni capacidad de ajuste a patrones específicos de la organización \parencite{GoogleCloud2026}.
 
-En conjunto, Google Cloud Operations Suite y Active Assist proporcionan capacidades avanzadas de observabilidad, monitoreo y análisis para recursos desplegados en Google Cloud. Mientras Operations Suite se orienta a la recopilación y visualización de métricas, registros y trazas, Active Assist complementa estas funcionalidades mediante un conjunto de recomendadores (recommenders) especializados que analizan el comportamiento de determinados servicios y generan sugerencias de optimización relacionadas con costos, rendimiento, utilización de recursos y configuración de infraestructura. Sin embargo, las recomendaciones disponibles dependen de los tipos de recursos y recomendadores implementados por la plataforma, y requieren la existencia de un historial de uso suficiente para que el sistema pueda analizar patrones de comportamiento y generar insights relevantes \parencite{GoogleCloud2026}.
+La limitación más significativa radica en la dependencia del ecosistema Google Cloud. Las capacidades de observabilidad y recomendación operan óptimamente sobre servicios gestionados por Google, pero la extensibilidad hacia otros proveedores cloud resulta limitada. Esta característica restringe la aplicabilidad en escenarios multi-cloud o híbridos, donde la heterogeneidad de la infraestructura requiere herramientas agnósticas respecto del proveedor. La suite constituye una solución robusta para organizaciones comprometidas con el ecosistema Google Cloud, pero presenta limitaciones de portabilidad y adaptabilidad que deben considerarse en evaluaciones de arquitectura cloud \parencite{GoogleCloud2026}.
 
 \subsection{Azure Monitor y Azure Advisor}
 
-Azure Monitor es la plataforma de monitoreo y observabilidad de Microsoft Azure, diseñada para recopilar, almacenar, analizar y visualizar información proveniente de aplicaciones, servicios e infraestructura desplegados en la nube. La herramienta permite supervisar el comportamiento de recursos tanto a nivel de infraestructura como de aplicaciones, proporcionando información sobre rendimiento, disponibilidad y utilización de recursos mediante la recopilación continua de métricas, registros y eventos operativos \parencite{Microsoft2026}.
+Microsoft Azure implementa su estrategia de observabilidad mediante Azure Monitor, una plataforma que centraliza la recopilación, almacenamiento y análisis de telemetría proveniente de infraestructura y aplicaciones. La arquitectura de Azure Monitor distingue entre métricas numéricas de alta frecuencia y registros de baja frecuencia pero mayor cardinalidad, proporcionando mecanismos diferenciados para cada tipo de dato. La integración con Log Analytics habilita consultas complejas mediante Kusto Query Language (KQL), permitiendo correlación multi-fuente y análisis forense de incidentes \parencite{Microsoft2026}.
 
-La plataforma integra diferentes mecanismos de observabilidad que permiten centralizar información generada por máquinas virtuales, bases de datos, redes, contenedores y aplicaciones. Entre sus funcionalidades se encuentran el monitoreo en tiempo real, la generación de alertas automáticas, la visualización mediante paneles de control personalizables y el análisis histórico de métricas. Además, Azure Monitor incorpora herramientas para la gestión de registros (Log Analytics), trazabilidad distribuida de aplicaciones y análisis de eventos, facilitando el diagnóstico de incidentes y la identificación de problemas de rendimiento dentro de arquitecturas distribuidas \parencite{Microsoft2026}.
+Azure Advisor complementa el monitoreo operativo con un sistema de recomendaciones que evalúa la configuración y utilización de recursos contra un catálogo de buenas prácticas. Las recomendaciones se categorizan en cinco dominios: confiabilidad, seguridad, rendimiento, excelencia operativa y optimización de costos. El sistema genera sugerencias puntuales como la identificación de máquinas virtuales subutilizadas, la recomendación de grupos de disponibilidad para incrementar resiliencia, o la detección de configuraciones de seguridad no conformes con políticas de Microsoft \parencite{Microsoft2026}.
 
-Azure Advisor es un servicio de recomendaciones que analiza la configuración y utilización de los recursos desplegados en Microsoft Azure con el objetivo de identificar oportunidades de mejora dentro de la infraestructura. A partir de la evaluación continua de los servicios utilizados, la herramienta genera recomendaciones personalizadas orientadas a optimizar costos, incrementar el rendimiento de las aplicaciones, mejorar la disponibilidad de los sistemas, reforzar la seguridad y promover buenas prácticas operativas \parencite{Microsoft2026}.
+El análisis crítico de Azure Monitor revela fortalezas en la integración con el ecosistema Microsoft, particularmente para organizaciones que operan entornos híbridos que combinan infraestructura on-premise con Azure. La familiaridad de la interfaz para administradores acostumbrados a herramientas Microsoft y la integración con Active Directory constituyen ventajas competitivas en segmentos empresariales específicos. Sin embargo, Azure Advisor opera bajo un modelo de reglas estáticas definidas por Microsoft, sin incorporar mecanismos adaptativos basados en aprendizaje automático que permitan personalizar las recomendaciones a patrones organizacionales específicos \parencite{Microsoft2026}.
 
-Las recomendaciones son presentadas al usuario a través del portal de Azure y se encuentran organizadas en distintas categorías, entre las que se incluyen confiabilidad, seguridad, rendimiento, excelencia operativa y optimización de costos. Estas sugerencias pueden abarcar acciones como la identificación de recursos subutilizados, el ajuste de configuraciones, la adopción de mecanismos de alta disponibilidad o la implementación de medidas de seguridad recomendadas por Microsoft. De esta manera, Azure Advisor actúa como un mecanismo de asistencia para la toma de decisiones relacionadas con la administración de infraestructura cloud \parencite{Microsoft2026}.
+Una limitación estructural de Azure Monitor concierne al modelo de pricing. La ingestión y retención de registros en Log Analytics genera costos significativos en entornos de alto volumen, requiriendo implementación cuidadosa de políticas de retención y muestreo para evitar costos inesperados. La complejidad del modelo de pricing, que distingue entre ingestión de datos, retención y consultas, puede resultar opaca para organizaciones sin expertise financiero en cloud, representando un riesgo de sobrecosto que debe gestionarse proactivamente \parencite{Microsoft2026}.
 
-En conjunto, Azure Monitor y Azure Advisor proporcionan capacidades integradas de observabilidad, monitoreo y generación de recomendaciones para la administración de recursos dentro del ecosistema Microsoft Azure. Mientras Azure Monitor se orienta a la recopilación, almacenamiento y análisis de información operativa proveniente de la infraestructura y las aplicaciones, Azure Advisor utiliza dicha información junto con análisis propios de la plataforma para generar recomendaciones orientadas a mejorar el rendimiento, la seguridad, la disponibilidad y la eficiencia económica de los recursos desplegados. Sin embargo, las recomendaciones disponibles dependen de los mecanismos de análisis implementados por Microsoft y se encuentran asociadas específicamente a los servicios soportados dentro del entorno Azure \parencite{Microsoft2026}.
+La articulación entre Azure Monitor y Azure Advisor proporciona una solución de observabilidad y optimización robusta para el ecosistema Azure, pero comparte las limitaciones de las herramientas nativas de otros proveedores: dependencia del ecosistema, recomendaciones basadas en reglas predefinidas sin adaptabilidad contextual, y separación entre detección de ineficiencias e implementación de correcciones que requiere intervención manual o automatización externa \parencite{Microsoft2026}.
 
 \subsection{Huawei Cloud Eye y Huawei Cloud Cost Center}
 
@@ -123,3 +125,97 @@ Asimismo, las soluciones comerciales analizadas presentan una escasa integració
 Otra diferencia importante radica en el enfoque del análisis. Las herramientas existentes se orientan principalmente a un modelo reactivo, donde los problemas se detectan una vez que ya se manifiestan en la infraestructura o en el consumo. La solución propuesta busca avanzar hacia un enfoque más proactivo, utilizando aprendizaje automático no supervisado para detectar comportamientos inusuales y generar recomendaciones antes de que las ineficiencias se consoliden como problemas operativos o económicos.
 
 En conjunto, estas observaciones evidencian una brecha entre las capacidades actuales del mercado y la necesidad de contar con una plataforma que integre monitoreo continuo, detección inteligente de anomalías, recomendaciones adaptadas al contexto operacional y automatización de infraestructura dentro de un entorno Huawei Cloud. El proyecto de tesis se posiciona precisamente en esa intersección, proponiendo una solución unificada que combine monitoreo, observabilidad, análisis basado en Machine Learning y despliegue automatizado mediante IaC.
+
+\section{Cuadro Comparativo de Soluciones}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|p{2.5cm}|p{1.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\textbf{Solución} & \textbf{Tipo} & \textbf{Proveedor Principal} & \textbf{Monitoreo y Observabilidad} & \textbf{Detección de Anomalías} & \textbf{Optimización de Costos} & \textbf{Integración IaC} \\
+\hline
+AWS CloudWatch + Cost Explorer + Trusted Advisor & Comercial & AWS & Integral & Básica (reglas predefinidas) & Avanzada & Limitada \\
+\hline
+Google Cloud Operations + Active Assist & Comercial & GCP & Integral & Intermedia (ML limitado) & Avanzada & Limitada \\
+\hline
+Azure Monitor + Advisor & Comercial & Azure & Integral & Básica (reglas predefinidas) & Avanzada & Limitada \\
+\hline
+Huawei Cloud Eye + Cost Center & Comercial & Huawei Cloud & Básica & No disponible & Intermedia & No disponible \\
+\hline
+VMware CloudHealth & Comercial & Multi-cloud & Intermedia & No disponible & Avanzada & Limitada \\
+\hline
+Datadog & Comercial & Multi-cloud & Integral & Intermedia (Bits AI) & Avanzada & Limitada \\
+\hline
+Dynatrace & Comercial & Multi-cloud & Integral & Avanzada (Davis AI determinista) & Intermedia & Limitada \\
+\hline
+New Relic & Comercial & Multi-cloud & Integral & Intermedia (AIOps) & Intermedia & Limitada \\
+\hline
+Prometheus + Grafana & Open Source & Agnóstico & Intermedia & No disponible & No disponible & No disponible \\
+\hline
+OpenTelemetry & Open Source & Agnóstico & Básica (estándar) & No disponible & No disponible & No disponible \\
+\hline
+\textbf{InfraEye (Propuesta)} & \textbf{Propuesta} & \textbf{Huawei Cloud} & \textbf{Integral} & \textbf{Avanzada (Isolation Forest)} & \textbf{Avanzada} & \textbf{Nativa (Terraform)} \\
+\hline
+\end{tabular}
+\caption{Comparativo de soluciones de gestión y optimización cloud}
+\label{tab:comparativo}
+\end{table}
+
+La Tabla \ref{tab:comparativo} presenta un análisis comparativo estructurado de las soluciones comerciales y de código abierto analizadas frente a la propuesta de InfraEye, considerando dimensiones clave como capacidades de monitoreo, detección de anomalías, optimización de costos, integración con IaC y enfoque operativo.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+\hline
+\textbf{Solución} & \textbf{Enfoque Operativo} & \textbf{Multi-cloud} & \textbf{Personalización de Modelos} & \textbf{Automatización de Remediación} \\
+\hline
+AWS CloudWatch + Cost Explorer + Trusted Advisor & Reactivo & No & No & Limitada \\
+\hline
+Google Cloud Operations + Active Assist & Reactivo & No & No & Limitada \\
+\hline
+Azure Monitor + Advisor & Reactivo & No & No & Limitada \\
+\hline
+Huawei Cloud Eye + Cost Center & Reactivo & No & No & No \\
+\hline
+VMware CloudHealth & Reactivo & Sí & No & No \\
+\hline
+Datadog & Reactivo & Sí & Limitada & Intermedia \\
+\hline
+Dynatrace & Proactivo & Sí & No & Avanzada \\
+\hline
+New Relic & Proactivo & Sí & Limitada & Intermedia \\
+\hline
+Prometheus + Grafana & Reactivo & Sí & Sí & No \\
+\hline
+OpenTelemetry & N/A & Sí & Sí & No \\
+\hline
+\textbf{InfraEye (Propuesta)} & \textbf{Proactivo} & \textbf{En desarrollo} & \textbf{Sí (Isolation Forest)} & \textbf{Avanzada (Terraform)} \\
+\hline
+\end{tabular}
+\caption{Comparativo de soluciones - Enfoque operativo y características adicionales}
+\label{tab:comparativo2}
+\end{table}
+
+Las tablas comparativas evidencian que InfraEye se posiciona como una solución diferenciada que aborda las limitaciones identificadas en las herramientas existentes. Mientras las soluciones nativas de Huawei Cloud presentan capacidades limitadas de detección de anomalías y optimización, InfraEye incorpora un enfoque basado en aprendizaje automático no supervisado mediante Isolation Forest, permitiendo identificar patrones inusuales de comportamiento de forma proactiva.
+
+La integración nativa con Terraform representa una ventaja competitiva significativa, ya que permite automatizar la implementación de recomendaciones de optimización directamente desde la plataforma, eliminando la necesidad de intervención manual o herramientas externas. Esta característica no está disponible en las soluciones comerciales analizadas, que requieren procesos separados para la implementación de cambios.
+
+El enfoque proactivo de InfraEye contrasta con el modelo reactivo predominante en las herramientas existentes, donde las ineficiencias se detectan después de manifestarse como problemas operativos o económicos. La utilización de Isolation Forest permite anticipar comportamientos anómalos y generar recomendaciones preventivas, contribuyendo a una gestión más eficiente de la infraestructura cloud.
+
+\section{Conclusiones del Estado del Arte}
+
+El análisis exhaustivo del estado del arte revela un mercado de soluciones de monitoreo y optimización cloud consolidado pero incompleto. Las herramientas comerciales líderes como AWS CloudWatch, Azure Monitor, Google Cloud Operations Suite, Datadog, Dynatrace y New Relic ofrecen capacidades robustas de observabilidad, monitoreo de métricas y generación de recomendaciones basadas en reglas predefinidas. Sin embargo, persisten brechas significativas que limitan su efectividad en escenarios complejos de gestión de infraestructura.
+
+La primera brecha identificada corresponde a la dependencia del proveedor. Las soluciones nativas de AWS, Azure y Google Cloud operan óptimamente dentro de sus respectivos ecosistemas, pero presentan limitaciones de portabilidad y adaptación a entornos multi-cloud o híbridos. En el caso específico de Huawei Cloud, la oferta de herramientas avanzadas de optimización resulta significativamente más limitada que la disponible en los proveedores líderes, creando una oportunidad de mercado específica.
+
+La segunda brecha radica en la naturaleza de los mecanismos de detección y recomendación. Las plataformas existentes fundamentan sus análisis en reglas estáticas, verificadores predefinidos o recommenders implementados por el proveedor, sin ofrecer al usuario control sobre el modelo subyacente ni capacidad de adaptación a patrones específicos de su infraestructura. Aunque soluciones como Dynatrace incorporan Davis AI con enfoque determinista, y Google Active Assist utiliza aprendizaje automático, estos modelos permanecen como cajas negras sin transparencia sobre su funcionamiento interno.
+
+La tercera brecha se refiere a la integración con prácticas de Infraestructura como Código. Las herramientas analizadas detectan oportunidades de optimización pero delegan la implementación de cambios a procesos manuales o herramientas externas, incrementando la fricción operativa y el tiempo de respuesta ante ineficiencias detectadas.
+
+La cuarta brecha concerne al enfoque temporal del análisis. El paradigma predominante en el mercado es reactivo: los problemas se identifican después de manifestarse como incidentes operativos o sobrecostos económicos, limitando la capacidad de prevención y optimización proactiva.
+
+INFRAEYE aborda estas brechas mediante una arquitectura que integra cuatro pilares diferenciadores. Primero, implementa detección de anomalías mediante Isolation Forest, un algoritmo de aprendizaje automático no supervisado que identifica patrones inusuales directamente desde las métricas operativas, sin depender de reglas predefinidas ni requerir etiquetado previo de datos. Segundo, proporciona integración nativa con Terraform, permitiendo automatizar la implementación de recomendaciones de optimización directamente desde la plataforma, eliminando la desconexión entre detección y remediación. Tercero, adopta un enfoque proactivo que anticipa comportamientos anómalos antes de que se consoliden como problemas, habilitando gestión preventiva de la infraestructura. Cuarto, se especializa en el ecosistema Huawei Cloud, cubriendo una necesidad de mercado específica donde las herramientas nativas presentan limitaciones significativas en capacidades avanzadas de optimización.
+
+El diferencial de INFRAEYE no reside en replicar funcionalidades existentes, sino en articular un flujo integrado que conecta monitoreo continuo, análisis inteligente basado en machine learning, generación de recomendaciones contextualizadas y automatización de infraestructura mediante IaC, constituyendo una propuesta de valor complementaria y diferenciada frente a las soluciones vigentes en el mercado.
