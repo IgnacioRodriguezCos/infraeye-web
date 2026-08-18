@@ -1,19 +1,143 @@
-\anexo{Transcripción de la entrevista a Richard Feynman}
-\begin{description}[leftmargin=0cm, labelsep=0.5cm]
-    \item[\textbf{Interviewer:}] If you get hold of two magnets, and you push them, you can feel this pushing between them. Turn them around the other way, and they slam together. Now, what is it, the feeling between those two magnets?
+\anexo{Entrevistas}
 
-    \item[\textbf{Feynman:}] What do you mean, "What's the feeling between the two magnets?"
+\subsection{Entrevista 1: Donnie Sacristan}
 
-    \item[\textbf{Interviewer:}] There's something there, isn't there? The sensation is that there's something there when you push these two magnets together.
+Donnie Sacristan, empleado de Huawei Cloud para Hiberus.
 
-    \item[\textbf{Feynman:}] Listen to my question. What is the meaning when you say that there's a feeling? Of course you feel it. Now what do you want to know?
+\textbf{¿Podría describir brevemente su rol y cómo administra usted o su organización la infraestructura cloud actualmente?}
 
-    \item[\textbf{Interviewer:}] What I want to know is what's going on between these two bits of metal?
+Actualmente me desempeño como IT Manager en la empresa y tengo infraestructura Cloud, tengo multicloud, con lo cual, generé un pequeño aplicativo que me permite consolidar la información de las distintas cuentas y poder manejar toda la infraestructura de un solo lugar.
 
-    \item[\textbf{Feynman:}] They repel each other.
+\textbf{¿Cómo estiman actualmente la capacidad o los recursos cloud que necesitarán para un proyecto o servicio nuevo?}
 
-    \item[\textbf{Interviewer:}] What does that mean, or why are they doing that, or how are they doing that? I think that's a perfectly reasonable question.
+Para saber la capacidad y los recursos que necesito, yo tengo que solicitarle a los equipos de desarrollo y de arquitectura que me indiquen cuál va a ser el alcance del proyecto y, generalmente, en qué hardware lo tienen ellos actualmente desplegado. O ya la mayoría ahora usa mucho Docker. Entonces, cuáles son los requerimientos de esos Docker files para después yo ver en la nube hacer el sizing en correcto. Y, cuando se desconoce, lo que hacemos es empezar con algo pequeño, y va creciendo gradualmente, aprovechando la elasticidad de la nube.
 
-    \item[\textbf{Feynman:}] Of course, it's an excellent question. But the problem, you see, when you ask why something happens, how does a person answer why something happens? For example, Aunt Minnie is in the hospital. Why? Because she went out, slipped on the ice, and broke her hip. That satisfies people. It satisfies, but it wouldn't satisfy someone who came from another planet and who knew nothing about why when you break your hip do you go to the hospital. How do you get to the hospital when the hip is broken? Well, because her husband, seeing that her hip was broken, called the hospital up and sent somebody to get her. All that is understood by people. And when you explain a why, you have to be in some framework that you allow something to be true. Otherwise, you're perpetually asking why. Why did the husband call up the hospital? Because the husband is interested in his wife's welfare. Not always, some husbands aren't interested in their wives' welfare when they're drunk, and they're angry.
-    \ldots
-\end{description}
+\textbf{¿Cuáles son los principales desafíos o dificultades que encuentra al monitorear recursos cloud en su entorno actual?}
+
+Los principales desafíos o dificultades en cuanto al monitoreo actualmente es, como ya comenté, el tener multicloud. Cada cloud tiene su monitoreo. Por suerte, puedo usar Prometheus, y lo que hago es consolidar la información que me dan los distintos proveedores en un solo dashboard que me indica y en el cual puedo generar alarmas y demás. Así que por suerte, existen herramientas externas que permiten la integración de la información de las otras.
+
+\textbf{¿Ha experimentado situaciones de sobrecostos o utilización ineficiente de recursos cloud? En caso afirmativo, ¿podría describir algún ejemplo?}
+
+Sí, he tenido sobrecostos. Por ejemplo, lo que me pasó es que de Huawei Cloud me ayudaron y me dieron un agente que me consolida esta información y me permite hacer como el análisis de costos y dónde puedo reducir, y qué equipos están sobredimensionados o algún equipo que debería desechar por la cantidad de tiempo que está pagado, etcétera, etcétera. Así que ahora, gracias a esa gente que hicieron ellos con inteligencia artificial, es que estoy manejando la mayoría del análisis de sobrecostos.
+
+\textbf{¿Cómo identifican actualmente recursos ociosos, innecesarios o sobredimensionados dentro de su infraestructura?}
+
+Como herramientas que utilizo para monitoreo y administración, obviamente, cada cloud tiene sus propios tableros en los que me indican esta información, pero para no estar entrando y saliendo, como comenté anteriormente, lo que hago es tener todo en Prometheus y Grafana, que son 2 herramientas que me permiten consolidar la información de las distintas nubes.
+
+\textbf{¿Qué herramientas utilizan para monitoreo, administración y optimización de infraestructura cloud? ¿Qué aspectos considera positivos y cuáles podrían mejorarse?}
+
+Como les comenté, el que me hicieron en Huawei es bastante bueno. Lo que sí estoy probando, obviamente, porque esto es nuevo y desconozco el modelo que utilizan por atrás, pero lo importante, la confiabilidad en lo que me indica. Generalmente, lo que me dice es qué recursos debo borrar o cuál es el recurso que está sobredimensionado. Otro bueno que tienes que me hace el gráfico de los distintos consumos, basado, obviamente, en la información de cada una de las nubes. En cuanto al consumo por hora o si tengo un consumo comprometido.
+
+Y, obviamente, el tema de que me indique recursos que están mucho tiempo apagados. Eso me pareció una muy buena opción, y me ayuda bastante.
+
+\textbf{Si existiera una herramienta que analizara automáticamente la infraestructura y sugiriera optimizaciones mediante inteligencia artificial, ¿qué información o características necesitaría para confiar en sus recomendaciones?}
+
+\textbf{¿Qué funcionalidades consideraría más valiosas en una plataforma diseñada para optimizar costos y recursos cloud?}
+
+El impacto que tienen este tipo de herramientas es que me ahorra mucho tiempo, ya que eso es algo que te hacía, generalmente, cuando, lamentablemente, el costo era elevado no tengo a nadie que esté en el día a día con esto, entonces este tipo de herramientas me ayudan bastante para lo que es llevar el análisis y el control de costos.
+
+\textbf{¿Cómo cree que una plataforma capaz de detectar ineficiencias y automatizar determinadas acciones podría impactar en sus tareas diarias o en las de su equipo?}
+
+\textbf{¿Existe algún problema, necesidad o experiencia relacionada con la administración de infraestructura cloud que considere importante mencionar y que no haya surgido durante la entrevista?}
+
+Sí, el tema de lo que es el manejo de permisos, el manejo de creaciones de infra, de templates. Si bien cada una de las plataformas cuenta con sus templates, estaría bueno tener un sitio en el cual yo pueda generar mi matriz de permisos, usuarios y templates por producto, y automáticamente eso lo cambie o lo modifique respecto a la distinta nube en la que yo quiera desplegar lo que diseñé.
+
+\subsection{Entrevista 2: Agustín Chiarenza}
+
+Agustín Chiarenza, empleado de Huawei Cloud para Oca.
+
+A partir de la información provista por Donnie Sacristan de un agente, nos derivó a Agustín para darnos más información sobre el mismo.
+
+Es un agente de IA, ¿sí? que nace de la necesidad de OCA de tener que hacer FinOps. La verdad que OCA es un cliente muy grande, tiene mucha infraestructura, terminamos diciendo, bueno, hagamos un agente de IA para poder automatizar ese proceso, por lo menos facilitarlo lo más posible.
+
+De entrada, lo que se planteó es utilizar las herramientas que tiene Huawei, que son el agente de CloudEye, que está instalado en todas las máquinas, y el Cost Center, que es para ver todos los consumos de la cuenta. Y aprovechando que los recursos están taggeados, empezar con eso va a empezar a mapear. ¿Cuál es la idea? Se automatiza un agente. ¿Qué es qué hace? Cada X tiempo va, hace un export de todos los recursos que hay en el CloudAI, ¿sí? O sea, todos los recursos que están siendo monitoreados por el CloudAI. Entonces, ahí vos tenés por ahí el consumo de memoria o de CPU o de Internet, en realidad son las 3 métricas, hay más, pero estas son las 3 principales de los últimos 3 meses de cada ECS, por ejemplo, ¿sí? O, si tenés RDS que están monitoreadas con CloudEye, lo mismo, cuál es el consumo, cuánto está siendo usado ese recurso, que es lo que te permite ver el CloudEye. Y con el Cost Center es ver cuánto me está gastando ese recurso a nivel económico, ¿sí? También mapeado por recurso, entonces, vos vas a tener, por ejemplo, para la para las máquinas, para las ECSs, vos tenés un listado de todas tus ECSs, cuánto consumieron en los últimos 3 meses, y lo mismo, un listado de todas tus ECSs, y cuánto consumieron a nivel económico en tus 3 meses.
+
+Entonces, el agente lo que hace es va, hace ese reporte, ese reporte se va a va a OBS, ¿sí? Se guarda, se almacena. Al principio lo empezaron a hacer de manera manual, hoy ya lo tienen automatizado, pero para salir del apuro lo empezaron haciendo manual. Ese reporte va al OBS, el agente ahí sí automáticamente toma esos reportes. Aparte de eso, también hay reportes de CTS para lo que es trazabilidad de lo que sucede en la cuenta, creación de security groups, a qué a qué máquina están linkeados los security groups. Digamos, hay distintos tipos de logs, no solamente un reporte de Cost Center y un reporte del CloudEye. Se toma información de distintos lugares.
+
+La idea es: se corre, el agente lo que hace es se ejecuta un script, que lo que hace es mapear recursos. Entonces, para tus recursos core, que son ECS, RDS, EIPs, te los mapea por consumo y por instancia.
+
+Entonces, vos ya tenés el mapeo finalizado de cuántas ECS tenés, vos, por ejemplo, ECS A consume, en promedio, en los últimos 3 meses, utilizó un 80 porciento, y gastó, o sea, y repercute a nivel económico un, no sé, vale 100 dólares, por ejemplo. Y eso hace con todos los recursos, hace con esos recursos clave, que son ECS, también evalúa VPCs, porque hace un poco análisis de seguridad el agente, VPCs, security groups. No me acuerdo la memoria exactamente todo el scope que tiene, pero es bastante integral. La idea es poder hacer un seguimiento, y lo que hace es lo sube a un dashboard, y ese dashboard te permite tener un seguimiento real de toda tu cuenta rápido a mano, con un botón, te hace un escaneo.
+
+El dashboard estaba hecho para que simplemente la persona que iba pedirlo lo pueda ver, y no simplemente quede una operación del agente, y que el agente simplemente te notifique, sino que es que pueda verlo antes de que la gente haga algo. Y la idea es que, cuando vos invocás a ese agente a trabajar de manera proactiva, te hace un escaneo de todo lo que ya mapeó, o sea, de todo lo que está consumiendo, de todo lo que está consumiendo dinero, de todas tus políticas de seguridad, de todo lo que sucedió en la cuenta, y te alerta sobre si sucede algo raro.
+
+Por ejemplo, si tenés puertos completamente abiertos. Si, por ejemplo, una IP tuvo picos de tráfico inusuales, si, por ejemplo, tenés una ECS sobredimensionada, ¿sí?
+
+Por ahí tenés un flavor que te vale 2000 dólares, por que en los últimos 3 meses te consumía 2000 dólares, pero se está usando un 10 porciento en promedio. Es decir, que ya está sobredimensionado. Y así con el resto de recursos, y también está desglosado por distintas métricas, donde el prompt, el agente maneja un sub agente distinto, con un prompt distinto, con unas skills distintas. Por ejemplo, para lo que es análisis de seguridad, delega al sub agente de seguridad. Para lo que es el agente de infraestructura, delega un agente de infraestructura, que lo que hace es, hacer el mapeo y te enumera los recursos.
+
+Vos te dice si iba estar sobredimensionado, si tuviste ahí una máquina pagada hace 3 meses, si tenés storage en el OBS, que por ahí está en en en el estado estándar, y por ahí no se consulta hace 180 días, entonces, te te dice que lo pases a Archive, por ejemplo. Todas esas features están, ¿sí? O sea, te recomienda cómo gestionar y hacer un FinOps. Y así también te hace un forecast de cuánto vas a gastar, y de cuánto te podrías ahorrar haciendo las correcciones que él te dice.
+
+\textbf{Resumen:}
+
+Creamos un agente de IA para OCA que automatiza el mapeo y análisis de recursos en Huawei Cloud, usando CloudEye y Call Center para monitorear consumo y costos de recursos clave (ECS, RDS, EIPs, etc.). El agente genera reportes automáticos, los sube a un dashboard y alerta sobre anomalías (seguridad, sobredimensionamiento, tráfico inusual). Además, recomienda optimizaciones, predice gastos y calcula posibles ahorros según las acciones sugeridas.
+
+\subsection{Entrevista 3: Nicolás Irigoyen}
+
+Nicolás Irigoyen, empleado de Huawei Cloud.
+
+Además de Agustín Chiarenza dentro del área de Cloud de Huawei, Nicolás Irigoyen también participó de la ronda de entrevistas.
+
+\textbf{1. Contexto actual}
+
+\textbf{¿Podría describir brevemente su rol y cómo administra usted o su organización la infraestructura cloud actualmente?}
+
+Mi rol actualmente es de arquitecto de soluciones cloud especializado en lo que es inteligencia artificial. Y el cómo organizo y administro yo mi infraestructura lo hago de manera manual. Tengo un 1 instancia, generalmente uso instancias, digamos, máquinas virtuales, aunque a veces también uso base de datos como servicio y demás. Pero, para simplificar, vamos con lo que serían instancias.
+
+Tengo, generalmente, una instancia por proyecto que llevo a cabo, la inicio y la pago de manera manual, y le pongo capacidades no muy altas, debido a que, generalmente, para lo que tengo que hacer no es necesario tanto, salvo casos específicos con GPUs, NPUs o cosas por el estilo.
+
+\textbf{2. Planificación de recursos}
+
+\textbf{¿Cómo estiman actualmente la capacidad o los recursos cloud que necesitarán para un proyecto o servicio nuevo?}
+
+Actualmente, para estimar la capacidad de los recursos que tengo que usar, por un lado, yo ya tengo bastante experiencia con las distintas cosas que voy a usar, así que medio que ya sé cuánto necesito. Pero, por otro lado, también hago 2 cosas. 1º, como siempre o casi siempre uso herramientas o cosas basadas en lo que es open source, o, bueno, en cualquier herramienta en general, busco las capacidades que necesita esa aplicación o esas herramientas, que generalmente te dan cuánto necesitás en espacio, en RAM y en CPU, que es básicamente las 3 cosas que necesito. Si no, también puedo usar una inteligencia artificial, y le pregunto en base a la herramienta, que haga una investigación heavy o importante de la herramienta, y que me diga qué capacidades son las recomendadas.
+
+\textbf{3. Monitoreo y operación}
+
+\textbf{¿Cuáles son los principales desafíos o dificultades que encuentra al monitorear recursos cloud en su entorno actual?}
+
+En cuanto a dificultades para lo que es monitoreo, yo realmente, como yo soy parte del proveedor, es decir, yo trabajo en el proveedor de las máquinas virtuales y demás, no tengo tanto problema en lo que es mantenerme eficiente, ya que no me miden por ser eficiente en las cosas que pruebo, sino en ser efectivo y que las pruebe y que funcionen bien. Pero lo que sí me me pasa a veces es, me olvido prendidas algunas máquinas o me doy cuenta que al final, por ejemplo, los discos principalmente eran demasiado grandes lo que necesitaba, entonces, nada, me terminé gastando un poco del crédito que yo uso o que tengo sin un 1 uso real, sino que simplemente se me pasan. Pero prácticamente es eso, para lo que es monitoreo no hay mucha cosa más.
+
+\textbf{4. Gestión de costos y eficiencia}
+
+\textbf{¿Ha experimentado situaciones de sobrecostos o utilización ineficiente de recursos cloud? En caso afirmativo, ¿podría describir algún ejemplo?}
+
+En cuanto a lo que son situaciones con sobrecostos o utilización ineficiente, como dije en la pregunta anterior, hubo algunos casos más puntuales que otra cosa, pero con, por ejemplo, la utilización de discos o que hice un cambio de capacidades de una máquina y al final no necesitaba tanto, y después capaz que me olvido de bajarla de nuevo o algo más chico. Pero, generalmente, no, no tengo tantos problemas, salvo esos que suelen ser más recurrentes, eso sí.
+
+\textbf{5. Detección de recursos innecesarios}
+
+\textbf{¿Cómo identifican actualmente recursos ociosos, innecesarios o sobredimensionados dentro de su infraestructura?}
+
+La detección de cómo hago para ver estos recursos innecesarios sobre sobredimensionados, lo hago yo manualmente. Es decir, me fijo y digo, che, al final, no estoy necesitando tanto. Luego, por ejemplo, en lo que es CPU y RAM con top dentro de la máquina, uso generalmente Linux, y tiro un top un top para poder ver la utilización sobrecarga, ¿no? Durante una carga productiva, y, generalmente, si veo algo que me sobra, lo bajo, pero no hago mucha cosa más.
+
+\textbf{6. Herramientas utilizadas}
+
+\textbf{¿Qué herramientas utilizan para monitoreo, administración y optimización de infraestructura cloud? ¿Qué aspectos considera positivos y cuáles podrían mejorarse?}
+
+Para lo que es monitoreo, administración y demás, yo, la única herramienta en sí misma que uso es la de un gestor SCH, que es para más administración. Que yo ahí puedo gestionar, de dónde puedo acceder y que tener snippets y demás. Ahora, lo que son herramientas para lo que es monitoreo en sí mismo, lo único que uso actualmente es las herramientas propias de la plataforma, o sea, de del cloud que estoy utilizando, que, generalmente, tienen el monitoreo de la mayoría de las cosas. Pero creo que podría mejorar mucho en el uso de estas herramientas, por ejemplo, ir hacia algo similar a Prometheus y Grafana, ya que dan mucho más detalle y puede estar más copado. Y también estaría bueno tener algo más automático que yo no tenga que estar mirando o que se haga de manera automática y me pueda cambiar las especificaciones en base a, por ejemplo, el historial del uso del CPU o de la RAM, cosa de que ese cambio no lo debe hacer yo, sino que lo haga una IA, por ejemplo.
+
+No sé, doy un ejemplo. Si en 30 días no usé una máquina más de, o sea, usé una máquina, pero la máquina es de 4 8 y uso un CPU y 2 gigas de RAM, que la baje automáticamente hasta eso. Más o menos, una cosa así.
+
+\textbf{7. Confianza en recomendaciones automáticas}
+
+\textbf{Si existiera una herramienta que analizara automáticamente la infraestructura y sugiriera optimizaciones mediante inteligencia artificial, ¿qué información o características necesitaría para confiar en sus recomendaciones?}
+
+Para poder confiar en las recomendaciones de una inteligencia artificial, me gustaría ver que me muestre en qué se basó. Es decir, que me diga, como dije con la pregunta anterior, si tengo una máquina que es 4 8, pero solamente uso 1 4, que me muestre el histórico del uso y de cuánto tiempo estuvo usando un CPU contra 4, por ejemplo, y que me muestre un gráfico de cómo fue el uso de eso. Entonces, ahí yo puedo decir, che, tiene razón, casi nunca paso el CPU o los 2 CPUs, puedo bajarla sin problema y puedo delegar a la IA para que lo haga.
+
+\textbf{8. Funcionalidades prioritarias}
+
+\textbf{¿Qué funcionalidades consideraría más valiosas en una plataforma diseñada para optimizar costos y recursos cloud?}
+
+Funcionalidades clave o ultravaliosas que me encantaría ver son, 1º: un agente que sea proactivo, es decir, que yo no tenga que estar diciéndole qué puedo mejorar, sino que me haga recomendaciones de manera proactiva. Que me diga, por ejemplo, una vez todos los días, que me diga, estuve viendo tus máquinas, están bien, o estuve viendo tus máquinas y estaría bueno que esta la cambies, que hagas esto, que hagas esto, capaz que me recomiende otro servicio que sea más eficiente para lo que estoy haciendo, cosas por el estilo. Y, como dije en la pregunta anterior, que me muestre las fuentes o el origen de la información para hacer esas recomendaciones, ya que, si no, es medio lo está haciendo a ojo, no me termina de convencer, pero si me muestra un histórico de datos, si me hace un análisis de esos datos, resumido, porque tampoco quiero leer 2 páginas por cada máquina, pero que me haga un tablero o algo así, tipo dashboard, estaría bueno y sería rápido y eficiente.
+
+\textbf{9. Validación de la propuesta}
+
+\textbf{¿Cómo cree que una plataforma capaz de detectar ineficiencias y automatizar determinadas acciones podría impactar en sus tareas diarias o en las de su equipo?}
+
+Podría ser una herramienta de estas, en cuanto a lo que es impacto, que mis créditos o que mi budget, que así le decimos en mi empresa, dure por mucho más tiempo, y que yo no tenga que estar tanto pendiente de levantar, apagar, bajar, etcétera, todas las máquinas, y puedo ocuparme en otras cosas. Yo creo que puede tener un impacto copado, principalmente por eso, ya que me saca de cosas que, sinceramente, no aportan valor, sino que simplemente hacen que gaste menos, que a mí, en particular, no me importan porque es crédito, pero entiendo que para una empresa que está usando cloud, sí, le serviría bastante. Y a mis compañeros de equipo lo mismo, haría que podamos enfocarnos en otras cosas o hacer proyectos más complejos, con más máquinas, con más servicios diferentes, sin que tengamos que estar teniendo miedo de cuánto estamos gastando, ¿sí? Estaría copado, una cosa así.
+
+\textbf{10. Comentarios adicionales}
+
+\textbf{¿Existe algún problema, necesidad o experiencia relacionada con la administración de infraestructura cloud que considere importante mencionar y que no haya surgido durante la entrevista?}
+
+En cuanto a algún tema en particular, yo creo que no. Lo único que pueden llegar a tener en, o que deberían tener en cuenta, es que cada nube funciona de maneras distintas. Entonces, no sé qué tan generalizable sería un agente, sino qué deberían hacer un agente por nube, ¿sí? Por tipo de nube. Porque, además, cada nube tiene infinitos servicios, hoy en día, de formas muy distintas.
+
+Algunos son infraestructura, otros son plataforma, otros son tipo SaaS. Entonces, nada, ojo con eso, porque un agente capaz que colapsa de tanta información y no da la mejor respuesta, así que capaz que estaría bueno tener diferentes agentes o diferentes... Sí, que vos, dentro de la plataforma, puedas elegir diferentes agentes en base a la nube con la que estés trabajando. Y, si estás trabajando con más de una nube, que puedas, o que se se modifique de manera automática de alguna manera, en base a lo que estás trabajando, el agente que debería usar. Por ejemplo, AWS, GCP, Azure, que vos estés trabajando con cosas entre distintos de ellos, por ejemplo, Azure y AWS, pero que y la gente, o sea, que haya un orquestador arriba que diga, ok, esta consulta va para Azure, esta consulta va para AWS. Yo creo que eso estaría bueno, ya que les daría mejores resultados.
