@@ -1,0 +1,430 @@
+CORRECCIONES ISO 690:2010 - REFERENCIAS BIBLIOGRÁFICAS
+========================================================
+
+Se identifican tres tipos de errores recurrentes en biblio.bib:
+
+==============================================================
+ERROR 1: AUTORES CORPORATIVOS ABREVIADOS
+==============================================================
+
+ISO 690:2010 requiere que los autores corporativos se indiquen con su
+denominación completa o formal, no con abreviaturas comerciales.
+
+| Clave          | Autor actual   | Corrección sugerida              |
+|----------------|----------------|----------------------------------|
+| AWS2023        | AWS            | Amazon Web Services              |
+| AWS2024        | AWS            | Amazon Web Services              |
+| AWS2026        | AWS            | Amazon Web Services              |
+| IBM2026        | IBM            | International Business Machines  |
+| Gartner2021    | Gartner        | Gartner, Inc.                    |
+| Datadog2026    | Datadog        | Datadog, Inc.                    |
+| Dynatrace2026  | Dynatrace      | Dynatrace LLC                    |
+| NewRelic2026   | New Relic      | New Relic, Inc.                  |
+| VMware2023     | VMware         | VMware, Inc.                     |
+
+Nota: Microsoft, HashiCorp, Red Hat, Grafana Labs, FinOps Foundation,
+Huawei Cloud, Google Cloud y Prometheus se consideran aceptables como
+autores corporativos dado que son denominaciones reconocidas formalmente.
+
+==============================================================
+ERROR 2: AUSENCIA DEL IDENTIFICADOR DE MEDIO [en línea]
+==============================================================
+
+ISO 690:2010 exige incluir el identificador de medio [en línea] para
+recursos electrónicos accedidos vía Internet.
+
+A) Entradas @Online (todas carecen de [en línea]):
+
+| Clave                 | Tipo    |
+|-----------------------|---------|
+| Gartner2021           | @Online |
+| Flexera2023           | @Online |
+| AWS2023               | @Online |
+| AWS2024               | @Online |
+| AWS2026               | @Online |
+| FinOps2026            | @Online |
+| FinOpsFramework2026   | @Online |
+| IBM2026               | @Online |
+| Microsoft2025         | @Online |
+| HashiCorp2026         | @Online |
+| GoogleCloud2026       | @Online |
+| RedHat2026            | @Online |
+| HuaweiCloud2026       | @Online |
+| VMware2023            | @Online |
+| Prometheus2026        | @Online |
+| Grafana2026           | @Online |
+| OpenTelemetry2026     | @Online |
+| Microsoft2026         | @Online |
+| Datadog2026           | @Online |
+| Dynatrace2026         | @Online |
+| NewRelic2026          | @Online |
+
+B) Entradas @Article/@InProceedings/@InBook con URL (acceso online):
+
+| Clave                       | Tipo          |
+|-----------------------------|---------------|
+| Ullah2018                   | @Article      |
+| Ward2014                    | @Article      |
+| Kratzke2022                 | @Article      |
+| Chen2023                    | @Article      |
+| Haben2023                   | @InBook       |
+| Shneiderman1996             | @InProceedings|
+| DiazcaroPetit2010           | @Article      |
+
+Caso especial: PaganiSelingerValiron2014 incluye [en línea] en NOTE
+pero con formato inconsistente: {[en línea][Consulta: agosto de 2025]}
+→ Debería unificar formato: {[en línea][consulta: agosto de 2025]}
+
+Solución sugerida: Agregar [en línea] al inicio del campo NOTE.
+Ejemplo: NOTE = {[en línea][consulta: 19 mayo 2026]}
+
+==============================================================
+ERROR 3: FECHA DE CONSULTA SIN CORCHETES
+==============================================================
+
+ISO 690:2010 requiere que la fecha de consulta se indique entre
+corchetes: [consulta: DD mes AAAA]. Actualmente todas usan formato
+sin corchetes: Consulta: DD mes AAAA
+
+| Clave                       | NOTE actual                    | Corrección                          |
+|-----------------------------|--------------------------------|-------------------------------------|
+| Gartner2021                 | Consulta: 16 septiembre 2026   | [consulta: 16 septiembre 2026]      |
+| Flexera2023                 | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| AWS2023                     | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| AWS2024                     | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| AWS2026                     | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| Ullah2018                   | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| Ward2014                    | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| Kratzke2022                 | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| FinOps2026                  | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| FinOpsFramework2026         | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| IBM2026                     | Consulta: 19 mayo 2026         | [consulta: 19 mayo 2026]            |
+| Microsoft2025               | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| HashiCorp2026               | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| HuaweiCloud2026             | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| VMware2023                  | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Prometheus2026              | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Grafana2026                 | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| OpenTelemetry2026           | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Microsoft2026               | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Chen2023                    | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| Shneiderman1996             | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| GoogleCloud2026             | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| RedHat2026                  | Consulta: 20 mayo 2026         | [consulta: 20 mayo 2026]            |
+| Datadog2026                 | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Dynatrace2026               | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| NewRelic2026                | Consulta: 15 mayo 2026         | [consulta: 15 mayo 2026]            |
+| Haben2023                   | Consulta: 16 septiembre 2026   | [consulta: 16 septiembre 2026]      |
+| DiazcaroPetit2010           | Consulta: 31 agosto 2024       | [consulta: 31 agosto 2024]          |
+
+Caso especial: PaganiSelingerValiron2014
+  Actual: {[en línea][Consulta: agosto de 2025]}
+  Corrección: {[en línea][consulta: agosto de 2025]}
+  (minúscula para consistencia, y falta día específico)
+
+==============================================================
+RESUMEN
+==============================================================
+
+| Tipo de error                          | Cantidad de entradas afectadas |
+|----------------------------------------|-------------------------------|
+| Autor corporativo abreviado            | 9                             |
+| Ausencia de [en línea]                 | 28 (21 @Online + 7 con URL)   |
+| Fecha de consulta sin corchetes        | 28                            |
+
+Formato normalizado ISO 690:2010 para NOTE en entradas online:
+  NOTE = {[en línea][consulta: DD mes AAAA]}
+
+Formato normalizado para entradas @Article con URL accedida online:
+  NOTE = {[en línea][consulta: DD mes AAAA]}
+
+
+==============================================================
+VERSIÓN CORREGIDA - ENTRADAS BIBTEX COMPLETAS
+==============================================================
+
+A continuación se presentan todas las entradas afectadas con las tres
+correcciones aplicadas: autor corporativo completo, [en línea] y
+[consulta: ...] entre corchetes.
+
+--- Entradas @Online corregidas ---
+
+@Online{Gartner2021,
+	AUTHOR = {Gartner, Inc.},
+	TITLE = {Predicts 2021: Cloud and Edge Infrastructure},
+	YEAR = {2020},
+	URL = {https://emt.gartnerweb.com/ngw/globalassets/en/doc/documents/735107-predicts-2021-cloud-and-edge-infrastructure.pdf},
+	NOTE = {[en línea][consulta: 16 septiembre 2026]}
+}
+
+@Online{Flexera2023,
+	AUTHOR = {Flexera},
+	TITLE = {2023 State of the Cloud Report},
+	YEAR = {2023},
+	URL = {https://www.flexera.com/products/software-budget-optimization/state-of-the-cloud-report},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{AWS2023,
+	AUTHOR = {Amazon Web Services},
+	TITLE = {AWS Well-Architected Framework: Cost Optimization Pillar},
+	YEAR = {2023},
+	URL = {https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/welcome.html},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{AWS2024,
+	AUTHOR = {Amazon Web Services},
+	TITLE = {What is Cloud Computing?},
+	YEAR = {2024},
+	URL = {https://aws.amazon.com/what-is-cloud-computing/},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Online{AWS2026,
+	AUTHOR = {Amazon Web Services},
+	TITLE = {AWS Billing and Cost Management User Guide},
+	YEAR = {2026},
+	URL = {https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Online{FinOps2026,
+	AUTHOR = {FinOps Foundation},
+	TITLE = {What is FinOps?},
+	YEAR = {2026},
+	URL = {https://www.finops.org/introduction/what-is-finops/},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Online{FinOpsFramework2026,
+	AUTHOR = {FinOps Foundation},
+	TITLE = {FinOps Framework Overview},
+	YEAR = {2026},
+	URL = {https://www.finops.org/framework/},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Online{IBM2026,
+	AUTHOR = {International Business Machines},
+	TITLE = {What is Cloud Optimization?},
+	YEAR = {2026},
+	URL = {https://www.ibm.com/topics/cloud-optimization},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Online{Microsoft2025,
+	AUTHOR = {Microsoft},
+	TITLE = {What is infrastructure as code (IaC)?},
+	YEAR = {2025},
+	URL = {https://learn.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@Online{HashiCorp2026,
+	AUTHOR = {HashiCorp},
+	TITLE = {What is Terraform?},
+	YEAR = {2026},
+	URL = {https://developer.hashicorp.com/terraform/intro},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@Online{GoogleCloud2026,
+	AUTHOR = {Google Cloud},
+	TITLE = {¿Qué es DevOps? Investigación y soluciones},
+	YEAR = {2026},
+	URL = {https://cloud.google.com/devops},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@Online{RedHat2026,
+	AUTHOR = {Red Hat},
+	TITLE = {What is automation?},
+	YEAR = {2026},
+	URL = {https://www.redhat.com/en/topics/automation/what-is-automation},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@Online{HuaweiCloud2026,
+	AUTHOR = {Huawei Cloud},
+	TITLE = {Cloud Eye User Guide},
+	YEAR = {2026},
+	URL = {https://support.huaweicloud.com/ces/index.html},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{VMware2023,
+	AUTHOR = {VMware, Inc.},
+	TITLE = {VMware CloudHealth: Multi-Cloud Cost Optimization and Governance},
+	YEAR = {2023},
+	URL = {https://www.vmware.com/products/cloudhealth.html},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{Prometheus2026,
+	AUTHOR = {Prometheus},
+	TITLE = {Prometheus Documentation},
+	YEAR = {2026},
+	URL = {https://prometheus.io/docs/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{Grafana2026,
+	AUTHOR = {Grafana Labs},
+	TITLE = {Grafana Documentation},
+	YEAR = {2026},
+	URL = {https://grafana.com/docs/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{OpenTelemetry2026,
+	AUTHOR = {OpenTelemetry},
+	TITLE = {OpenTelemetry Documentation},
+	YEAR = {2026},
+	URL = {https://opentelemetry.io/docs/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{Microsoft2026,
+	AUTHOR = {Microsoft},
+	TITLE = {Azure Monitor Documentation},
+	YEAR = {2026},
+	URL = {https://docs.microsoft.com/azure/azure-monitor/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{Datadog2026,
+	AUTHOR = {Datadog, Inc.},
+	TITLE = {Datadog - Cloud Monitoring as a Service},
+	YEAR = {2026},
+	URL = {https://www.datadoghq.com/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{Dynatrace2026,
+	AUTHOR = {Dynatrace LLC},
+	TITLE = {Dynatrace - Observability built for the age of AI},
+	YEAR = {2026},
+	URL = {https://www.dynatrace.com/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+@Online{NewRelic2026,
+	AUTHOR = {New Relic, Inc.},
+	TITLE = {New Relic - AI-powered Observability},
+	YEAR = {2026},
+	URL = {https://newrelic.com/},
+	NOTE = {[en línea][consulta: 15 mayo 2026]}
+}
+
+--- Entradas @Article/@InProceedings/@InBook con URL corregidas ---
+
+@Article{Ullah2018,
+	AUTHOR = {Ullah, Amjad and Li, Jingpeng and Shen, Yindong and Hussain, Amir},
+	TITLE = {A control theoretical view of cloud elasticity: taxonomy, survey and challenges},
+	JOURNAL = {Cluster Computing},
+	VOLUME = {21},
+	NUMBER = {3},
+	PAGES = {1735--1764},
+	YEAR = {2018},
+	DOI = {10.1007/s10586-018-2807-6},
+	URL = {https://link.springer.com/article/10.1007/s10586-018-2807-6},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Article{Ward2014,
+	AUTHOR = {Ward, Jonathan Stuart and Barker, Adam},
+	TITLE = {Observing the clouds: a survey and taxonomy of cloud monitoring},
+	JOURNAL = {Journal of Cloud Computing},
+	VOLUME = {3},
+	PAGES = {24},
+	YEAR = {2014},
+	DOI = {10.1186/s13677-014-0024-2},
+	URL = {https://journalofcloudcomputing.springeropen.com/articles/10.1186/s13677-014-0024-2},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Article{Kratzke2022,
+	AUTHOR = {Kratzke, Nane},
+	TITLE = {Cloud-Native Observability: The Many-Faceted Benefits of Structured and Unified Logging---A Multi-Case Study},
+	JOURNAL = {Future Internet},
+	VOLUME = {14},
+	NUMBER = {10},
+	PAGES = {274},
+	YEAR = {2022},
+	DOI = {10.3390/fi14100274},
+	URL = {https://www.mdpi.com/2071-1050/14/10/274},
+	NOTE = {[en línea][consulta: 19 mayo 2026]}
+}
+
+@Article{Chen2023,
+	AUTHOR = {Chen, Junxiang and Zhang, Jilin and Qian, Ruixiang and Yuan, Junfeng and Ren, Yongjian},
+	TITLE = {An Anomaly Detection Method for Wireless Sensor Networks Based on the Improved Isolation Forest},
+	JOURNAL = {Applied Sciences},
+	VOLUME = {13},
+	NUMBER = {2},
+	PAGES = {702},
+	YEAR = {2023},
+	DOI = {10.3390/app13020702},
+	URL = {https://www.mdpi.com/2076-3417/13/2/702},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@InBook{Haben2023,
+	AUTHOR = {Haben, Stephen and Voss, Marcus and Holderbaum, William},
+	TITLE = {Time Series Forecasting: Core Concepts and Definitions},
+	BOOKTITLE = {Core Concepts and Methods in Load Forecasting},
+	PUBLISHER = {Springer},
+	YEAR = {2023},
+	PAGES = {55--66},
+	ADDRESS = {Cham},
+	DOI = {10.1007/978-3-031-27852-5_5},
+	URL = {https://doi.org/10.1007/978-3-031-27852-5_5},
+	NOTE = {[en línea][consulta: 16 septiembre 2026]}
+}
+
+@InProceedings{Shneiderman1996,
+	AUTHOR = {Shneiderman, Ben},
+	TITLE = {The Eyes Have It: A Task by Data Type Taxonomy for Information Visualizations},
+	BOOKTITLE = {Proceedings IEEE Symposium on Visual Languages},
+	YEAR = {1996},
+	URL = {https://www.cs.umd.edu/~ben/papers/Shneiderman1996eyes.pdf},
+	NOTE = {[en línea][consulta: 20 mayo 2026]}
+}
+
+@Article{DiazcaroPetit2010,
+	AUTHOR = {
+					Díaz-Caro, Alejandro and 
+					Petit, Barbara
+				},
+	JOURNAL = {ArXiv},
+	NOTE = {[en línea][consulta: 31 agosto 2024]},
+	TITLE = {Sums in linear algebraic lambda-calculus},
+	URL = {https://api.semanticscholar.org/CorpusID:43105639},
+	VOLUME = {abs/1011.3542},
+	YEAR = {2010}
+}
+
+--- Caso especial corregido ---
+
+@Article{PaganiSelingerValiron2014,
+	ADDRESS =	 		{New York, NY, USA},
+	AUTHOR = 			{
+							Pagani, Michele and 
+							Selinger, Peter and 
+							Valiron, Benoît
+						},
+	DOI = 				{10.1145/2578855.2535879},
+	ISSN = 				{0362-1340},
+	ISSUE_DATE = 		{January 2014},
+	JOURNAL = 			{SIGPLAN Not.},
+	MONTH = 			{01},
+	NOTE = 				{[en línea][consulta: agosto de 2025]},
+	NUMBER =			{1},
+	NUMPAGES = 			{12},
+	PAGES = 			{647--658},
+	PUBLISHER = 		{Association for Computing Machinery},
+	TITLE = 			{Applying quantitative semantics to higher-order quantum computing},
+	VOLUME = 			{49},
+	YEAR = 				{2014}
+}

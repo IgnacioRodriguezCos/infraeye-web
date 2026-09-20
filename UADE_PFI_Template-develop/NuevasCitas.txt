@@ -1,0 +1,10 @@
+2.1.10.3 Series temporales
+Las series temporales consisten en secuencias de observaciones registradas en distintos instantes y ordenadas cronológicamente. Habitualmente, estas observaciones se recolectan en intervalos de tiempo regulares, lo que permite analizar la evolución de una variable a lo largo del tiempo. Además, una serie temporal puede ser univariada cuando contiene una única variable por instante, o multivariada cuando registra múltiples variables en cada momento (Haben, Voss y Holderbaum, 2023).
+
+En el contexto del monitoreo de infraestructura cloud, las métricas de utilización de recursos pueden representarse mediante series temporales, ya que valores como el uso de CPU, memoria, almacenamiento y tráfico de red son recolectados periódicamente. En InfraEye, estas métricas son obtenidas en intervalos de cinco minutos, permitiendo construir registros temporales sobre el comportamiento de los recursos. El análisis de estos datos permite obtener características estadísticas sobre diferentes ventanas temporales y utilizarlas posteriormente como entrada para el proceso de detección de anomalías.
+
+El análisis mediante ventanas temporales permite resumir el comportamiento de las métricas durante períodos determinados. En lugar de considerar únicamente valores individuales, pueden calcularse medidas estadísticas como la media, el máximo, el mínimo, la desviación estándar y los percentiles de una ventana de observaciones. De esta manera, es posible caracterizar el comportamiento de utilización de un recurso durante un período y reducir la influencia de variaciones puntuales.
+
+Referencia
+
+HABEN, Stephen; VOSS, Marcus; HOLDERBAUM, William, 2023. Time Series Forecasting: Core Concepts and Definitions. En: Core Concepts and Methods in Load Forecasting. Cham: Springer, 2023, pp. 55–66. DOI 10.1007/978-3-031-27852-5_5. Disponible también desde: https://doi.org/10.1007/978-3-031-27852-5_5. Consulta: 16 septiembre 2026.

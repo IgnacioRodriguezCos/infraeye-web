@@ -1,0 +1,53 @@
+CORRECCION SECCION 2.8 - Isolation Forest aplicado a métricas de INFRAEYE
+=========================================================================
+
+ARCHIVO: chapters/chapter02_antecedentes.tex
+LINEA: 109 (tercer párrafo de la subsección "Algoritmo Isolation Forest")
+
+TEXTO ACTUAL:
+---
+En el contexto de sistemas e infraestructura tecnológica, Isolation Forest puede contribuir a la detección de anomalías mediante el análisis del comportamiento histórico y operativo del entorno con el objetivo de identificar desviaciones respecto de patrones considerados normales. Para ello, el algoritmo puede utilizar información proveniente de métricas, registros de eventos (logs), utilización de recursos, tráfico de red o indicadores de rendimiento para detectar comportamientos inusuales que puedan asociarse con fallos operativos, degradación del servicio, incidentes de seguridad o utilización anómala de recursos. De esta manera, el modelo permite complementar estrategias tradicionales de monitoreo y favorecer mecanismos más proactivos de supervisión del sistema \parencite{Chen2023}.
+---
+
+TEXTO PROPUESTO (reemplazo):
+---
+En el contexto de INFRAEYE, Isolation Forest se aplica específicamente sobre las métricas de utilización de recursos recolectadas periódicamente desde la infraestructura cloud del usuario. Estas métricas incluyen la utilización de CPU, memoria, disco, tráfico de red entrante y tráfico de red saliente, las cuales son obtenidas en intervalos regulares de cinco minutos, conformando series temporales multivariadas. Dado que Isolation Forest no opera directamente sobre series temporales, se realiza una transformación que representa el comportamiento de cada instancia mediante características estadísticas calculadas sobre ventanas temporales: la media, el percentil 5 y el percentil 95 de cada métrica. De esta forma, cada instancia queda representada por 15 variables que describen tanto su nivel habitual de utilización como los niveles extremos que alcanza, permitiendo que el algoritmo identifique instancias cuyo comportamiento se desvía significativamente respecto del patrón de referencia \parencite{Chen2023}.
+---
+
+JUSTIFICACION:
+El texto actual describe la aplicación de Isolation Forest de forma general sobre infraestructura cloud en abstracto. La corrección profundiza en cómo el algoritmo se aplica específicamente sobre las métricas que recolecta INFRAEYE, mencionando las variables concretas (CPU, memoria, disco, tráfico de red), el intervalo de recolección, la transformación mediante características estadísticas sobre ventanas temporales (media, percentil 5, percentil 95), y las 15 variables resultantes. Esto conecta con lo ya descripto en la sección 3.8.8 "Algoritmo de detección de anomalías" del capítulo 3.
+
+SECCION 3.8.8 RELACIONADA (chapter03_descripcion.tex, líneas 1490-1596):
+Contiene menciones a:
+- Métricas: CPU, memoria, disco, tráfico de red entrante y saliente
+- Transformación: media, percentil 5, percentil 95 → 15 variables
+- Series temporales como fuente de datos
+- Ventanas temporales y características estadísticas
+- Contamination, 100 árboles, semilla aleatoria fija
+- Anomaly score y clasificación binaria
+
+NUEVA SUBSECCION A AGREGAR (después de "Aprendizaje supervisado y no supervisado" en chapter02_antecedentes.tex, línea 101):
+Basado en NuevasCitas.txt, se agrega la subsección "Series temporales":
+
+\subsubsection{Series temporales}
+
+Las series temporales consisten en secuencias de observaciones registradas en distintos instantes y ordenadas cronológicamente. Habitualmente, estas observaciones se recolectan en intervalos de tiempo regulares, lo que permite analizar la evolución de una variable a lo largo del tiempo. Además, una serie temporal puede ser univariada cuando contiene una única variable por instante, o multivariada cuando registra múltiples variables en cada momento \parencite{Haben2023}.
+
+En el contexto del monitoreo de infraestructura cloud, las métricas de utilización de recursos pueden representarse mediante series temporales, ya que valores como el uso de CPU, memoria, almacenamiento y tráfico de red son recolectados periódicamente. En InfraEye, estas métricas son obtenidas en intervalos de cinco minutos, permitiendo construir registros temporales sobre el comportamiento de los recursos. El análisis de estos datos permite obtener características estadísticas sobre diferentes ventanas temporales y utilizarlas posteriormente como entrada para el proceso de detección de anomalías.
+
+El análisis mediante ventanas temporales permite resumir el comportamiento de las métricas durante períodos determinados. En lugar de considerar únicamente valores individuales, pueden calcularse medidas estadísticas como la media, el máximo, el mínimo, la desviación estándar y los percentiles de una ventana de observaciones. De esta manera, es posible caracterizar el comportamiento de utilización de un recurso durante un período y reducir la influencia de variaciones puntuales.
+
+REFERENCIA BIBLIOGRAFICA NUEVA (agregar a biblio.bib):
+
+@InBook{Haben2023,
+	AUTHOR = {Haben, Stephen and Voss, Marcus and Holderbaum, William},
+	TITLE = {Time Series Forecasting: Core Concepts and Definitions},
+	BOOKTITLE = {Core Concepts and Methods in Load Forecasting},
+	PUBLISHER = {Springer},
+	YEAR = {2023},
+	PAGES = {55--66},
+	ADDRESS = {Cham},
+	DOI = {10.1007/978-3-031-27852-5_5},
+	URL = {https://doi.org/10.1007/978-3-031-27852-5_5},
+	NOTE = {Consulta: 16 septiembre 2026}
+}
