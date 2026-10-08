@@ -1,0 +1,401 @@
+================================================================================
+PENDIENTES DE CODIGO (para que el artefacto coincida con la tesis)
+================================================================================
+Estado consolidado tras la verificacion de datos (octubre 2026).
+Actualizado el 7/10/2026 tras la jornada de implementacion:
+
+  COMPLETADOS:  CAMBIO DE BASE, PENDIENTE 1, PENDIENTE 2, PENDIENTE 3,
+                PENDIENTE 5, PENDIENTE 6
+  PENDIENTES:   PENDIENTE 7, PENDIENTE 8
+  (El PENDIENTE 4 ya estaba completado; sus scripts de respaldo ahora viven
+  en el repositorio, ver esa seccion.)
+
+Antes de la entrega final queda completar P7-P8 y volver a validar.
+
+--------------------------------------------------------------------------------
+CAMBIO DE BASE: dataset oficial verificado — COMPLETADO (7/10/2026)
+--------------------------------------------------------------------------------
+Verificado que los archivos locales eran DERIVADOS (submuestreados y
+reformateados), no el artefacto oficial. Ya descargado y verificado:
+
+  - data/raw/machine_usage_oficial.tar.gz (1,7 GB)
+    SHA256 = 3e6ee87fd204bb85b9e234c5c75a5096580fdabc8f085b224033080090753a7a
+    (coincide con el publicado en clusterdata/trace_2018.md)
+  - Extraido en data/raw/oficial/machine_usage.csv
+  - data/raw/machine_meta_oficial.tar.gz (92 KB): inventario, 4.034 maquinas
+
+Verificacion de la extraccion (7/10/2026):
+  - SHA256 del CSV extraido = SHA256 del miembro dentro del tar.gz
+    (ca89f90e458f33277604e12b11891e389127277036e90a823e0d26c2017cf34b):
+    la extraccion es fiel al artefacto verificado.
+  - 246.934.820 filas | 4.023 maquinas con utilizacion | 8,00 dias
+    (t = 0 a 691.190 s, ~11 s entre muestras).
+  - ATENCION: el conteo real es 246.934.820 filas, no 246.931.820 como se
+    declaraba aqui antes. Corregir la cifra donde se cite (ver notas de
+    tesis al final).
+
+Hallazgos al rebasar:
+  - data/raw/machine_usage.csv (raiz) era una COPIA CORRUPTA del oficial
+    (mismo tamano, bloques en blanco desde offset ~843 MB); todos los
+    scripts apuntaban a el.
+  - machine_usage.tar.gz (166 MB) estaba truncado e inservible.
+
+Acciones ejecutadas:
+  1. Eliminados los derivados: machine_usage.csv (9 GB corrupto),
+     machine_usage_clean.csv y machine_usage.tar.gz; tambien el script
+     clean_alibaba_dataset.py (recuperable de git).
+  2. Todo el codigo rebasado sobre data/raw/oficial/: default del loader
+     (src/data/data_loader.py), src/main.py, web/app.py (/api/train) y 14
+     scripts de analisis/evaluacion.
+  3. Procedimiento, hashes y nota de deprecacion documentados en
+     data/raw/README.md.
+
+--------------------------------------------------------------------------------
+PENDIENTE 1 — Entrenamiento SIN filtrar — COMPLETADO (7/10/2026)
+--------------------------------------------------------------------------------
+Decision: el entrenamiento usa una muestra REPRESENTATIVA del dataset
+oficial, sin el filtrado que aplicaba clean_alibaba_dataset.py (que eliminaba
+maquinas con cpu<5%, mem<20% y mem>95%).
+
+Implementado:
+  1. Nuevo modulo src/training/oficial_trainer.py: carga el oficial con
+     agregacion por chunks en dos pasadas (memoria acotada, nunca carga las
+     ~247M de filas en RAM), SIN filtros de utilizacion, replicando
+     exactamente el procedimiento de la evaluacion etiquetada (media exacta
+     por suma/conteo; p05/p95 por histograma de 201 bins, resolucion 0,5;
+     valores invalidos -1/101 -> NaN).
+  2. Excluye del entrenamiento las 400 maquinas etiquetadas
+     (eval/muestra_etiquetado_oficial.csv) para mantener valida la
+     evaluacion: 3.623 entrenamiento / 400 evaluacion, disjuntos.
+  3. contamination = 0.03 (cubre PENDIENTE 2).
+  4. Modelo persistido regenerado: models/isolation_forest.joblib y
+     models/preprocessor.joblib (los que consume la app/demo).
+     109/3.623 anomalias en entrenamiento (3,01%).
+
+Scripts:
+  - scripts/train_model_oficial.py: entrenamiento canonico (lo usa
+    train_model.bat); al terminar verifica las features contra la referencia
+    y reproduce la evaluacion de la seccion 3.8.
+  - scripts/eval_etiquetada.py: barrido de contamination contra etiquetas
+    (respaldo de la tabla de la tesis).
+
+Integracion:
+  - web/app.py /api/train usa el trainer (antes cargaba los 9 GB en RAM,
+    lo cual habria reventado con el oficial, y usaba contamination 0.05).
+  - src/main.py: default 0.03 y usa el trainer para datos reales.
+
+Resultado clave — el modelo desplegado ES el modelo evaluado:
+  - Features verificadas identicas contra eval/features_oficial.csv.
+  - Evaluacion reproduce exactamente lo declarado: precision 0.95 /
+    exhaustividad 0.21 (19 marcadas: 18 VP, 1 FP, 67 FN sobre 85
+    ineficientes).
+  - Para lograrlo hubo que alinear el orden de columnas de features del
+    preprocessor (mean, p05, p95) con el usado en la evaluacion: con
+    random_state fijo, el orden de columnas cambia los arboles del IF.
+    Es un detalle de implementacion sin significado estadistico (mismas
+    15 features, mismos valores); alinearlo garantiza que los numeros de
+    la tesis describan el modelo que corre en la app.
+
+Artefactos de evaluacion preservados en eval/ (antes en temp/opencode,
+volatil): muestra_etiquetado_oficial.csv, features_oficial.csv y README
+con resultados declarados.
+
+--------------------------------------------------------------------------------
+PENDIENTE 2 — Contamination 0,03 — COMPLETADO (cubierto por PENDIENTE 1)
+--------------------------------------------------------------------------------
+La tesis declara 0,03. Cambiado en el nuevo script de entrenamiento,
+src/main.py (default del CLI y de train_model), web/app.py (/api/train) y
+train_model.bat. Modelo reentrenado y persistido con 0.03.
+
+--------------------------------------------------------------------------------
+PENDIENTE 3 — Ventana de analisis de 30 dias — COMPLETADO (7/10/2026)
+--------------------------------------------------------------------------------
+La tesis declara 30 dias por defecto. El codigo usaba 24 horas.
+
+Acciones ejecutadas:
+  1. Default a 30 dias (hours=720) en todos los puntos:
+     - src/cloud/huaweicloud_client.py: get_server_metrics (from_time por
+       defecto) y get_servers_with_metrics(hours_back=720)
+     - src/cloud/huawei_pipeline.py: analyze(hours_back=720)
+     - web/app.py: /api/cloud/servers-with-metrics y /api/cloud/analyze
+     - web/templates/index.html (frontend), example_usage.py, README de
+       src/cloud.
+  2. Paginacion implementada: _show_metric_data_chunked parte la consulta
+     en bloques de hasta 3.000 datapoints por request, concatena, deduplica
+     por timestamp y ordena. Reemplazo los tres bloques de consulta inline
+     (loop principal, metrica descubierta, retry post-habilitacion de
+     monitoreo de memoria).
+  3. Verificado en la documentacion oficial de Cloud Eye:
+     - El API de metrica unica (ShowMetricData, la que usa el cliente) NO
+       tiene limite documentado de datapoints devueltos. El limite de 3.000
+       datapoints es del API batch (regla: n. metricas x (to-from)/intervalo
+       <= 3000). Se usa 3.000/bloque como tope conservador.
+     - Retencion documentada (FAQ "How Long Is Metric Data Retained?"):
+       raw/1 min -> 2 dias | 5 min (300 s) -> 10 dias | 20 min -> 20 dias |
+       1 h / 4 h / 24 h -> 155 dias.
+  4. DECISION DE DISENO derivada de la retencion: a 300 s una ventana de 30
+     dias solo tendria ~10 dias reales de datos. Para que la ventana
+     declarada sea efectiva, get_servers_with_metrics selecciona
+     automaticamente la granularidad mas fina cuya retencion cubre la
+     ventana (select_period_for_window): 30 dias -> 3600 s (720 datapoints
+     por metrica, 1 request); ventanas de hasta 10 dias mantienen 300 s;
+     20 dias -> 1200 s.
+  5. Revalidacion del flujo completo con CES simulado: 720 datapoints por
+     metrica, ventana cubierta 30,0 dias, pipeline completo (analyze) con
+     el modelo persistido real, 0 errores. Suite: 276 tests OK (+9 nuevos
+     de selector de granularidad y chunking).
+
+--------------------------------------------------------------------------------
+PENDIENTE 4 — Evaluacion con etiquetas humanas (COMPLETADO)
+--------------------------------------------------------------------------------
+Planilla: muestra_etiquetado_oficial.csv (400 maquinas aleatorias del dataset
+oficial, semilla 42). Etiquetado por el equipo: 85 ineficientes / 315
+normales (regla de extension no activada). Evaluacion ejecutada con
+conjuntos disjuntos (3.623 entrenamiento / 400 evaluacion):
+
+  contaminacion 0.03 -> precision 0.95 / exhaustividad 0.21
+  baseline regla umbral -> precision 0.84 / exhaustividad 0.99
+
+Resultados integrados a la tesis (seccion 3.8 "Evaluacion del modelo de
+deteccion contra etiquetas humanas" + decisiones de diseño derivadas:
+0.03 y reglas sobre todas las instancias).
+
+ACTUALIZACION (7/10/2026): los scripts de respaldo ya no viven en
+temp/opencode. En el repositorio quedaron:
+  - eval/muestra_etiquetado_oficial.csv (planilla de etiquetas)
+  - eval/features_oficial.csv (features de referencia de las 4.023 maquinas)
+  - scripts/eval_etiquetada.py (barrido de contamination, reproduce la
+    tabla) y la verificacion automatica dentro de
+    scripts/train_model_oficial.py.
+
+--------------------------------------------------------------------------------
+PENDIENTE 5 — Pipeline hibrido: reglas sobre TODAS las instancias — COMPLETADO (7/10/2026)
+--------------------------------------------------------------------------------
+Decision de diseño respaldada por la evaluacion (la tesis ya lo declara).
+
+Implementado en src/cloud/huawei_pipeline.py:
+  1. _analyze_instance ahora pasa TODAS las instancias al motor de
+     recomendaciones (las reglas de umbrales operativos evaluan a todas,
+     sin importar el veredicto del modelo). El motor ya lo soportaba:
+     "regla activada" = recommendation_count > 0 (acciones SCALE_UP /
+     SCALE_DOWN sobre el perfil de recursos).
+  2. Las instancias marcadas UNICAMENTE por el modelo (sin activacion de
+     ninguna regla) se presentan con requires_review=True (prioridad alta,
+     sin recomendacion automatica). Campo nuevo en InstanceAnalysisResult
+     y en el JSON de salida.
+  3. PipelineResult suma conteos nuevos: instances_with_recommendations
+     (reglas activadas) e instances_requiring_review (solo modelo), junto
+     al anomalous_instances existente (veredicto del modelo).
+  4. App web actualizada (web/templates/test.html): el resumen muestra
+     anómalas (modelo) / con recomendaciones (reglas) / requieren
+     revision, y las instancias se agrupan en "Con Recomendaciones",
+     "Requieren Revision - solo modelo" y "Sin hallazgos", con badge
+     REQUIERE REVISION por instancia.
+  5. Revalidado el flujo completo (CES simulado, ventana 30 dias): el
+     servidor de demo es marcado por el modelo Y activa 3 reglas de
+     subutilizacion (disk/red) -> obtiene recomendaciones;
+     requires_review queda para los casos solo-modelo. Suite: 281 tests OK
+     (+5 nuevos del comportamiento hibrido; 2 tests viejos que codificaban
+     el comportamiento anterior - "no anomala -> sin recomendaciones" -
+     fueron reescritos a la semantica hibrida).
+
+--------------------------------------------------------------------------------
+PENDIENTE 6 — Recalibracion de reglas (thresholds.yaml) — COMPLETADO (7/10/2026)
+--------------------------------------------------------------------------------
+Decision derivada de la evaluacion con etiquetas (la tesis ya la declara
+como tercera decision de diseño). Las 48 instancias que el sistema perdia
+tenian cpu ~31-34 y mem ~90: la regla migrate_memory_optimized
+(cpu_low=30, mem_high=85) las fallaba por margen minimo frente al criterio
+del administrador (~35).
+
+Acciones ejecutadas:
+  1. cpu_low de migrate_memory_optimized elevado de 30 a 35 en
+     config/thresholds.yaml y en los defaults de
+     src/recommendations/config/threshold_config.py.
+  2. Verificado contra las 400 etiquetas humanas (nueva verificacion
+     empirica, scripts de respaldo en temp/opencode/verify_p6.py):
+       - Banda migrate sola: antes 18 marcadas (precision 1,00 /
+         exhaustividad 0,21) -> despues 74 marcadas (VP=60, FP=14;
+         precision 0,81 / exhaustividad 0,71).
+       - Conjunto completo de reglas: antes precision 0,97 /
+         exhaustividad 0,38 -> despues precision 0,84 / exhaustividad 0,87.
+         (La precision 0,84 coincide con el baseline declarado en la
+         seccion 3.8.)
+  3. Detecciones unicas del IF verificadas: son exactamente las mismas
+     maquinas antes y despues del cambio (sus memorias, 20-76%, quedan
+     fuera de la banda mem > 85). Son 6 marcas: 5 ineficientes reales
+     (m_1120, m_1275, m_1971, m_2997, m_4025) + el falso positivo del IF
+     (m_2734, etiquetada normal). El "5" de la version anterior de este
+     pendiente contaba solo las verdaderas; el cambio de umbral no altero
+     el conjunto.
+  4. Suite recorrida: 281 tests OK. Ningun test fijaba el valor 30 de
+     forma que rompiera (los fixtures usan cpu_avg=20, valido para ambos
+     umbrales).
+
+DECISION DOCUMENTADA — mem_high se mantiene en 85 (no se sube a 90):
+Se evaluo empíricamente subir mem_high de 85 a 90 (propuesta para
+"consistencia con IF") y los datos la rechazan:
+  - Con cpu_low=35: mem_high=85 -> VP=74, FP=14 (precision 0,84 /
+    exhaustividad 0,87); mem_high=90 -> VP=50, FP=10 (precision 0,83 /
+    exhaustividad 0,59). Pierde 24 verdaderos positivos (las maquinas
+    con mem 85-90 que el equipo etiqueto ineficientes: 24 de 28 en esa
+    banda) sin ganancia de precision.
+  - Ademas romperia la unicidad: m_3409 (cpu 3,6 / mem 85,0) pasaria a
+    ser deteccion unica adicional del IF.
+  - Razon de fondo: mem ~90 es el patron NORMAL de memoria del cluster;
+    la ineficiencia que captura la regla es la CPU ociosa, y el criterio
+    del administrador (~35) es sobre CPU.
+
+--------------------------------------------------------------------------------
+PENDIENTE 7 — Cifrado de credenciales en reposo
+--------------------------------------------------------------------------------
+La tesis declara (seccion Tecnologías, "Seguridad de credenciales y
+despliegue") que las AK/SK se almacenan cifradas con Fernet (AES-128-CBC +
+HMAC-SHA256) y clave fuera de la base de datos.
+
+Hoy: web/app.py mantiene las credenciales en memoria (estructura global,
+linea ~83) y no hay persistencia cifrada.
+
+Accion:
+  1. Implementar el cifrado con la biblioteca cryptography (clase Fernet).
+  2. Clave de cifrado via variable de entorno (nunca en la BD ni en el
+     codigo fuente).
+  3. Integrar con la persistencia en PostgreSQL (PENDIENTE 8): columnas
+     ak_cifrada / sk_cifrada por usuario, como en el modelo ER.
+  4. Nunca loggear credenciales ni incluirlas en reportes.
+
+--------------------------------------------------------------------------------
+PENDIENTE 8 — Despliegue en ECS de Huawei Cloud + PostgreSQL
+--------------------------------------------------------------------------------
+La tesis declara que la aplicacion se despliega en una instancia ECS de
+Huawei Cloud junto con PostgreSQL, servida por HTTPS.
+
+Hoy: no existe despliegue definido (sin Dockerfile ni scripts; la app corre
+como servidor de desarrollo local) ni base de datos (los resultados se
+exportan a archivos).
+
+Accion:
+  1. Provisionar la ECS con los creditos disponibles.
+  2. Crear Dockerfile para la app (reproducibilidad) y desplegar en la
+     instancia.
+  3. Configurar PostgreSQL e implementar la persistencia de recomendaciones
+     declarada en la tesis (recomendaciones + codigo Terraform + descripcion,
+     asociadas a cada usuario).
+  4. Servir por HTTPS y verificar el flujo completo contra Huawei Cloud
+     desde la instancia.
+
+--------------------------------------------------------------------------------
+FIXES DE COHERENCIA DEL PIPELINE CLOUD (revision del 7/10/2026, COMPLETADOS)
+--------------------------------------------------------------------------------
+Al probar el sistema contra las 5 instancias REALES de Huawei Cloud
+(ecs-restore-5eec3c, ecs-terrabot, ecs-tera-test, ecs-hbdr,
+ecs-vinchintest) se encontraron y corrigieron estos problemas:
+
+  1. DISCO FABRICADO: transform_to_infraeye_format inventaba disk=30%
+     cuando no habia metricas de disco, generando recomendaciones espurias
+     ("Disk I/O subutilizado") hasta en maquinas apagadas. Eliminado: sin
+     datos de disco -> NO_DECISION. Hallazgo asociado: ecs-tera-test tiene
+     el disco real al 89,8% (pre-apagado), antes invisible por el default.
+  2. GUARD DE MUESTRAS DERROTADO: min_data_points contaba campos
+     estadisticos presentes (avg/p95/p99/max), no muestras reales, y los
+     fallbacks del transform lo inflaban a 4 -> ecs-hbdr recibia "RAM
+     subutilizado" con UNA sola muestra de memoria. Corregido: el
+     transform propaga {metrica}_samples y MetricAnalyzer los usa como
+     data_points reales.
+  3. MAQUINAS APAGADAS: las SHUTOFF entraban al analisis con datos
+     pre-apagado sin distinguirlas. Ahora el pipeline las marca con
+     status, las excluye del modelo y de las recomendaciones, con motivo
+     "Instancia apagada" (contador instances_stopped; grupo "Apagadas" en
+     la web).
+  4. DATOS FALTANTES COMO CERO EN EL MODELO: una instancia sin memoria
+     entraba al IF con mem=0 y terminaba "anomala" por artefacto. Ahora el
+     modelo exige CPU y memoria presentes; sin ellas -> NO_DECISION con
+     motivo. Las reglas siguen evaluando a todas (P5): ecs-terrabot
+     (4 vCPU al 1,7%) sigue recibiendo su recomendacion util "reducir a
+     1 vCPU" aunque el modelo no opine.
+  5. DIAGNOSTICO: nuevo metodo HuaweiCloudClient.list_available_metrics +
+     endpoint GET /api/cloud/available-metrics/<server_id> para enumerar
+     las metricas que Cloud Eye expone realmente por instancia.
+
+SEGUNDA RONDA (mismo dia), tras enumerar las metricas reales de los
+flavors ARM (ac8/c7n/c9) con el endpoint nuevo:
+  6. RED RESUELTA: esos flavors exponen la red como
+     network_incoming/outgoing_bytes_aggregate_rate (no ..._rate_inband).
+     El cliente ahora prueba el nombre inband y cae al aggregate_rate como
+     fallback (mismos B/s -> MB/s). Verificado contra el catalogo real de
+     metricas de las instancias.
+  7. DISCO ACLARADO: verificado contra la tabla oficial de metricas ECS de
+     Huawei (usermanual-ecs/ecs_03_1002.html) y contra el listado real de
+     las instancias: para Linux sobre KVM/QingTian, disk_util_inband y
+     mem_util NO estan soportados (solo Windows con UVP VMTools o Xen).
+     No es cuestion del flavor ARM: es la combinacion Linux + KVM/QingTian.
+     Lo que si exponen: cpu_util, tasas de disco (bytes/s, IOPS),
+     network_*_aggregate_rate y network_vm_*. Para tener % de disco y de
+     memoria en Linux hace falta el agente de Cloud Eye (AGT.ECS:
+     disk_usedPercent por punto de montaje, mem_usedPercent) — el mismo
+     fix de infraestructura pendiente del equipo.
+  8. NOTAS DE DATOS FALTANTES: el transform agrega data_notes por
+     instancia (memoria requiere UniAgent; disco sin metrica de
+     utilizacion para este tipo; red sin datos) que el pipeline propaga
+     al output y la web muestra en un recuadro "Datos faltantes".
+  9. FLAVOR INCOMPATIBLE ACLARADO (antes "Error: No se encontro un flavor
+     compatible"): FlavorRecommender ahora explica los requisitos que no
+     se pudieron cumplir y sugiere la alternativa mas cercana (p. ej.,
+     ecs-terrabot: "No existe un flavor que cumpla: 1 vCPU como maximo,
+     8 GB de RAM como minimo. La alternativa mas cercana es s3.medium.1
+     (2 vCPU / 8 GB)..."). compare_flavors ya no pisa el mensaje con el
+     generico (bug de orden error/no_compatible) y el summary ya no
+     prefija "Error:" en ese caso; la web muestra la explicacion.
+
+Suite: 291 tests OK (+5: fallback de red aggregate_rate, data_notes,
+explicacion de flavor incompatible).
+
+Hallazgos de infraestructura (fuera del codigo):
+  - mem_usedPercent requiere UniAgent (AGT.ECS): solo ecs-hbdr tiene 1
+    datapoint. Pendiente del equipo: instalar el agente en las ECS.
+  - network_incoming/outgoing_bytes_rate_inband no devuelve datos en
+    NINGUNA de las 5 (flavors ARM ac8/c7n/c9), mientras que cpu_util y
+    disk_util_inband si existen. Usar el endpoint nuevo para enumerar los
+    nombres reales.
+  - Bug adicional corregido en la misma revision: el dashboard (/api/train
+    y endpoints de instancias) apareaba los resultados del IF (ordenados
+    por score) con las metricas por POSICION -> el estado de anomalia
+    mostrado por instancia pertenecia a otra maquina. Corregido
+    reordenando por instance_id; verificado que los scores del dashboard
+    coinciden con el modelo por maquina.
+
+Suite: 286 tests OK (+7 nuevos: sin disco -> NO_DECISION, propagacion de
+muestras, guard de 1 muestra, servidores apagados, datos parciales).
+
+--------------------------------------------------------------------------------
+NOTAS PARA LA TESIS (a aplicar en el documento)
+--------------------------------------------------------------------------------
+Nuevas, surgidas de la implementacion del 7/10/2026:
+  - Cifra de filas del dataset oficial: corregir 246.931.820 ->
+    246.934.820 donde se cite (verificado contra el hash publicado; las
+    4.023 maquinas y los 8 dias si coincidian).
+  - Ventana de 30 dias: si algun pasaje declara granularidad de 300 s para
+    la consulta a Cloud Eye, ajustar/justificar. La retencion documentada a
+    300 s es de solo 10 dias, por lo que la ventana de 30 dias consulta a
+    3600 s (retencion 155 dias, 720 datapoints por metrica, un request).
+    Ventanas de hasta 10 dias mantienen 300 s. La paginacion por bloques de
+    3.000 datapoints queda implementada de todos modos.
+  - El orden de features del preprocessor se alineo con la evaluacion
+    (mean, p05, p95 por metrica): el modelo desplegado es matematicamente
+    identico al evaluado, por lo que los numeros de la seccion 3.8
+    describen exactamente el artefacto que corre en la app.
+
+--------------------------------------------------------------------------------
+REGISTRO DE CAMBIOS DE TESIS ASOCIADOS (ya aplicados al documento)
+--------------------------------------------------------------------------------
+- Ventana: 24 h -> 30 dias en tres pasajes + justificacion.
+- Tablas comparativas 2.I/2.II en seccion 2.2.4 (recuperadas del commit
+  0d29cbb con ajustes de consistencia).
+- Parrafo del dataset GPU 2020 eliminado (el archivo local tenia memoria y
+  red saliente generadas aleatoriamente — hibrido real/sintetico).
+- Cierre del estado del arte con importancia y aporte a la sociedad.
+- Marco teorico purgado de decisiones de diseno.
+- Metodologia agil, validacion cuantitativa (provisoria, a reemplazar por
+  la evaluacion etiquetada), justificacion del dataset, conclusion completa.
+- NOTA: la justificacion del dataset dice "aproximadamente 4.000 maquinas":
+  con el oficial es exacto (4.023 con utilizacion / 4.034 inventario).

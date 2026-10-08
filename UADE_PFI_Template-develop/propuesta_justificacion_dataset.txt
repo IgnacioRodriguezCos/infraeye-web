@@ -1,0 +1,169 @@
+================================================================================
+PROPUESTA: JUSTIFICACIÓN DEL DATASET ALIBABA CLUSTER TRACE 2018 (v2)
+================================================================================
+Requisito a cumplir: "El uso de datasets está explicitado y justificado,
+indicando origen, características y pertinencia para el trabajo."
+
+Veredicto actual: SE CUMPLE PARCIALMENTE. El dataset está nombrado y se
+explica su rol (fuente de entrenamiento), pero falta explicitar origen
+(es público, de Alibaba, sin cita bibliográfica), características (tipo de
+máquinas y cargas, escala, duración) y pertinencia.
+
+Nada de esto se aplica todavía a los .tex ni al .bib: está acá para revisión.
+
+--------------------------------------------------------------------------------
+0. RESPUESTA A LA CONSULTA SOBRE EL TIPO DE MÁQUINAS Y CARGAS
+--------------------------------------------------------------------------------
+Verificado contra la documentación oficial del dataset (repositorio GitHub
+alibaba/clusterdata, documento trace_2018.md del trace v2018):
+
+- Las máquinas pertenecen a un CLÚSTER DE PRODUCCIÓN real de Alibaba (no un
+  entorno de laboratorio).
+- Las cargas NO son controladas/óptimas ni generadas al azar: son cargas de
+  trabajo REALES capturadas durante la operación normal del clúster.
+- En CADA máquina coexisten (colocación) dos tipos de cargas:
+  a) Servicios en línea de larga duración (long running applications),
+     empaquetados en contenedores (tablas container_meta / container_usage).
+  b) Trabajos de procesamiento por lotes (batch), en su mayoría jobs con
+     dependencias tipo DAG (tablas batch_task / batch_instance).
+- Los orquestadores son Sigma (servicios en línea) y Fuxi (batch); Alibaba
+  usa esta colocación justamente para elevar la utilización general del
+  clúster, por lo que el trace refleja un entorno operativamente real y ya
+  sometido a prácticas de optimización.
+- Las máquinas son heterogéneas (capacidades de CPU/memoria distintas,
+  registradas en machine_meta).
+- Escala confirmada: ~4.000 máquinas durante 8 días. Dataset completo:
+  ~48 GB comprimido / ~280 GB descomprimido (6 tablas).
+
+Esto se incorpora al texto propuesto de la sección 2: se caracteriza el
+dataset como trazas de operación normal de un clúster productivo con cargas
+reales coexistentes (servicios en línea + batch), descartando explícitamente
+que se trate de ejecuciones controladas o sintéticas.
+
+--------------------------------------------------------------------------------
+1. EVIDENCIA VERIFICADA EN EL CÓDIGO (pfi-infraeye)
+--------------------------------------------------------------------------------
+- src/data/data_loader.py (AlibabaDataLoader): carga las 6 tablas oficiales
+  del trace 2018 (machine_meta, machine_usage, container_meta,
+  container_usage, batch_task, batch_instance) — coincide exactamente con el
+  esquema publicado por Alibaba.
+- La tabla machine_usage tiene las columnas: machine_id, time_stamp,
+  cpu_util_percent, mem_util_percent, mem_gps, mkpi, net_in, net_out,
+  disk_io_percent. Es decir, el dataset SÍ provee las 5 métricas que la
+  tesis declara usar (CPU, memoria, disco, red entrante y saliente).
+- data/raw/machine_usage.csv ocupa ~9 GB, lo que confirma un volumen de
+  observaciones muy grande.
+- Los datasets sintéticos (calibración de contamination) ya están
+  justificados en la sección de validación; no requieren cambios.
+
+--------------------------------------------------------------------------------
+2. TEXTO LaTeX PROPUESTO
+--------------------------------------------------------------------------------
+Archivo: chapters/chapter03_descripcion.tex
+Acción: REEMPLAZAR el párrafo actual de las líneas 1544-1549:
+
+  TEXTO ACTUAL (a eliminar):
+  ----------------------------------------------------------------
+  El modelo utiliza como fuente de entrenamiento el conjunto de datos
+  Alibaba Cluster Trace 2018, que contiene información de utilización de
+  recursos obtenida a partir de una infraestructura de producción. A
+  partir de las métricas disponibles se construye una representación de
+  cada instancia que posteriormente será utilizada como entrada del
+  algoritmo.
+  ----------------------------------------------------------------
+
+  TEXTO PROPUESTO (a insertar en su lugar):
+  ----------------------------------------------------------------
+  El modelo utiliza como fuente de entrenamiento el conjunto de datos
+  Alibaba Cluster Trace 2018, publicado por Alibaba Group dentro de su
+  programa de trazas de clúster y disponible públicamente
+  \parencite{AlibabaClusterTrace2018}. El conjunto corresponde a un
+  muestreo de uno de los clústeres de producción del proveedor, recolectado
+  durante ocho días sobre aproximadamente 4.000 máquinas heterogéneas. Las
+  cargas registradas no provienen de ejecuciones controladas ni de datos
+  sintéticos, sino de la operación normal del clúster, en la que coexisten
+  en cada máquina servicios en línea de larga duración, desplegados en
+  contenedores, y trabajos de procesamiento por lotes. De las seis tablas
+  que componen el conjunto, el proyecto emplea la de utilización de
+  máquinas, que registra para cada equipo la utilización de CPU, memoria,
+  disco y tráfico de red entrante y saliente a lo largo del tiempo, es
+  decir, métricas de la misma naturaleza que las que la plataforma obtiene
+  desde el servicio de monitoreo de Huawei Cloud durante la etapa de
+  inferencia.
+
+  La pertinencia de este conjunto de datos para el presente trabajo se
+  sustenta en tres aspectos. En primer lugar, dado que Isolation Forest es
+  un algoritmo no supervisado, el entrenamiento no requiere ejemplos
+  etiquetados de anomalías, sino una base de comportamiento de utilización
+  representativa de una infraestructura real. La coexistencia de servicios
+  de larga duración, con patrones de utilización sostenidos, y de trabajos
+  por lotes, con consumos más irregulares, aporta una diversidad de
+  perfiles de utilización que permite que el modelo aprenda una noción
+  amplia del comportamiento considerado normal. En segundo lugar, la
+  correspondencia entre las métricas disponibles en el conjunto de
+  entrenamiento y las métricas recolectadas por la plataforma garantiza
+  que las características estadísticas construidas durante el entrenamiento
+  puedan calcularse de la misma manera sobre las instancias analizadas, lo
+  que resulta indispensable para que el modelo produzca resultados
+  significativos. Finalmente, su disponibilidad pública y su documentación
+  permiten reproducir el proceso de entrenamiento, en concordancia con el
+  requerimiento de consistencia definido para el sistema.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. ENTRADA PROPUESTA PARA biblio.bib
+--------------------------------------------------------------------------------
+(Al final del archivo, siguiendo el formato @Online de las entradas
+existentes. La fecha de consulta es hoy; ajustar si se prefiere otra.)
+
+  @Online{AlibabaClusterTrace2018,
+  	AUTHOR = {{Alibaba Group}},
+  	TITLE = {Alibaba Cluster Trace 2018},
+  	YEAR = {2018},
+  	URL = {https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2018/trace_2018.md},
+  	NOTE = {[en línea][consulta: 6 octubre 2026]}
+  }
+
+  Alternativa (URL del repositorio general, más corta):
+  	URL = {https://github.com/alibaba/clusterdata}
+
+--------------------------------------------------------------------------------
+4. OTROS PUNTOS DONDE SUMAR LA CITA (opcional, para consistencia)
+--------------------------------------------------------------------------------
+a) chapters/chapter03_descripcion.tex, sección "Validación del prototipo"
+   (subsección "Evaluación empírica del modelo de detección"): agregar
+   \parencite{AlibabaClusterTrace2018} después de "Alibaba Cluster Trace
+   2018" en el párrafo que comienza "El entrenamiento del modelo se realizó
+   sobre el conjunto de datos...".
+
+b) chapters/conclusion.tex, ítem del listado de cumplimiento de objetivos
+   ("entrenado sobre el conjunto de datos Alibaba Cluster Trace 2018"):
+   no hace falta cita en la conclusión, es opcional.
+
+--------------------------------------------------------------------------------
+5. DATOS VERIFICADOS CONTRA LA FUENTE OFICIAL (6 de octubre de 2026)
+--------------------------------------------------------------------------------
+Fuentes consultadas:
+- https://github.com/alibaba/clusterdata (README del programa)
+- https://github.com/alibaba/clusterdata/blob/master/cluster-trace-v2018/trace_2018.md
+
+Hechos confirmados por la fuente oficial:
+- [x] "About 4000 machines in a period of 8 days" (se mantiene
+      "aproximadamente 4.000"; la cifra exacta 4.063 aparece en
+      publicaciones académicas, no en el README oficial).
+- [x] Trace muestreado de un clúster de producción de Alibaba.
+- [x] Colocación en cada máquina de servicios en línea (LRA, en
+      contenedores) y trabajos batch (mayoría DAG), orquestados por Sigma
+      y Fuxi respectivamente.
+- [x] 6 tablas: machine_meta, machine_usage, container_meta,
+      container_usage, batch_instance, batch_task (coinciden con
+      data_loader.py del proyecto).
+- [x] Valores normalizados a [0, 100] por confidencialidad (con -1 y 101
+      como valores inválidos; el _clean_usage_data del proyecto los
+      reemplaza por NaN, consistente).
+- [x] Tamaño total: ~48 GB comprimido / ~280 GB descomprimido.
+- [x] URL del repositorio vigente.
+
+Detalles deliberadamente OMITIDOS en el texto propuesto (para no recargar
+o afirmar de más): orquestadores Sigma/Fuxi, tamaño en GB, dependencias
+DAG, normalización [0,100]. Se pueden sumar si se prefiere más detalle.

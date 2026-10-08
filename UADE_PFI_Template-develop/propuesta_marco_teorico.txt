@@ -1,0 +1,187 @@
+================================================================================
+PROPUESTA: PURGAR DECISIONES DE DISEÑO DEL MARCO TEÓRICO (sección 2.1)
+================================================================================
+Requisito: "El marco teórico es suficiente y aclaratorio... En el desarrollo
+del marco teórico no emite opiniones y tampoco toma de decisiones."
+
+Veredicto actual: CUMPLE PARCIAL. Los criterios de cobertura técnica y
+temática se cumplen por completo, pero hay 3 párrafos que introducen
+decisiones y detalles de diseño de InfraEye dentro del marco teórico
+(sección 2.1). El más riesgoso dice literalmente "decisiones de diseño"
+(línea 125).
+
+Menciones verificadas: las únicas referencias a InfraEye dentro de la
+sección 2.1 (Marco Teórico, líneas 1-164) están en las líneas 107, 119 y
+125. Las referencias de las líneas 229-293 pertenecen a la sección 2.2
+(Estado del Arte), donde el análisis comparativo con la propuesta es
+legítimo y NO se toca.
+
+PRINCIPIO DE LA CORRECCIÓN: ninguna decisión de diseño se pierde; todo el
+contenido específico de InfraEye ya está documentado (o pasa a estarlo)
+en el capítulo 3, que es donde el revisor espera las decisiones.
+
+Nada de esto se aplica todavía a los .tex: está acá para revisión.
+
+--------------------------------------------------------------------------------
+CAMBIO 1 — LÍNEA 107 (subsección "Series temporales")
+--------------------------------------------------------------------------------
+QUÉ: eliminar la referencia a InfraEye en el segundo párrafo.
+
+TEXTO ACTUAL:
+  "En el contexto del monitoreo de infraestructura cloud, las métricas de
+  utilización de recursos pueden representarse mediante series temporales,
+  ya que valores como el uso de CPU, memoria, almacenamiento y tráfico de
+  red son recolectados periódicamente. [En InfraEye, estas métricas son
+  obtenidas en intervalos de cinco minutos, permitiendo construir
+  registros temporales sobre el comportamiento de los recursos.] El
+  análisis de estos datos permite obtener características estadísticas
+  sobre diferentes ventanas temporales y utilizarlas posteriormente como
+  entrada para el proceso de detección de anomalías."
+
+  (La frase entre corchetes es la que se elimina.)
+
+TEXTO RESULTANTE:
+  "En el contexto del monitoreo de infraestructura cloud, las métricas de
+  utilización de recursos pueden representarse mediante series temporales,
+  ya que valores como el uso de CPU, memoria, almacenamiento y tráfico de
+  red son recolectados periódicamente. El análisis de estos datos permite
+  obtener características estadísticas sobre diferentes ventanas
+  temporales y utilizarlas posteriormente como entrada para un proceso de
+  detección de anomalías."
+
+POR QUÉ NO HAY PÉRDIDA: el intervalo de cinco minutos ya está documentado
+en el capítulo 3 (período de agregación de 300 segundos, ventana de 24 h,
+288 observaciones por métrica, en "Integración con Huawei Cloud" y en
+"Algoritmo de detección de anomalías").
+
+--------------------------------------------------------------------------------
+CAMBIO 2 — LÍNEA 119 (subsección "Algoritmo Isolation Forest")
+--------------------------------------------------------------------------------
+QUÉ: reemplazar el párrafo "En el contexto de INFRAEYE..." por una versión
+teórica y genérica, sin las decisiones de diseño específicas (features
+media/p5/p95, 15 variables, ventanas de 1 h y 24 h aplicadas a InfraEye).
+
+TEXTO ACTUAL (a reemplazar por completo):
+  "En el contexto de INFRAEYE, Isolation Forest se aplica específicamente
+  sobre las métricas de utilización de recursos recolectadas
+  periódicamente desde la infraestructura cloud del usuario. Estas métricas
+  incluyen la utilización de CPU, memoria, disco, tráfico de red entrante
+  y tráfico de red saliente, las cuales son obtenidas en intervalos
+  regulares de cinco minutos, conformando series temporales multivariadas.
+  Dado que Isolation Forest no opera directamente sobre series temporales,
+  se realiza una transformación que representa el comportamiento de cada
+  instancia mediante características estadísticas calculadas sobre
+  ventanas temporales: la media, el percentil 5 y el percentil 95 de cada
+  métrica. De esta forma, cada instancia queda representada por 15
+  variables que describen tanto su nivel habitual de utilización como los
+  niveles extremos que alcanza, permitiendo que el algoritmo identifique
+  instancias cuyo comportamiento se desvía significativamente respecto del
+  patrón de referencia \parencite{Chen2023}. Las características se
+  calculan sobre ventanas deslizantes definidas sobre las series temporales
+  de cada instancia: ventanas de una hora (12 observaciones) para capturar
+  el comportamiento inmediato y ventanas de 24 horas (288 observaciones)
+  para capturar el patrón diario completo, a partir de las cuales se
+  derivan las estadísticas que representan a cada instancia."
+
+TEXTO PROPUESTO (teoría pura, sin decisiones de InfraEye):
+  "Cuando la detección de anomalías se aplica sobre métricas de
+  infraestructura, Isolation Forest no opera directamente sobre series
+  temporales, por lo que resulta necesario realizar una transformación que
+  represente el comportamiento de cada instancia mediante características
+  estadísticas calculadas sobre ventanas temporales, tales como medidas de
+  tendencia central y de dispersión, o percentiles de cada métrica. De
+  esta forma, cada instancia queda representada por un conjunto acotado de
+  variables que describen tanto su nivel habitual de utilización como los
+  niveles extremos que alcanza, lo que permite que el algoritmo identifique
+  instancias cuyo comportamiento se desvía significativamente respecto del
+  patrón de referencia \parencite{Chen2023}."
+
+POR QUÉ NO HAY PÉRDIDA:
+- Las 5 métricas (CPU, memoria, disco, red entrante/saliente) están en el
+  capítulo 3 ("Algoritmo de detección de anomalías").
+- Las features media/p5/p95 y las 15 variables están en el capítulo 3
+  (misma subsección).
+- Las ventanas de 12 y 288 observaciones (1 h / 24 h) ya quedan como
+  teoría genérica en el marco teórico, línea 111 ("una ventana de 12
+  observaciones abarca una hora de comportamiento, mientras que una
+  ventana de 288 observaciones abarca un día completo") — ese párrafo NO
+  se toca porque no menciona a InfraEye.
+
+--------------------------------------------------------------------------------
+CAMBIO 3 — LÍNEA 125 (subsección "Limitaciones de Isolation Forest")
+--------------------------------------------------------------------------------
+QUÉ: eliminar el párrafo "En el caso de InfraEye, estas limitaciones son
+atendidas mediante dos decisiones de diseño..." — es el más riesgoso del
+rubric porque usa literalmente la expresión "decisiones de diseño" dentro
+del marco teórico.
+
+TEXTO ACTUAL (a eliminar):
+  "En el caso de InfraEye, estas limitaciones son atendidas mediante dos
+  decisiones de diseño: la calibración empírica del parámetro de
+  contaminación a partir de evaluaciones sobre conjuntos de datos con
+  tasas de anomalía conocidas, y la representación de cada instancia
+  mediante un conjunto acotado de características estadísticas
+  seleccionadas, que reduce la dimensionalidad del espacio de búsqueda.
+  Cabe señalar que la etapa posterior de recomendaciones, basada en reglas
+  de umbrales operativos, opera sobre las instancias ya identificadas como
+  anómalas por el algoritmo, por lo que la decisión de detección recae
+  exclusivamente en Isolation Forest. La incorporación de un esquema
+  híbrido que combine el puntaje del modelo con reglas de negocio en la
+  propia etapa de detección constituye una línea de trabajo futuro para
+  incrementar la sensibilidad frente a degradaciones graduales."
+
+MAPEO DE CONTENIDO (dónde vive cada afirmación después del cambio):
+- "calibración empírica del parámetro de contaminación" ->
+  capítulo 3, sección 3.8 "Evaluación empírica del modelo de detección"
+  (tabla de calibración + adopción del 0,03).
+- "conjunto acotado de características seleccionadas" ->
+  capítulo 3, "Algoritmo de detección de anomalías" (media, p5, p95;
+  15 variables).
+- "la decisión de detección recae exclusivamente en Isolation Forest" ->
+  capítulo 3 (~línea 1541): "Estas reglas no intervienen en la decisión de
+  detección, que recae exclusivamente en el algoritmo no supervisado."
+- "esquema híbrido como línea de trabajo futuro" ->
+  conclusión del trabajo, sección "Trabajo futuro" (cuarto párrafo).
+
+ALTERNATIVA (si prefieren no eliminar del todo): reemplazar el párrafo por
+una frase neutra de puente:
+  "El modo en que el desarrollo presentado en los capítulos siguientes
+  atiende estas limitaciones se describe junto con las decisiones de
+  diseño correspondientes."
+Yo recomiendo la eliminación lisa y llana: el rubric penaliza las
+decisiones en el marco teórico, y todo el contenido ya está en el capítulo 3.
+
+--------------------------------------------------------------------------------
+LO QUE NO SE TOCA (importante)
+--------------------------------------------------------------------------------
+- Línea 111 (ventanas deslizantes, 12/288 observaciones): teoría genérica
+  sin mención a InfraEye; además responde a una observación anterior del
+  revisor (punto 2 de sugerencias.txt). SE MANTIENE.
+- Líneas 115-117 (definición y ventajas de Isolation Forest) y 123
+  (limitaciones, con citas): teoría pura que satisface la observación
+  anterior del revisor (punto 3 de sugerencias.txt). SE MANTIENEN.
+- Sección 2.2 Estado del Arte (líneas 165-293): las evaluaciones de
+  herramientas y las comparaciones con InfraEye son legítimas ahí (es el
+  propósito de la sección); el rubric apunta al marco teórico. SE MANTIENE.
+- El subsubsection "Limitaciones de Isolation Forest" (título) se
+  conserva: queda con su párrafo teórico (línea 123).
+
+--------------------------------------------------------------------------------
+OPCIONAL (no incluido en los cambios, decidir aparte)
+--------------------------------------------------------------------------------
+Sumar al capítulo 3 ("Algoritmo de detección de anomalías", junto al
+párrafo de la ventana de 24 h / 288 observaciones) la mención de la
+ventana de 1 hora / 12 observaciones que usa el código para las features
+temporales (src/data/preprocessor.py, window=12). Hoy el capítulo 3 solo
+documenta la ventana de 24 h. Esto haría el capítulo 3 más fiel al código,
+pero no es necesario para el rubric del marco teórico.
+
+--------------------------------------------------------------------------------
+EFECTO ESPERADO SOBRE EL RUBRIC
+--------------------------------------------------------------------------------
+Con los 3 cambios aplicados, la sección 2.1 queda como teoría pura:
+- barre aspectos técnicos de las herramientas (criterio 1) ✓
+- nivela al lector en la temática (criterio 2) ✓
+- sin opiniones ni decisiones; las decisiones de diseño quedan
+  exclusivamente en el capítulo 3 (criterio 3) ✓
+El veredicto pasaría de "Cumple parcial" a "Cumple".

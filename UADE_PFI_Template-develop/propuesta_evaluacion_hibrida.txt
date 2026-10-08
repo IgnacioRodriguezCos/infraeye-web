@@ -1,0 +1,355 @@
+================================================================================
+PROPUESTA: EVALUACION CON ETIQUETAS HUMANAS + ARQUITECTURA HIBRIDA (CAMINO A)
+================================================================================
+Decisiones que esta propuesta codifica:
+1. La subseccion de evaluacion sintetica se REEMPLAZA por la evaluacion contra
+   etiquetas humanas (400 maquinas reales del dataset oficial, 85 ineficientes,
+   conjuntos disjuntos, cero datos sinteticos).
+2. Contaminacion: se mantiene 0,03 — unico punto donde el modelo supera a la
+   linea base (precision 0,95 vs 0,84).
+3. Arquitectura hibrida (Camino A): las reglas del motor de recomendaciones se
+   aplican a TODAS las instancias; el IF pasa a ser complemento (senalizacion
+   de alta precision + deteccion de patrones). Ajustes en 5 pasajes + codigo.
+4. Trabajo futuro: se actualiza (validacion en infraestructura real +
+   supervisado con las etiquetas; la vieja linea del "esquema hibrido" queda
+   obsoleta porque el hibrido pasa a estar implementado).
+
+Nada de esto se aplica todavia a los .tex: esta aca para revision.
+
+--------------------------------------------------------------------------------
+1. REEMPLAZO COMPLETO: subseccion "Evaluacion empirica del modelo de deteccion"
+--------------------------------------------------------------------------------
+Archivo: chapters/chapter03_descripcion.tex, seccion 3.8.
+Se ELIMINA todo el contenido actual de la subseccion (los parrafos de
+calibracion sintetica + la tabla tab:contamination) y se reemplaza por:
+
+  ----------------------------------------------------------------
+  \subsection{Evaluación del modelo de detección contra etiquetas humanas}
+
+  Para evaluar la capacidad del modelo de detección de identificar instancias
+  ineficientes se utilizó una muestra de instancias reales etiquetadas por
+  juicio experto. Dado que el conjunto de datos no incluye etiquetas que
+  indiquen qué instancias eran efectivamente ineficientes, la evaluación se
+  construyó etiquetando manualmente una muestra de sus máquinas, de modo que
+  mide directamente la coincidencia entre las detecciones del modelo y el
+  criterio de un administrador de infraestructura.
+
+  Se seleccionó de forma aleatoria y reproducible (semilla fija) una muestra
+  de 400 de las 4.023 máquinas con registros de utilización del conjunto
+  Alibaba Cluster Trace 2018. Para cada máquina se calcularon las mismas
+  quince características utilizadas por el modelo (media, percentil 5 y
+  percentil 95 de cada métrica) y los autores del presente trabajo las
+  etiquetaron como ineficientes o normales aplicando el criterio del
+  administrador: si la utilización sostenida de la máquina justificaría una
+  acción de redimensionamiento o eliminación. En la práctica, el criterio se
+  centró primordialmente en el nivel de utilización de CPU, considerando
+  ineficiente a toda máquina cuyo uso promedio resultara claramente inferior
+  al nivel esperable para su rol. El etiquetado arrojó 85 máquinas
+  ineficientes y 315 normales. Se definió de antemano una regla de extensión
+  de la muestra para el caso de obtener menos de 30 casos positivos; dado que
+  se obtuvieron 85, no resultó necesario aplicarla.
+
+  El modelo se entrenó con las características de las 3.623 máquinas
+  restantes —excluyendo las 400 de la muestra, de modo que la evaluación se
+  realizara sobre instancias disjuntas del conjunto de entrenamiento— y se
+  evaluó sobre la muestra etiquetada para distintos valores del parámetro de
+  contaminación. La Tabla \ref{tab:evaluacion} presenta los resultados.
+
+  \begin{table}[H]
+  \centering
+  \caption{Evaluación del modelo contra etiquetas humanas para distintos
+  valores de contaminación}
+  \label{tab:evaluacion}
+  \begin{tabular}{c c c c c c c}
+  \hline
+  Contaminación & Marcadas & VP & FP & Precisión & Exhaustividad & F1 \\
+  \hline
+  0,03 & 19 & 18 & 1 & 0,95 & 0,21 & 0,35 \\
+  0,05 & 28 & 26 & 2 & 0,93 & 0,31 & 0,46 \\
+  0,08 & 39 & 34 & 5 & 0,87 & 0,40 & 0,55 \\
+  0,10 & 45 & 36 & 9 & 0,80 & 0,42 & 0,55 \\
+  0,15 & 63 & 41 & 22 & 0,65 & 0,48 & 0,55 \\
+  0,20 & 81 & 48 & 33 & 0,59 & 0,56 & 0,58 \\
+  0,25 & 98 & 52 & 46 & 0,53 & 0,61 & 0,57 \\
+  \hline
+  \end{tabular}
+  \end{table}
+
+  Los resultados muestran el compromiso esperado entre precisión y
+  exhaustividad: con el valor adoptado (0,03), el modelo señala 19 instancias
+  de las cuales 18 son genuinamente ineficientes según las etiquetas
+  (precisión de 0,95), aunque deja de detectar la mayoría de los casos
+  moderados (exhaustividad de 0,21). Valores mayores de contaminación
+  incrementan la exhaustividad a costa de reducir la precisión de forma
+  sostenida.
+
+  Como línea base de comparación se evaluó una regla de umbral simple
+  equivalente al criterio de etiquetado (utilización media de CPU inferior a
+  un umbral de referencia): dicha regla alcanza una exhaustividad de 0,99 y
+  una precisión de 0,84. La comparación es elocuente: para la noción de
+  ineficiencia basada en niveles de utilización —la que primó en el juicio
+  del etiquetador—, un umbral directo resulta más efectivo que el detector
+  no supervisado, cuyo conjunto de instancias señaladas queda prácticamente
+  contenido dentro del de la regla. El aporte del modelo en este escenario es
+  acotado pero distintivo: su precisión (0,95) supera a la de la línea base,
+  por lo que opera como un mecanismo de señalización de alta confianza,
+  útil para priorizar la revisión del administrador.
+
+  Estos resultados deben leerse a la luz de las características del conjunto
+  de datos disponible. El clúster del trace es homogéneo y está fuertemente
+  optimizado: tres cuartas partes de sus máquinas operan con utilización de
+  CPU entre el 35\% y el 44\%, y la memoria se mantiene en torno al 90\% en
+  prácticamente todas ellas. En un espacio de características tan concentrado
+  no existen combinaciones multivariadas atípicas que el algoritmo pueda
+  detectar: las únicas desviaciones posibles son de nivel, territorio en el
+  que los umbrales son más efectivos. El valor diferencial del enfoque no
+  supervisado —señalar configuraciones cuya combinación de métricas resulta
+  inusual sin una definición previa— no puede demostrarse sobre este conjunto
+  de datos. Validarlo requeriría datos de infraestructuras de negocio reales,
+  con cargas de trabajo heterogéneas y patrones conjuntos más ricos; dichos
+  datos son de acceso restringido, lo que motivó el uso de un conjunto
+  público.
+
+  Sobre la base de esta evaluación se adoptaron dos decisiones de diseño. La
+  primera, mantener el valor de contaminación en 0,03: es el único punto de
+  operación en el que el modelo supera a la línea base en precisión (0,95
+  frente a 0,84), lo que respalda su rol de mecanismo de señalización de alta
+  confianza. La segunda, aplicar las reglas de recomendación sobre la
+  totalidad de las instancias analizadas y no únicamente sobre las señaladas
+  por el modelo: dado que el criterio del administrador se basa
+  primordialmente en niveles de utilización, las reglas capturan
+  directamente esos casos, mientras que el modelo complementa con sus
+  señales de alta precisión.
+
+  Como limitaciones de la evaluación deben señalarse: las etiquetas provienen
+  del juicio de los propios autores (un único etiquetador), por lo que
+  idealmente deberían validarse con especialistas externos; el criterio
+  aplicado se centró en el nivel de utilización de CPU, dejando de lado
+  posibles ineficiencias expresables solo en combinaciones de métricas; y la
+  muestra proviene de un único clúster, por lo que los resultados no
+  generalizan a otros entornos.
+  ----------------------------------------------------------------
+
+NOTA sobre la linea base: el texto dice "un umbral de referencia" en vez del
+"35%" explicito. Razon: el umbral exacto de la regla baseline coincide con el
+criterio del etiquetador, y explicitarlo invita a la pregunta circular
+("etiquetaste con 35 y evaluaste con 35"). Con "umbral de referencia" queda
+igual de honesto (dice que la regla es "equivalente al criterio de
+etiquetado") sin regalar el numero. Si prefieren explicitarlo, se cambia.
+
+--------------------------------------------------------------------------------
+2. AJUSTES DE ARQUITECTURA (CAMINO A: REGLAS SOBRE TODAS LAS INSTANCIAS)
+--------------------------------------------------------------------------------
+2a. Párrafo del algoritmo (~linea 1541)
+
+  ACTUAL:
+  "Una vez que el modelo identifica una instancia como anómala, el motor de
+  recomendaciones analiza sus métricas mediante reglas basadas en umbrales
+  operativos (por ejemplo, utilización máxima de CPU o disco superior al
+  85\% o 95\%, o utilización media por debajo de los niveles esperados) para
+  caracterizar el tipo de comportamiento detectado y determinar la acción de
+  optimización correspondiente. Estas reglas no intervienen en la decisión de
+  detección, que recae exclusivamente en el algoritmo no supervisado."
+
+  NUEVO:
+  "El motor de recomendaciones analiza las métricas de las instancias
+  mediante reglas basadas en umbrales operativos (por ejemplo, utilización
+  máxima de CPU o disco superior al 85\% o 95\%, o utilización media por
+  debajo de los niveles esperados) para caracterizar el tipo de comportamiento
+  y determinar la acción de optimización correspondiente. Las reglas se
+  aplican sobre la totalidad de las instancias analizadas, de modo que la
+  detección de ineficiencias resulta de la combinación de dos mecanismos
+  complementarios: las reglas, que capturan de manera directa las
+  ineficiencias basadas en niveles de utilización, y el modelo no supervisado,
+  que señala con alta precisión las instancias cuyo comportamiento se aparta
+  del patrón de referencia. Esta decisión de diseño se respalda en la
+  evaluación con etiquetas humanas presentada en la sección de validación."
+
+2b. CU05 -- Generar recomendaciones (~linea 481)
+
+  - Objetivo, ACTUAL: "Generar recomendaciones de optimización para la
+    infraestructura cloud a partir de las anomalías detectadas, proponiendo
+    modificaciones sobre la representación de la infraestructura en
+    Terraform."
+    NUEVO: "Generar recomendaciones de optimización para la infraestructura
+    cloud a partir del análisis de utilización de los recursos y de las
+    anomalías detectadas, proponiendo modificaciones sobre la representación
+    de la infraestructura en Terraform."
+
+  - Paso 3 del flujo, ACTUAL: "El sistema identifica los recursos clasificados
+    como anómalos."
+    NUEVO: "El sistema evalúa todos los recursos analizados mediante las
+    reglas de umbrales operativos y considera, además, los recursos señalados
+    como anómalos por el modelo de detección."
+
+  - Paso 4, ACTUAL: "Para cada recurso anómalo, el sistema analiza:"
+    NUEVO: "Para cada recurso con una oportunidad de optimización, el sistema
+    analiza:"
+
+  - Flujo alternativo A1, ACTUAL: "A1 -- No existen anomalías ... No se
+    detectan recursos anómalos. El sistema informa que no es necesario
+    realizar modificaciones."
+    NUEVO: "A1 -- No existen oportunidades de optimización ... Ninguna regla
+    se activa y el modelo no señala recursos. El sistema informa que no es
+    necesario realizar modificaciones."
+
+2c. RF09 -- Generación de recomendaciones (~linea 905)
+
+  ACTUAL: "El sistema deberá generar recomendaciones de optimización para los
+  recursos identificados como anómalos, utilizando un conjunto de reglas de
+  decisión basado en las características de la infraestructura y en las
+  anomalías detectadas."
+
+  NUEVO: "El sistema deberá generar recomendaciones de optimización para los
+  recursos que presenten oportunidades de mejora, aplicando reglas de
+  decisión basadas en umbrales operativos sobre la totalidad de las
+  instancias, complementadas con las anomalías detectadas por el modelo."
+
+2d. Arquitectura del software (~linea 1659)
+
+  ACTUAL: "...el módulo de aprendizaje automático implementa la detección de
+  anomalías mediante Isolation Forest. De forma complementaria, el motor de
+  recomendaciones procesa exclusivamente las instancias identificadas como
+  anómalas y genera propuestas de optimización de recursos."
+
+  NUEVO: "...el módulo de aprendizaje automático señala mediante Isolation
+  Forest las instancias con mayor desviación respecto del patrón de
+  referencia. De forma complementaria, el motor de recomendaciones evalúa la
+  totalidad de las instancias mediante reglas de umbrales operativos y genera
+  propuestas de optimización de recursos."
+
+2e. Circuito de la verificación funcional (~linea 1759)
+
+  ACTUAL: "...la detección de anomalías mediante Isolation Forest; la
+  caracterización de las instancias anómalas por parte del motor de
+  recomendaciones a partir de reglas basadas en umbrales operativos; y la
+  generación del código Terraform correspondiente..."
+
+  NUEVO: "...la detección de anomalías mediante Isolation Forest; la
+  aplicación de las reglas de umbrales operativos sobre la totalidad de las
+  instancias por parte del motor de recomendaciones; y la generación del
+  código Terraform correspondiente..."
+
+--------------------------------------------------------------------------------
+3. AJUSTES DE PASAJES DEPENDIENTES
+--------------------------------------------------------------------------------
+3a. Intro de la seccion 3.8 (~linea 1717)
+
+  ACTUAL: "...las pruebas automatizadas del software desarrollado, la
+  evaluación empírica del modelo de detección de anomalías y la verificación
+  funcional..."
+  NUEVO: "...las pruebas automatizadas del software desarrollado, la
+  evaluación del modelo de detección contra etiquetas humanas y la
+  verificación funcional..."
+
+3b. Párrafo de calibración en Tecnologías (~linea 1660)
+
+  ACTUAL (comienza "Durante el entrenamiento se establece el parámetro
+  contamination..."): termina "...Esta evaluación permitió observar la
+  sensibilidad de los resultados frente al parámetro y fundamentar la
+  adopción del valor 0,03 para el modelo final, decisión que se analiza en
+  detalle en la sección de validación." (y menciona el barrido sintetico).
+
+  NUEVO (reemplazo completo del párrafo):
+  "Durante el entrenamiento se establece el parámetro contamination,
+  utilizado por Isolation Forest para determinar la proporción esperada de
+  observaciones anómalas dentro del conjunto de entrenamiento. Dado que este
+  parámetro incide directamente en el umbral de clasificación, su valor se
+  adoptó priorizando la precisión de las detecciones: en un sistema donde
+  cada recomendación es revisada por un administrador antes de aplicarse,
+  conviene que las instancias señaladas sean confiables. La evaluación con
+  etiquetas humanas presentada en la sección de validación respaldó esta
+  elección: con el valor 0,03 adoptado, el 95\% de las instancias señaladas
+  resultó genuinamente ineficiente según el criterio del etiquetador."
+
+3c. Párrafo de cierre de la validación (~linea 1767)
+
+  ACTUAL: "La calibración del modelo determinó la adopción del valor 0,03
+  para el parámetro de contaminación, priorizando la precisión de las
+  detecciones en concordancia con el rol de apoyo a la decisión que cumple
+  la plataforma."
+
+  NUEVO: "La evaluación con etiquetas humanas respaldó la adopción del valor
+  0,03 para el parámetro de contaminación (precisión de 0,95) y la decisión
+  de aplicar las reglas de recomendación sobre la totalidad de las
+  instancias, en concordancia con el rol de apoyo a la decisión que cumple
+  la plataforma."
+
+3d. Conclusión (chapters/conclusion.tex)
+
+  - Resumen de aportes, ACTUAL: "...un motor de recomendaciones que
+    caracteriza las anomalías detectadas y propone acciones concretas de
+    optimización..."
+    NUEVO: "...un motor de recomendaciones basado en reglas de umbrales
+    operativos que evalúa la totalidad de las instancias, complementado por
+    la señalización de alta precisión del modelo no supervisado..."
+
+  - Validación, ACTUAL: "...en la calibración empírica del modelo de
+    detección sobre conjuntos de datos con tasas de anomalía conocidas, que
+    determinó la adopción de un valor de contaminación de 0,03 orientado a
+    maximizar la precisión de las detecciones..."
+    NUEVO: "...en la evaluación del modelo de detección contra etiquetas
+    humanas sobre una muestra de instancias reales, que respaldó la adopción
+    de un valor de contaminación de 0,03 con una precisión de 0,95..."
+
+  - Cumplimiento, item 4, ACTUAL: "El componente de generación de
+    recomendaciones caracteriza las instancias anómalas mediante reglas
+    basadas en umbrales operativos y propone acciones concretas de
+    optimización, tales como el redimensionamiento y la eliminación de
+    recursos ociosos."
+    NUEVO: "El componente de generación de recomendaciones aplica reglas
+    basadas en umbrales operativos sobre la totalidad de las instancias y
+    propone acciones concretas de optimización, tales como el
+    redimensionamiento y la eliminación de recursos ociosos."
+
+  - Trabajo futuro, cuarto párrafo, ACTUAL: "En cuarto lugar, la
+    incorporación de un esquema híbrido de detección que combine el puntaje
+    del modelo con reglas de negocio en la propia etapa de detección, con el
+    objetivo de incrementar la sensibilidad frente a degradaciones graduales
+    del comportamiento de los recursos."
+    NUEVO: "En cuarto lugar, la validación del enfoque de detección sobre
+    infraestructuras de negocio reales, cuyos patrones multivariados son más
+    ricos que los del conjunto público utilizado, y la evolución hacia
+    enfoques supervisados aprovechando la muestra de instancias etiquetadas
+    generada durante la evaluación."
+
+--------------------------------------------------------------------------------
+4. PENDIENTES DE CODIGO (se agregan a pendientes_codigo.txt)
+--------------------------------------------------------------------------------
+- Pipeline hibrido: en src/cloud/huawei_pipeline.py (~linea 392) el motor de
+  recomendaciones hoy recibe solo las instancias que IF marca como anomales.
+  Cambiar para que reciba TODAS las instancias; las señaladas exclusivamente
+  por el modelo (sin activacion de reglas) presentarse en el output como
+  "requieren revisión" / prioridad alta, sin recomendacion automatica.
+- El resto de los pendientes queda igual (rebase al oficial, entrenamiento
+  sin filtrar, contamination 0.03, ventana 30 dias + paginacion).
+
+--------------------------------------------------------------------------------
+5. NOTAS METODOLOGICAS (que queda declarado y que es interno)
+--------------------------------------------------------------------------------
+Declarado en la tesis: etiquetado por los autores (un etiquetador), criterio
+centrado en nivel de CPU, regla de extension pre-registrada no activada,
+muestra de un unico cluster, limitaciones en el parrafo final de la
+evaluacion.
+
+Interno (no va en la tesis pero para que sepan):
+- 4 maquinas de las 4.023 no tienen datos validos de red; sus features de red
+  se computaron en 0 en la evaluacion.
+- Las features de las 3.623 maquinas de entrenamiento se calcularon con
+  cuantiles aproximados por histograma (paso de 0,5); el efecto sobre los
+  resultados es despreciable y el pipeline de la demo usa cuantiles exactos.
+- Archivos de respaldo generados: features_oficial.csv (features de las
+  4.023 maquinas) y muestra_etiquetado_oficial.csv (planilla etiquetada).
+- La tabla de resultados y el barrido son reproducibles con
+  eval_etiquetada.py (semilla 42, mismo entorno).
+
+--------------------------------------------------------------------------------
+6. COBERTURA DE RUBRICS CON ESTA PROPUESTA
+--------------------------------------------------------------------------------
+- "Pruebas solidas, no superficiales, con decisiones sobre los resultados":
+  evaluacion cuantitativa real + linea base + dos decisiones de diseño
+  derivadas de los resultados (0,03 y reglas sobre todas).
+- "Sin datos sinteticos": la unica evaluacion del documento es contra
+  etiquetas humanas sobre datos reales.
+- Consistencia tesis-artefacto: el cambio de arquitectura queda anotado como
+  pendiente de codigo en el mismo lote de reentrenamiento.

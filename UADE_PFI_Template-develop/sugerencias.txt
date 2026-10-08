@@ -1,0 +1,419 @@
+================================================================================
+SUGERENCIAS PARA LA TESIS — PUNTOS 2, 3 y 5 DEL REVISOR
+================================================================================
+Fuente de evidencia: código fuente del proyecto InfraEye
+(C:\Users\maxbi\OneDrive\Desktop\Tesis Demo\pfi-infraeye)
+
+Archivos de la tesis afectados (los que se compilan en main.tex):
+  - chapters/chapter02_antecedentes.tex  (marco teórico)
+  - chapters/chapter03_descripcion.tex   (descripción / metodología)
+
+Nota: converted_content.tex es un archivo legacy que NO se compila. Contiene
+texto viejo ("anticipar posibles fallas", "creciente adopción en mercados
+específicos") que generó las observaciones 1 y 4 del revisor. Se recomienda
+eliminarlo o archivarlo para evitar confusiones en futuras revisiones.
+
+
+================================================================================
+PUNTO 2 — INGENIERÍA DE FEATURES CON VENTANAS DESLIZANTES
+================================================================================
+
+EVIDENCIA ENCONTRADA EN EL CÓDIGO
+---------------------------------
+1. src/data/preprocessor.py, líneas 22-46 (compute_temporal_features):
+   implementa ventanas deslizantes (rolling windows) reales:
+     - window=12  -> 1 hora  (12 muestras x 5 min)   -> media
+     - window=288 -> 24 horas (288 muestras x 5 min) -> media, máximo, desvío
+   Esto confirma que el intervalo de 5 minutos declarado en la tesis es
+   consistente con los tamaños de ventana del código.
+
+2. src/data/preprocessor.py, líneas 48-98 (aggregate_by_machine):
+   por cada instancia se calculan sobre el período de observación: media,
+   máximo, mínimo, desvío estándar y percentiles 5, 25, 50, 75, 95 y 99.
+
+3. src/data/preprocessor.py, líneas 100-129 (prepare_training_features):
+   del conjunto anterior se seleccionan media, percentil 5 y percentil 95 por
+   métrica -> 15 variables (5 métricas x 3 estadísticas). Coincide con lo
+   declarado en la tesis, pero la tesis nunca menciona que esto se apoya en
+   ventanas deslizantes ni cuánto duran las ventanas.
+
+4. src/cloud/huaweicloud_client.py, líneas 731-756 (_compute_percentiles):
+   en el flujo con Huawei Cloud las estadísticas se calculan sobre los
+   datapoints de la ventana consultada (por defecto las últimas 24 h).
+
+5. src/data/preprocessor.py, líneas 131-140: normalización con StandardScaler.
+
+CAMBIOS PROPUESTOS
+------------------
+(A) chapters/chapter02_antecedentes.tex — insertar DESPUÉS del párrafo de la
+    línea 109 ("El análisis mediante ventanas temporales permite resumir...")
+    el siguiente párrafo:
+
+    Esta transformación puede implementarse mediante ventanas deslizantes
+    (sliding windows), mecanismo en el cual una ventana de observación de
+    tamaño fijo se desplaza sobre la serie temporal y las estadísticas se
+    recalculan en cada posición. En el caso de métricas recolectadas cada
+    cinco minutos, una ventana de 12 observaciones abarca una hora de
+    comportamiento, mientras que una ventana de 288 observaciones abarca un
+    día completo. De esta manera es posible capturar tanto las variaciones de
+    corto plazo como los patrones diarios de utilización de un recurso, y
+    sobre estas ventanas se construyen las características que luego serán
+    utilizadas por el algoritmo de detección de anomalías.
+
+(B) chapters/chapter02_antecedentes.tex — ampliar el párrafo de la línea 117
+    ("En el contexto de INFRAEYE, Isolation Forest se aplica...") agregando
+    al final:
+
+    Las características se calculan sobre ventanas deslizantes definidas
+    sobre las series temporales de cada instancia: ventanas de una hora (12
+    observaciones) para capturar el comportamiento inmediato y ventanas de
+    24 horas (288 observaciones) para capturar el patrón diario completo,
+    a partir de las cuales se derivan las estadísticas que representan a
+    cada instancia.
+
+(C) chapters/chapter03_descripcion.tex — en la sección del modelo de detección
+    (alrededor de las líneas 1517-1536, donde se describe la transformación y
+    las "15 variables"), especificar la ventana de observación. Insertar
+    después del párrafo que termina en "...niveles de utilización que alcanza
+    en situaciones de menor y mayor demanda." (línea 1530):
+
+    Las características estadísticas se calculan sobre la ventana de
+    observación definida para el análisis, que comprende por defecto las
+    últimas 24 horas de métricas. Con un intervalo de recolección de cinco
+    minutos, esta ventana contiene hasta 288 observaciones por métrica,
+    cantidad suficiente para caracterizar el patrón diario de utilización de
+    cada instancia. Esta decisión de diseño responde al objetivo del
+    proyecto: identificar comportamientos sostenidos de ineficiencia
+    requiere observar el comportamiento a lo largo de un ciclo operativo
+    completo y no únicamente valores instantáneos.
+
+
+================================================================================
+PUNTO 3 — LIMITACIONES DE ISOLATION FOREST
+================================================================================
+
+EVIDENCIA ENCONTRADA EN EL CÓDIGO
+---------------------------------
+1. Sensibilidad al parámetro de contaminación (evidencia empírica en el
+   propio proyecto):
+   - src/models/anomaly_detector.py:17  -> default contamination = 0.1
+   - src/main.py:27 y train_model.bat    -> el modelo final se entrena con 0.05
+   - src/evaluation/find_optimal_contamination.py -> barrido de valores
+     0.03 / 0.05 / 0.08 / 0.10 / 0.12 / 0.15 / 0.18 / 0.20 evaluados sobre
+     datasets sintéticos con tasas de anomalía del 5%, 10%, 15% y 20%.
+   - data/synthetic/optimal_contamination_results.json -> resultados: el mejor
+     F1 medio se obtuvo con 0.03 (F1 = 0.418, precisión alta, recall bajo);
+     con valores mayores el F1 decae. Es decir: el proyecto YA hizo la
+     calibración empírica que justifica documentar la limitación.
+
+2. Esquema híbrido: EXISTE en el código pero NO se usa en el flujo final.
+   - src/models/anomaly_detector.py, líneas 97-163 (detect_anomalies_hybrid):
+     combina Isolation Forest con reglas de negocio basadas en umbrales
+     (cpu_max > 85/95, disk_max > 85/95, cpu_mean < 20 y mem_mean < 50 ->
+     subutilizado, etc.).
+   - VERIFICADO: ningún flujo de producción lo invoca. Todos los call sites
+     (src/cloud/huawei_pipeline.py:304, src/main.py:89, web/app.py:326, 628,
+     747 y 854, y los scripts de análisis) usan detect_anomalies(), es decir,
+     Isolation Forest puro.
+   - En el flujo final las reglas operan AGUAS ABAJO de la detección: el
+     motor de recomendaciones (src/recommendations/recommendation_engine.py,
+     invocado en huawei_pipeline.py:392) clasifica mediante umbrales (85/95,
+     etc.) el TIPO de anomalía y genera acciones, pero únicamente para
+     instancias que IF ya marcó como anómalas. La decisión is_anomaly es
+     100% Isolation Forest.
+   - Conclusión: la afirmación de la tesis "Isolation Forest como algoritmo
+     único" (chapter02_antecedentes.tex:271) es CORRECTA para la versión
+     final. El método híbrido es código experimental no integrado.
+
+3. Alta dimensionalidad y mitigación:
+   - src/data/preprocessor.py, líneas 100-129: se mitiga reduciendo el espacio
+     a 15 características seleccionadas (media, p05, p95 por métrica) en lugar
+     de usar todas las estadísticas calculadas (que serían ~50).
+
+CAMBIOS PROPUESTOS
+------------------
+(A) chapters/chapter02_antecedentes.tex — insertar una subsección de
+    limitaciones DESPUÉS del párrafo de ventajas (línea 115, "Entre las
+    principales ventajas de Isolation Forest...") y ANTES del párrafo
+    "En el contexto de INFRAEYE..." (línea 117):
+
+    \subsubsection{Limitaciones de Isolation Forest}
+
+    Si bien las ventajas descriptas favorecen la aplicación de Isolation
+    Forest en escenarios de monitoreo de infraestructura, el algoritmo
+    presenta limitaciones que condicionan su utilización. En primer lugar,
+    los resultados dependen de manera significativa del parámetro de
+    contaminación, que define la proporción esperada de observaciones
+    anómalas y a partir del cual se establece el umbral de clasificación.
+    Dado que dicha proporción no se conoce con anticipación en un entorno
+    real, un valor subestimado reduce la sensibilidad de la detección,
+    mientras que un valor sobreestimado incrementa la cantidad de falsos
+    positivos \parencite{Liu2008}. En segundo lugar, el mecanismo de
+    aislamiento resulta eficaz para identificar observaciones que se
+    apartan marcadamente del patrón global, pero presenta dificultades
+    para detectar degradaciones graduales del comportamiento, en las que
+    cada observación individual resulta próxima a las consideradas normales
+    y la desviación solo se evidencia a lo largo del tiempo
+    \parencite{Natterdal2024}. Finalmente, aunque el algoritmo opera con
+    eficiencia computacional sobre espacios de alta dimensionalidad, la
+    presencia de características irrelevantes o redundantes degrada la
+    calidad del aislamiento, por lo que su aplicación se beneficia de una
+    etapa previa de selección de características \parencite{Zou2022}.
+
+    En el caso de InfraEye, estas limitaciones son atendidas mediante dos
+    decisiones de diseño: la calibración empírica del parámetro de
+    contaminación a partir de evaluaciones sobre conjuntos de datos con
+    tasas de anomalía conocidas, y la representación de cada instancia
+    mediante un conjunto acotado de características estadísticas
+    seleccionadas, que reduce la dimensionalidad del espacio de búsqueda.
+    Cabe señalar que la etapa posterior de recomendaciones, basada en reglas
+    de umbrales operativos, opera sobre las instancias ya identificadas
+    como anómalas por el algoritmo, por lo que la decisión de detección
+    recae exclusivamente en Isolation Forest. La incorporación de un
+    esquema híbrido que combine el puntaje del modelo con reglas de negocio
+    en la propia etapa de detección constituye una línea de trabajo futuro
+    para incrementar la sensibilidad frente a degradaciones graduales.
+
+    (Las claves Liu2008, Natterdal2024 y Zou2022 ya existen en biblio.bib,
+    líneas 619, 553 y 540 respectivamente. No hace falta agregar referencias.)
+
+(B) chapters/chapter03_descripcion.tex — ampliar el párrafo de la línea 1549
+    ("Durante el entrenamiento se establece el parámetro contamination...")
+    con la calibración empírica realizada en el proyecto:
+
+    Durante el entrenamiento se establece el parámetro contamination,
+    utilizado por Isolation Forest para determinar la proporción esperada de
+    observaciones anómalas dentro del conjunto de entrenamiento. Dado que
+    este parámetro incide directamente en el umbral de clasificación, su
+    valor se definió a partir de una evaluación empírica: se entrenaron
+    modelos con distintos valores de contaminación (entre 0,03 y 0,20) y se
+    los comparó sobre conjuntos de datos sintéticos con tasas de anomalía
+    conocidas del 5\%, 10\%, 15\% y 20\%, midiendo precisión, exhaustividad
+    y puntaje F1. Esta evaluación permitió observar la sensibilidad de los
+    resultados frente al parámetro y fundamentar el valor de configuración
+    adoptado para el modelo final.
+
+    OJO — inconsistencia interna del proyecto a resolver antes de redactar:
+    el barrido arrojó como óptimo 0.03, pero el modelo final se entrena con
+    0.05 (src/main.py:27 y train_model.bat). Decidir qué valor declarar en
+    la tesis (0.05 si es el efectivamente usado; 0.03 si se reentrena) y ser
+    consistente en todo el documento.
+
+(C) chapters/chapter03_descripcion.tex — NO describir la detección como
+    híbrida: en la versión final la decisión is_anomaly es exclusivamente de
+    Isolation Forest (ver evidencia, punto 2 arriba); el texto propuesto en
+    (A) ya refleja esto. El esquema híbrido solo debe mencionarse, en su
+    caso, como línea de trabajo futuro (el método detect_anomalies_hybrid
+    existe como prototipo no integrado en anomaly_detector.py:97-163). Lo
+    que sí corresponde describir, si no está, es el rol de las reglas de
+    umbrales del motor de recomendaciones como clasificación POSTERIOR a la
+    detección:
+
+    Una vez que el modelo identifica una instancia como anómala, el motor
+    de recomendaciones analiza sus métricas mediante reglas basadas en
+    umbrales operativos (por ejemplo, utilización máxima de CPU o disco
+    superior al 85\% o 95\%, o utilización media por debajo de los niveles
+    esperados) para caracterizar el tipo de comportamiento detectado y
+    determinar la acción de optimización correspondiente. Estas reglas no
+    intervienen en la decisión de detección, que recae exclusivamente en
+    el algoritmo no supervisado.
+
+
+================================================================================
+PUNTO 5 — INTERVALOS DE RECOLECCIÓN Y RETENTION PERIOD
+================================================================================
+
+EVIDENCIA ENCONTRADA EN EL CÓDIGO
+---------------------------------
+1. Intervalo de recolección:
+   - src/cloud/huaweicloud_client.py:325 y 335 -> las consultas al servicio
+     Cloud Eye (CES) usan period = 300 segundos (5 minutos). Coincide con lo
+     declarado en el marco teórico (chapter02_antecedentes.tex:107,117).
+
+2. Ventana de análisis:
+   - src/cloud/huaweicloud_client.py:368-371 -> por defecto se consultan las
+     últimas 24 horas (from_time = now - 24h).
+   - src/cloud/huawei_pipeline.py:145 -> hours_back = 24 (default).
+   - web/app.py:1044 y 1265 -> el parámetro "hours" es configurable por
+     solicitud en la API web.
+
+3. Retention / persistencia:
+   - ESTADO ACTUAL del código: NO existe base de datos (no hay PostgreSQL,
+     SQLAlchemy ni psycopg en el proyecto, verificado fuera de .venv). Las
+     métricas se consultan on-demand a Cloud Eye en cada análisis; los
+     resultados se exportan a archivos (txt/csv/json) mediante
+     src/utils/report_generator.py; el modelo se guarda con joblib.
+   - PLAN PARA LA ENTREGA FINAL (informado por los autores): se incorporará
+     una base de datos que almacenará, por usuario, las recomendaciones
+     generadas para la infraestructura, incluyendo el código Terraform.
+    - DECISIONES CONFIRMADAS POR LOS AUTORES para la entrega final:
+      a) MÉTRICAS: no se persisten. En cada análisis el sistema vuelve a
+         obtener las métricas desde Huawei Cloud autenticándose con las
+         credenciales AK/SK del usuario. No existe retention propio de
+         métricas: la disponibilidad histórica queda limitada por la política
+         de retención de Cloud Eye.
+      b) RECOMENDACIONES: se persisten en base de datos. Cada recomendación
+         incluye el código Terraform generado y una descripción que documenta
+         la anomalía detectada y la acción propuesta. La trazabilidad del
+         análisis vive dentro del Terraform + descripción, no en tablas
+         normalizadas de análisis/resultados.
+      c) ARQUITECTURA DE BD: base de datos ÚNICA con registros asociados a
+         cada usuario (no una BD separada por usuario).
+
+CAMBIOS PROPUESTOS
+------------------
+(A) chapters/chapter03_descripcion.tex — en la sección "Integración con
+    Huawei Cloud" (línea 1462), agregar un párrafo con las decisiones de
+    diseño de telemetría:
+
+    La consulta de métricas se configura con un período de agregación de 300
+    segundos, equivalente a un intervalo de recolección de cinco minutos, y
+    una ventana de análisis que comprende por defecto las últimas 24 horas,
+    parámetro que puede ajustarse por solicitud. Ambos valores constituyen
+    decisiones de diseño con impacto directo sobre el modelo de anomalías:
+    el intervalo de recolección determina la cantidad de observaciones
+    disponibles por ventana y la granularidad con la que pueden detectarse
+    variaciones de corto plazo, mientras que la ventana de análisis
+    determina el comportamiento que las características estadísticas
+    logran capturar. Ventanas demasiado breves no alcanzan a representar el
+    patrón diario de utilización, mientras que ventanas excesivamente
+    extensas diluyen los cambios recientes de comportamiento.
+
+    En cuanto a la persistencia de datos, el sistema distingue dos planos.
+    Las métricas crudas no se almacenan: en cada ejecución del análisis, el
+    sistema vuelve a obtener las observaciones desde el servicio de
+    monitoreo del proveedor autenticándose con las credenciales (AK/SK)
+    registradas por el usuario, por lo que la disponibilidad de información
+    histórica de utilización queda determinada por la política de retención
+    de Huawei Cloud Eye, lo cual establece una cota superior para la ventana
+    de análisis utilizable. En cambio, los resultados derivados sí se
+    persisten: las recomendaciones de optimización generadas para la
+    infraestructura del usuario se almacenan en una base de datos única, con
+    registros asociados a cada usuario. Cada recomendación conservada
+    incluye el código Terraform propuesto y una descripción de la anomalía
+    detectada y de la acción sugerida, lo que mantiene la trazabilidad entre
+    la detección realizada y la acción recomendada. [Completar con el
+    retention definido: p. ej. "se conserva el historial completo de
+    recomendaciones generadas" o "las recomendaciones se conservan durante
+    X días/meses".]
+
+(B) chapters/chapter02_antecedentes.tex — opcionalmente, enlazar el intervalo
+    de 5 minutos (líneas 107 y 117) con la ventana de análisis de 24 h
+    mencionando que "288 observaciones por métrica" componen la ventana
+    típica de análisis (coherente con el punto 2 de este documento).
+
+(C) RECOMENDACIÓN PARA EL MODELO ENTIDAD-RELACIÓN DE LA TESIS:
+    Con las decisiones confirmadas (métricas re-obtenidas vía AK/SK sin
+    persistencia; recomendaciones + Terraform + descripción persistidas; BD
+    única con registros por usuario), la afirmación de la tesis en la línea
+    1340 ("...almacenamiento de los resultados en PostgreSQL...") pasa a ser
+    correcta. El punto que queda desalineado es el DIAGRAMA
+    ENTIDAD-RELACIÓN (fig:er, subsección líneas 1371-1380 e imagen
+    media/image2.png), que hoy modela entidades de métricas, análisis,
+    resultados de anomalía y recomendaciones como si todas se persistieran.
+
+    RECOMENDACIÓN: simplificar el ER al modelo de datos realmente
+    implementado, con dos entidades principales:
+
+      USUARIO
+        - id (PK)
+        - nombre / email
+        - ak_cifrada (texto: credencial cifrada, NO en texto plano)
+        - sk_cifrada (texto: credencial cifrada, NO en texto plano)
+        Nota: cifrado reversible (p. ej. Fernet/AES-GCM con clave gestionada
+        fuera de la BD, vía variable de entorno o KMS), NO hash: el sistema
+        necesita recuperar el AK/SK para re-autenticarse en cada análisis.
+        Materializa RNF01 (chapter03_descripcion.tex:1003).
+      RECOMENDACION
+        - id (PK)
+        - usuario_id (FK -> USUARIO)
+        - fecha de generación
+        - infraestructura analizada (identificación de los recursos)
+        - codigo_terraform (plan propuesto)
+        - descripcion (anomalía detectada + acción propuesta)
+
+      Relación: USUARIO (1) --genera--> (N) RECOMENDACION
+
+    Justificación:
+      - Un ER que incluye datos transitorios (métricas que no se guardan)
+        mezcla procesamiento con persistencia y genera exactamente el tipo
+        de observación que hizo el revisor (¿cuál es el retention de cada
+        cosa?).
+      - El modelo simplificado responde la observación 5 de forma directa:
+        lo único persistido son recomendaciones/Terraform por usuario.
+      - Es honesto con la entrega y no exige desarrollo adicional.
+      - La trazabilidad análisis -> anomalía -> acción que el ER actual
+        modelaba con tablas separadas queda cubierta por la descripción
+        embebida en cada recomendación/Terraform (decisión confirmada).
+
+    Cambios concretos:
+      1) Redibujar la imagen media/image2.png con el modelo simplificado
+         (requiere edición de imagen, fuera del alcance de esta herramienta).
+      2) Reemplazar el párrafo descriptivo del ER
+         (chapter03_descripcion.tex, línea 1373) por:
+
+         El Diagrama Entidad-Relación presentado en la Figura representa el
+         modelo de datos persistente de la plataforma. El modelo distingue
+         los datos transitorios de los persistentes: las métricas de
+         utilización constituyen datos transitorios, ya que no se
+         almacenan de forma permanente sino que se obtienen en cada
+         análisis desde el servicio de monitoreo del proveedor utilizando
+         las credenciales registradas por el usuario. El modelo de datos
+         persistente se concentra en los usuarios de la plataforma y en
+         las recomendaciones de optimización generadas para sus
+         infraestructuras. Cada recomendación almacena el código
+         Terraform propuesto junto con una descripción de la anomalía
+         detectada y de la acción sugerida, lo que conserva la trazabilidad
+         entre la detección realizada y la acción recomendada sin requerir
+         el almacenamiento de las métricas originales.
+
+      3) RFN08 (línea 1083): el requisito actual exige conservar "un
+         registro histórico de los análisis realizados, incluyendo las
+         anomalías detectadas, las recomendaciones generadas, las
+         decisiones tomadas por el usuario y las versiones de Terraform
+         asociadas". Con el alcance confirmado, reformular para que
+         coincida con lo implementado:
+
+         El sistema deberá conservar las recomendaciones de optimización
+         generadas para cada usuario, incluyendo el código Terraform
+         asociado y una descripción de la anomalía detectada y de la
+         acción propuesta, de modo que el usuario pueda consultar el
+         historial de recomendaciones obtenidas para su infraestructura.
+
+         (Alternativa: mantener RFN08 como está y declarar el registro
+         normalizado de análisis y decisiones del usuario como trabajo
+         futuro. No recomendado: deja un requisito funcional sin cubrir
+         en la entrega.)
+
+
+================================================================================
+RESUMEN DE ACCIONES
+================================================================================
+1. [P2] chapter02_antecedentes.tex: párrafo sobre ventanas deslizantes después
+   de línea 109 + ampliar párrafo de línea 117.
+2. [P2] chapter03_descripcion.tex: párrafo sobre ventana de 24 h / 288
+   observaciones después de línea 1530.
+3. [P3] chapter02_antecedentes.tex: subsección "Limitaciones de Isolation
+   Forest" entre líneas 115 y 117 (citas ya existentes en biblio.bib).
+4. [P3] chapter03_descripcion.tex: ampliar párrafo de contamination (línea
+   1549) con la calibración empírica 0.03-0.20. Resolver antes la
+   inconsistencia 0.03 (óptimo del barrido) vs 0.05 (entrenamiento real).
+5. [P3] chapter03_descripcion.tex: NO presentar la detección como híbrida
+   (la versión final usa IF puro; el método híbrido es código no integrado).
+   Describir las reglas de umbrales del motor de recomendaciones como
+   clasificación posterior a la detección, y el esquema híbrido solo como
+   trabajo futuro.
+6. [P5] chapter03_descripcion.tex: párrafo de decisiones de telemetría en la
+   sección "Integración con Huawei Cloud" (línea 1462): intervalo 5 min,
+   ventana 24 h configurable, métricas re-obtenidas en cada análisis vía
+   AK/SK (sin persistencia; retención delegada a Cloud Eye) y
+   recomendaciones/Terraform+descripción persistidas en BD única con
+   registros por usuario. Definir el retention de las recomendaciones (o
+   declarar histórico completo).
+7. [P5] Simplificar el ER de la tesis (fig:er) a USUARIO + RECOMENDACION
+   (con codigo_terraform y descripcion): redibujar media/image2.png y
+   reemplazar el párrafo de la línea 1373 con el texto propuesto. Reformular
+   RFN08 (línea 1083) para que coincida con el alcance persistido
+   (recomendaciones + Terraform + descripción).
+8. [General] Eliminar o archivar converted_content.tex (texto viejo no
+   compilado que confunde a los revisores).

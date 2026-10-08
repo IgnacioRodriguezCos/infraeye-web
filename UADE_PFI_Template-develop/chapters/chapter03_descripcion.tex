@@ -482,7 +482,7 @@ Al finalizar el caso de uso el sistema dispone de:
 
 \paragraph*{Objetivo}
 
-Generar recomendaciones de optimización para la infraestructura cloud a partir de las anomalías detectadas, proponiendo modificaciones sobre la representación de la infraestructura en Terraform.
+Generar recomendaciones de optimización para la infraestructura cloud a partir del análisis de utilización de los recursos y de las anomalías detectadas, proponiendo modificaciones sobre la representación de la infraestructura en Terraform.
 
 \paragraph*{Precondiciones}
 
@@ -502,8 +502,8 @@ Generar recomendaciones de optimización para la infraestructura cloud a partir 
   \item la representación de la infraestructura en Terraform;
   \item los resultados del análisis realizado por Isolation Forest.
   \end{itemize}
-\item El sistema identifica los recursos clasificados como anómalos.
-\item Para cada recurso anómalo, el sistema analiza:
+\item El sistema evalúa todos los recursos analizados mediante las reglas de umbrales operativos y considera, además, los recursos señalados como anómalos por el modelo de detección.
+\item Para cada recurso con una oportunidad de optimización, el sistema analiza:
   \begin{itemize}
   \item el tipo de recurso;
   \item las métricas que originaron la anomalía;
@@ -533,12 +533,12 @@ Generar recomendaciones de optimización para la infraestructura cloud a partir 
 
 \paragraph*{Flujos alternativos}
 
-\subparagraph{A1 -- No existen anomalías}
+\subparagraph{A1 -- No existen oportunidades de optimización}
 
 En el paso 3:
 
 \begin{itemize}
-\item No se detectan recursos anómalos.
+\item Ninguna regla se activa y el modelo no señala recursos.
 \item El sistema informa que no es necesario realizar modificaciones.
 \item Finaliza el caso de uso.
 \end{itemize}
@@ -906,7 +906,7 @@ Media.
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá generar recomendaciones de optimización para los recursos identificados como anómalos, utilizando un conjunto de reglas de decisión basado en las características de la infraestructura y en las anomalías detectadas.
+El sistema deberá generar recomendaciones de optimización para los recursos que presenten oportunidades de mejora, aplicando reglas de decisión basadas en umbrales operativos sobre la totalidad de las instancias, complementadas con las anomalías detectadas por el modelo.
 
 Las recomendaciones podrán incluir modificaciones en la configuración de los recursos, cambios de capacidad, redistribución de cargas o eliminación de recursos innecesarios.
 
@@ -1080,11 +1080,11 @@ La información obtenida mediante el modelo de aprendizaje automático debe ser 
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá conservar un registro histórico de los análisis realizados, incluyendo las anomalías detectadas, las recomendaciones generadas, las decisiones tomadas por el usuario y las versiones de Terraform asociadas.
+El sistema deberá conservar las recomendaciones de optimización generadas para cada usuario, incluyendo el código Terraform asociado y una descripción de la anomalía detectada y de la acción propuesta, de modo que el usuario pueda consultar el historial de recomendaciones obtenidas para su infraestructura.
 
 \noindent \textbf{Justificación:}
 
-Permite realizar auditorías, comparar análisis históricos y dar seguimiento a la evolución de la infraestructura.
+Permite consultar el historial de recomendaciones, verificar la evidencia que respaldó cada propuesta y dar seguimiento a las optimizaciones sugeridas para la infraestructura.
 
 \subsubsection{RNF10 -- Confiabilidad}
 
@@ -1333,6 +1333,26 @@ La estrategia comercial acompaña este posicionamiento mediante un modelo de dis
 
 La estrategia propuesta no busca competir por amplitud de funcionalidades frente a las grandes plataformas de observabilidad, sino por la especialización en un problema concreto: la optimización inteligente del dimensionamiento de recursos cloud. La combinación de aprendizaje automático, generación de recomendaciones sobre Infraestructura como Código, ausencia de agentes propios y un modelo comercial de baja barrera de entrada constituye una propuesta de valor diferenciada que permite posicionar a la solución como una alternativa innovadora dentro del mercado de herramientas para la administración y optimización de infraestructuras cloud.
 
+\section{Metodología de desarrollo}
+
+El desarrollo de la plataforma se abordó mediante un enfoque ágil adaptado a las características del equipo de trabajo, compuesto por dos integrantes. La elección de un enfoque ágil respondió a tres factores. En primer lugar, el producto constituía un prototipo cuyos requerimientos podían refinarse a medida que avanzaba la comprensión del problema de optimización de infraestructura cloud, un escenario que favorece los enfoques ágiles, orientados a la entrega incremental de software funcional y a la adaptación al cambio por sobre la planificación exhaustiva inicial \parencite{AgileManifesto2001}. En segundo lugar, la experimentación asociada al componente de aprendizaje automático, que incluyó la selección de características y la calibración empírica del parámetro de contaminación, implicaba incertidumbre técnica que se beneficiaba de ciclos cortos de implementación, prueba y ajuste. Finalmente, el tamaño reducido del equipo hacía inviable la adopción literal de marcos de trabajo diseñados para equipos más numerosos, por lo que se adoptaron las prácticas esenciales de los enfoques ágiles con los roles simplificados que se describen a continuación.
+
+\subsection{Adaptación del enfoque ágil al equipo}
+
+Marcos de referencia como Scrum prescriben equipos de entre tres y nueve integrantes con roles diferenciados \parencite{ScrumGuide2020}, por lo que su aplicación literal a un equipo de dos personas no resultaba adecuada. En consecuencia, se realizó una adaptación: las responsabilidades de priorización del trabajo y de facilitación del proceso fueron asumidas de manera compartida por ambos integrantes, quienes participaron en todas las etapas del desarrollo. La comunicación directa y permanente, posible gracias al tamaño del equipo, permitía tomar las decisiones técnicas en conjunto y resolver consultas a medida que surgían, sin necesidad de ceremonias formales de sincronización diaria. Como instancia estructurada de seguimiento, el equipo realizaba una reunión semanal de avances en la que se revisaban el estado de las tareas, los obstáculos encontrados y los resultados obtenidos hasta el momento; la duración de estas reuniones no era fija, sino que se ajustaba a los temas a tratar en cada ocasión.
+
+\subsection{Gestión del trabajo}
+
+El trabajo se organizó a partir de un listado de funcionalidades priorizadas derivado de los requerimientos funcionales y no funcionales definidos en la sección anterior. Cada funcionalidad se desagregó en tareas concretas de diseño, implementación y prueba, que fueron distribuidas entre los integrantes según su disponibilidad y afinidad con cada componente. El seguimiento del estado de las tareas se realizó mediante un tablero visual en Trello, organizado a la manera de Kanban con los estados pendiente, en curso y finalizada, lo que permitía mantener visibilidad del avance global con una sobrecarga mínima de gestión. De manera complementaria, el avance macro del proyecto se controló contra el cronograma incluido en el anexo, que agrupaba los grandes hitos del proyecto.
+
+\subsection{Prácticas de desarrollo}
+
+El desarrollo se apoyó en un conjunto de prácticas orientadas a mantener la calidad del código en un contexto de entrega incremental. El control de versiones se realizó con Git, y el código fuente se encuentra disponible en los repositorios públicos del proyecto incluidos en el anexo. Cada integrante revisaba el código producido por el otro antes de su integración, mecanismo que funcionó como control de calidad y como transferencia de conocimiento dentro del equipo. La verificación mediante pruebas automatizadas con Pytest, descripta en la sección de validación, se incorporó al propio ciclo de desarrollo: las pruebas del módulo afectado se ejecutaban como parte de la definición de finalización de cada tarea. Finalmente, la arquitectura modular del sistema, descripta en las secciones siguientes, permitió que los componentes pudieran desarrollarse y probarse de forma relativamente independiente.
+
+\subsection{Ciclo de las iteraciones}
+
+El trabajo se organizó en iteraciones de una duración aproximada de dos semanas. Cada iteración siguió un patrón repetido: selección de un conjunto acotado de tareas del listado priorizado, diseño o ajuste de los módulos involucrados, implementación, verificación mediante las pruebas automatizadas y revisión conjunta de los resultados. De manera complementaria, al cierre de cada semana se presentaban y revisaban los avances obtenidos, lo que permitía detectar desvíos y replanificar sin esperar al final de la iteración. El cierre de cada iteración alimentaba la replanificación: se reevaluaba la prioridad de las funcionalidades pendientes a la luz de lo aprendido, incorporando los ajustes que la experimentación sugería. La construcción del prototipo avanzó de manera incremental: primero los módulos de obtención y preprocesamiento de datos, luego el modelo de detección de anomalías, posteriormente la aplicación web, y finalmente el motor de recomendaciones y la generación de código Terraform.
+
 \section{Diagramas}
 
 \subsection{Diagrama de componentes}
@@ -1370,7 +1390,7 @@ El diagrama de arquitectura presenta una visión general de la estructura tecnol
 
 \subsection{Modelo Entidad-Relación}
 
-El Diagrama Entidad-Relación presentado en la Figura representa el modelo de datos diseñado para la plataforma de optimización de infraestructuras cloud. El modelo establece una separación entre las distintas etapas de procesamiento de la plataforma. Las métricas representan el comportamiento observado de las instancias, los análisis representan las ejecuciones del modelo de detección, los resultados de anomalía representan las decisiones obtenidas mediante Isolation Forest y las recomendaciones representan las acciones de optimización derivadas de dichas detecciones. Esta estructura permite mantener la trazabilidad del proceso completo, desde los datos de utilización de los recursos hasta la generación de una recomendación de optimización.
+El Diagrama Entidad-Relación presentado en la Figura representa el modelo de datos persistente de la plataforma. El modelo distingue los datos transitorios de los persistentes: las métricas de utilización constituyen datos transitorios, ya que no se almacenan de forma permanente sino que se obtienen en cada análisis desde el servicio de monitoreo del proveedor utilizando las credenciales registradas por el usuario. El modelo de datos persistente se concentra en los usuarios de la plataforma y en las recomendaciones de optimización generadas para sus infraestructuras. Cada recomendación almacena el código Terraform propuesto junto con una descripción de la anomalía detectada y de la acción sugerida, lo que conserva la trazabilidad entre la detección realizada y la acción recomendada sin requerir el almacenamiento de las métricas originales.
 
 \begin{figure}[H]
 \centering
@@ -1380,6 +1400,22 @@ El Diagrama Entidad-Relación presentado en la Figura representa el modelo de da
 \end{figure}
 
 \section{Tecnologías}
+
+\subsection{Comparación de alternativas}
+
+La selección de las tres tecnologías centrales del sistema —el algoritmo de detección, el framework de backend y la herramienta de Infraestructura como Código— se realizó comparando las alternativas principales de cada categoría.
+
+\subsubsection{Algoritmo de detección de anomalías}
+
+La elección de Isolation Forest se evaluó frente a los enfoques habituales para la detección de anomalías no supervisada \parencite{Chandola2009}. Los métodos basados en densidad, como Local Outlier Factor, comparan la densidad local de cada observación con la de sus vecinas, lo que resulta costoso en espacios de alta dimensionalidad y sensible a la definición de la vecindad. One-Class SVM aprende una frontera que separa las observaciones normales del resto, pero exige la calibración de hiperparámetros de fuerte impacto y su costo de entrenamiento crece con el volumen de datos. Los enfoques de reconstrucción basados en autoencoders requieren un esfuerzo de diseño y entrenamiento considerable y una mayor cantidad de datos para generalizar. Los métodos de agrupamiento como DBSCAN identifican anomalías como ruido, con resultados que dependen de forma crítica de sus parámetros de radio y densidad mínima. Isolation Forest, en cambio, no requiere etiquetas, opera con complejidad lineal, es eficiente en espacios de alta dimensionalidad y produce un puntaje interpretable basado en la facilidad con que cada observación puede ser aislada \parencite{Liu2008}. A ello se suma el precedente de la literatura sobre detección de anomalías en infraestructura: los antecedentes analizados en el estado del arte emplean la familia de Isolation Forest o mecanismos relacionados \parencite{Zou2022, Natterdal2024, Nawrocki2022}, lo que aporta respaldo empírico a su aplicación sobre métricas de utilización.
+
+\subsubsection{Framework de backend}
+
+La elección de Flask se evaluó frente a Django y FastAPI. Django es un framework de alcance completo que incorpora mapeador objeto-relacional, autenticación, panel de administración y un conjunto de convenciones orientadas a aplicaciones de mayor escala; esa amplitud resulta innecesaria para un prototipo cuyo backend se limita a una API REST y a la renderización de un panel de control. FastAPI ofrece un enfoque moderno basado en anotaciones de tipos y ejecución asincrónica, especialmente adecuado para servicios de alta concurrencia; la aplicación no presenta requisitos de concurrencia que justifiquen esa complejidad adicional. Flask, como microframework, proporciona los componentes necesarios —enrutamiento, manejo de solicitudes y renderizado de plantillas— con una sobrecarga mínima, en línea con el tamaño del prototipo.
+
+\subsubsection{Herramienta de Infraestructura como Código}
+
+La elección de Terraform se evaluó frente a las alternativas principales. AWS CloudFormation se encuentra restringido al ecosistema de AWS, lo que resulta incompatible con la operación sobre Huawei Cloud y con la aspiración de extensión futura a otros proveedores. Pulumi permite definir la infraestructura en lenguajes de propósito general, pero su ecosistema es más reciente. Ansible, aunque ampliamente adoptado, está orientado principalmente a la gestión de configuración de sistemas antes que al aprovisionamiento declarativo de recursos cloud. Terraform, por su parte, ofrece un modelo declarativo basado en un grafo de recursos, cuenta con un proveedor mantenido para Huawei Cloud y es una de las herramientas de mayor adopción en la industria, lo que facilita que las recomendaciones generadas se integren en procesos de infraestructura como código existentes \parencite{HashiCorp2026, Morris2016}.
 
 \subsection{Lenguaje de programación: Python}
 
@@ -1473,6 +1509,50 @@ información utilizada durante la etapa de inferencia del modelo,
 permitiendo obtener las métricas necesarias para detectar anomalías y
 generar recomendaciones de optimización sobre infraestructuras reales.
 
+La consulta de métricas se configura con una ventana de análisis que
+comprende por defecto los últimos treinta días, parámetro que puede
+ajustarse por solicitud. El período de agregación se selecciona de forma
+automática en función de la ventana, adoptando la granularidad más fina
+cuya retención documentada en el servicio de monitoreo la cubre: para
+ventanas de hasta diez días se utiliza un período de 300 segundos,
+equivalente a un intervalo de recolección de cinco minutos, mientras que
+para la ventana por defecto de treinta días la consulta se realiza con un
+período de 3.600 segundos, dado que la granularidad de cinco minutos se
+conserva únicamente durante diez días. Las consultas se paginan en bloques
+que acotan la cantidad de puntos de datos por solicitud, concatenando y
+deduplicando los resultados por marca temporal. Estos valores constituyen
+decisiones de diseño con impacto directo sobre el modelo de anomalías: el
+período de agregación determina la cantidad de observaciones disponibles
+por ventana y la granularidad con la que pueden detectarse variaciones de
+corto plazo, mientras que la ventana de análisis determina el
+comportamiento que las características estadísticas logran capturar. La
+extensión de la ventana por defecto responde al objetivo de identificar
+comportamientos sostenidos de ineficiencia: observar la utilización a lo
+largo de múltiples ciclos operativos, tanto diarios como semanales, reduce
+el riesgo de juzgar erróneamente instancias con cargas periódicas, como
+aquellas que permanecen ociosas los fines de semana o que ejecutan
+procesos intensivos hacia el final de cada mes. Ventanas más breves
+alcanzan a representar el patrón diario pero no permiten distinguir una
+ineficiencia sostenida de una situación circunstancial, mientras que
+ventanas excesivamente extensas diluyen los cambios recientes de
+comportamiento; por este motivo la ventana permanece configurable por
+solicitud.
+
+En cuanto a la persistencia de datos, el sistema distingue dos planos.
+Las métricas crudas no se almacenan: en cada ejecución del análisis, el
+sistema vuelve a obtener las observaciones desde el servicio de
+monitoreo del proveedor autenticándose con las credenciales (AK/SK)
+registradas por el usuario, por lo que la disponibilidad de información
+histórica de utilización queda determinada por la política de retención
+de Huawei Cloud Eye, lo cual establece una cota superior para la ventana
+de análisis utilizable. En cambio, los resultados derivados sí se
+persisten: las recomendaciones de optimización generadas para la
+infraestructura del usuario se almacenan en una base de datos única, con
+registros asociados a cada usuario. Cada recomendación conservada
+incluye el código Terraform propuesto y una descripción de la anomalía
+detectada y de la acción sugerida, de modo que se preserve el historial
+de propuestas y su trazabilidad.
+
 \subsection{Tecnologías del frontend}
 
 La interfaz de usuario se desarrolla utilizando tecnologías web estándar
@@ -1505,12 +1585,53 @@ manera, el modelo de aprendizaje automático funciona como una primera
 etapa de filtrado, mientras que la determinación de una posible acción
 de optimización queda a cargo del módulo de recomendaciones.
 
+El motor de recomendaciones analiza las métricas de las instancias mediante
+reglas basadas en umbrales operativos (por ejemplo, utilización máxima de
+CPU o disco superior al 85\% o 95\%, o utilización media por debajo de los
+niveles esperados) para caracterizar el tipo de comportamiento y determinar
+la acción de optimización correspondiente. Las reglas se aplican sobre la
+totalidad de las instancias analizadas, de modo que la detección de
+ineficiencias resulta de la combinación de dos mecanismos complementarios:
+las reglas, que capturan de manera directa las ineficiencias basadas en
+niveles de utilización, y el modelo no supervisado, que señala con alta
+precisión las instancias cuyo comportamiento se aparta del patrón de
+referencia. Esta decisión de diseño se respalda en la evaluación con
+etiquetas humanas presentada en la sección de validación.
+
 El modelo utiliza como fuente de entrenamiento el conjunto de datos
-Alibaba Cluster Trace 2018, que contiene información de utilización de
-recursos obtenida a partir de una infraestructura de producción. A
-partir de las métricas disponibles se construye una representación de
-cada instancia que posteriormente será utilizada como entrada del
-algoritmo.
+Alibaba Cluster Trace 2018, publicado por Alibaba Group dentro de su
+programa de trazas de clúster y disponible públicamente
+\parencite{AlibabaClusterTrace2018}. El conjunto corresponde a un
+muestreo de uno de los clústeres de producción del proveedor, recolectado
+durante ocho días sobre aproximadamente 4.000 máquinas heterogéneas. Las
+cargas registradas no provienen de ejecuciones controladas ni de datos
+sintéticos, sino de la operación normal del clúster, en la que coexisten
+en cada máquina servicios en línea de larga duración, desplegados en
+contenedores, y trabajos de procesamiento por lotes. De las seis tablas
+que componen el conjunto, el proyecto emplea la de utilización de
+máquinas, que registra para cada equipo la utilización de CPU, memoria,
+disco y tráfico de red entrante y saliente a lo largo del tiempo, es
+decir, métricas de la misma naturaleza que las que la plataforma obtiene
+desde el servicio de monitoreo de Huawei Cloud durante la etapa de
+inferencia.
+
+La pertinencia de este conjunto de datos para el presente trabajo se
+sustenta en tres aspectos. En primer lugar, dado que Isolation Forest es
+un algoritmo no supervisado, el entrenamiento no requiere ejemplos
+etiquetados de anomalías, sino una base de comportamiento de utilización
+representativa de una infraestructura real. La coexistencia de servicios
+de larga duración, con patrones de utilización sostenidos, y de trabajos
+por lotes, con consumos más irregulares, aporta una diversidad de
+perfiles de utilización que permite que el modelo aprenda una noción
+amplia del comportamiento considerado normal. En segundo lugar, la
+correspondencia entre las métricas disponibles en el conjunto de
+entrenamiento y las métricas recolectadas por la plataforma garantiza
+que las características estadísticas construidas durante el entrenamiento
+puedan calcularse de la misma manera sobre las instancias analizadas, lo
+que resulta indispensable para que el modelo produzca resultados
+significativos. Finalmente, su disponibilidad pública y su documentación
+permiten reproducir el proceso de entrenamiento, en concordancia con el
+requerimiento de consistencia definido para el sistema.
 
 Las variables consideradas corresponden a la utilización de CPU,
 memoria, disco, tráfico de red entrante y tráfico de red saliente.
@@ -1529,6 +1650,19 @@ características que describe tanto su utilización habitual como los
 niveles de utilización que alcanza en situaciones de menor y mayor
 demanda.
 
+Las características estadísticas se calculan sobre la ventana de
+observación definida para el análisis, que comprende por defecto los
+últimos treinta días de métricas. Con el período de agregación de 3.600
+segundos seleccionado para esa ventana, esta contiene hasta 720
+observaciones por métrica, cantidad suficiente para caracterizar el
+comportamiento de cada instancia a lo largo de múltiples ciclos
+operativos, tanto diarios como semanales.
+Esta decisión de diseño responde al objetivo del proyecto: identificar
+comportamientos sostenidos de ineficiencia requiere observar la
+utilización a lo largo de un período prolongado y no únicamente valores
+instantáneos o un ciclo aislado, de modo que resulte posible distinguir
+una ineficiencia persistente de una situación circunstancial.
+
 Con cinco métricas y tres características derivadas para cada una, la
 representación final utilizada por el modelo está compuesta por 15
 variables. Esta transformación permite que Isolation Forest trabaje con
@@ -1540,7 +1674,8 @@ entrenamiento del modelo Isolation Forest. El algoritmo construye un
 conjunto de árboles de aislamiento mediante particiones aleatorias del
 espacio de características.
 
-El modelo utilizado se configura con 100 árboles, buscando obtener una
+El modelo utilizado se configura con 100 árboles y un parámetro de
+contaminación de 0,03, buscando obtener una
 representación estable del espacio de características a partir de
 múltiples particiones aleatorias. Asimismo, se establece una semilla
 aleatoria fija para garantizar que los experimentos puedan ser
@@ -1548,7 +1683,14 @@ reproducidos bajo las mismas condiciones.
 
 Durante el entrenamiento se establece el parámetro contamination,
 utilizado por Isolation Forest para determinar la proporción esperada de
-observaciones anómalas dentro del conjunto de entrenamiento.
+observaciones anómalas dentro del conjunto de entrenamiento. Dado que este
+parámetro incide directamente en el umbral de clasificación, su valor se
+adoptó priorizando la precisión de las detecciones: en un sistema donde
+cada recomendación es revisada por un administrador antes de aplicarse,
+conviene que las instancias señaladas sean confiables. La evaluación con
+etiquetas humanas presentada en la sección de validación respaldó esta
+elección: con el valor 0,03 adoptado, el 95\% de las instancias señaladas
+resultó genuinamente ineficiente según el criterio del etiquetador.
 
 Una vez finalizada la etapa de entrenamiento, el modelo Isolation Forest
 queda disponible para analizar nuevas infraestructuras sin necesidad de
@@ -1601,11 +1743,75 @@ La aplicación adopta una arquitectura modular que organiza sus
 componentes según su responsabilidad funcional. Los módulos de
 adquisición y preprocesamiento de datos son responsables de obtener y
 preparar las métricas para su análisis, mientras que el módulo de
-aprendizaje automático implementa la detección de anomalías mediante
-Isolation Forest. De forma complementaria, el motor de recomendaciones
-procesa exclusivamente las instancias identificadas como anómalas y
-genera propuestas de optimización de recursos. Finalmente, el sistema
+aprendizaje automático señala mediante Isolation Forest las instancias con
+mayor desviación respecto del patrón de referencia. De forma complementaria,
+el motor de recomendaciones evalúa la totalidad de las instancias mediante
+reglas de umbrales operativos y genera propuestas de optimización de
+recursos. Finalmente, el sistema
 incorpora módulos de integración con Huawei Cloud, generación de
 reportes y una aplicación web desarrollada en Flask para la interacción
 con el usuario. Esta organización modular favorece la mantenibilidad,
 escalabilidad y reutilización de los distintos componentes del sistema.
+
+\subsection{Seguridad de credenciales y despliegue}
+
+Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado: las credenciales se emplean exclusivamente para las consultas de lectura de recursos y métricas durante el análisis, sin realizar operaciones de modificación sobre la infraestructura del usuario. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
+
+En cuanto a la comunicación, el tráfico entre el navegador del usuario y la aplicación se protege mediante HTTPS/TLS, al igual que la comunicación entre la aplicación y los servicios de Huawei Cloud, cuyos endpoints oficiales operan sobre TLS. La extensión Flask-CORS configura las políticas de intercambio de recursos de origen cruzado para restringir los orígenes habilitados a consumir la API.
+
+La aplicación se despliega en una instancia Elastic Cloud Server (ECS) de Huawei Cloud junto con el servicio de base de datos PostgreSQL que persiste las recomendaciones generadas. Esta decisión aprovecha los créditos de prueba disponibles en dicho proveedor y permite operar el producto en el mismo ecosistema al que se orienta. El acceso a la aplicación se realiza mediante HTTPS, y las actualizaciones del servicio consisten en el despliegue de una nueva versión del código en la instancia y el reinicio del proceso correspondiente.
+
+\section{Validación del prototipo}
+
+La validación del prototipo se organizó en tres instancias complementarias: las pruebas automatizadas del software desarrollado, la evaluación del modelo de detección contra etiquetas humanas y la verificación funcional del circuito completo de análisis sobre infraestructura desplegada en Huawei Cloud. El propósito de esta etapa fue evaluar la capacidad del sistema para detectar ineficiencias y generar recomendaciones efectivas de optimización, en concordancia con el alcance definido para el prototipo.
+
+\subsection{Pruebas automatizadas del software}
+
+El funcionamiento de los módulos desarrollados se verificó mediante una suite de 267 pruebas automatizadas, unitarias y de integración, construidas con el framework Pytest. Las pruebas del motor de recomendaciones cubren los principales casos de clasificación: instancias con utilización normal, infrautilización, sobreutilización crítica y alta de CPU y memoria, instancias sobredimensionadas, cuellos de botella de disco y de red, comportamientos mixtos y casos límite tales como valores exactamente en los umbrales, valores extremos y valores nulos o negativos. De forma complementaria, la extensión Pytest-cov se empleó para medir la cobertura del código fuente: los componentes centrales del módulo de recomendaciones presentan coberturas elevadas, con el clasificador de anomalías y las reglas de clasificación integradas cubiertos en su totalidad, el calculador de confianza en un 96\% y el analizador de métricas en un 93\%. Este conjunto de pruebas constituye además una base de regresión que permite verificar que modificaciones posteriores sobre los módulos no introduzcan errores en funcionalidades ya verificadas.
+
+\subsection{Evaluación del modelo de detección contra etiquetas humanas}
+
+Para evaluar la capacidad del modelo de detección de identificar instancias ineficientes se utilizó una muestra de instancias reales etiquetadas por juicio experto. Dado que el conjunto de datos no incluye etiquetas que indiquen qué instancias eran efectivamente ineficientes, la evaluación se construyó etiquetando manualmente una muestra de sus máquinas, de modo que mide directamente la coincidencia entre las detecciones del modelo y el criterio de un administrador de infraestructura.
+
+Se seleccionó de forma aleatoria y reproducible (semilla fija) una muestra de 400 de las 4.023 máquinas con registros de utilización del conjunto Alibaba Cluster Trace 2018. Para cada máquina se calcularon las mismas quince características utilizadas por el modelo (media, percentil 5 y percentil 95 de cada métrica) y los autores del presente trabajo las etiquetaron como ineficientes o normales aplicando el criterio del administrador: si la utilización sostenida de la máquina justificaría una acción de redimensionamiento o eliminación. En la práctica, el criterio se centró primordialmente en el nivel de utilización de CPU, considerando ineficiente a toda máquina cuyo uso promedio resultara claramente inferior al nivel esperable para su rol. El etiquetado arrojó 85 máquinas ineficientes y 315 normales. Se definió de antemano una regla de extensión de la muestra para el caso de obtener menos de 30 casos positivos; dado que se obtuvieron 85, no resultó necesario aplicarla.
+
+El modelo se entrenó con las características de las 3.623 máquinas restantes —excluyendo las 400 de la muestra, de modo que la evaluación se realizara sobre instancias disjuntas del conjunto de entrenamiento— y se evaluó sobre la muestra etiquetada para distintos valores del parámetro de contaminación. La Tabla \ref{tab:evaluacion} presenta los resultados.
+
+\begin{table}[H]
+\centering
+\caption{Evaluación del modelo contra etiquetas humanas para distintos valores de contaminación}
+\label{tab:evaluacion}
+\begin{tabular}{c c c c c c c}
+\hline
+Contaminación & Marcadas & VP & FP & Precisión & Exhaustividad & F1 \\
+\hline
+0,03 & 19 & 18 & 1 & 0,95 & 0,21 & 0,35 \\
+0,05 & 28 & 26 & 2 & 0,93 & 0,31 & 0,46 \\
+0,08 & 39 & 34 & 5 & 0,87 & 0,40 & 0,55 \\
+0,10 & 45 & 36 & 9 & 0,80 & 0,42 & 0,55 \\
+0,15 & 63 & 41 & 22 & 0,65 & 0,48 & 0,55 \\
+0,20 & 81 & 48 & 33 & 0,59 & 0,56 & 0,58 \\
+0,25 & 98 & 52 & 46 & 0,53 & 0,61 & 0,57 \\
+\hline
+\end{tabular}
+\end{table}
+
+Los resultados muestran el compromiso esperado entre precisión y exhaustividad: con el valor adoptado (0,03), el modelo señala 19 instancias de las cuales 18 son genuinamente ineficientes según las etiquetas (precisión de 0,95), aunque deja de detectar la mayoría de los casos moderados (exhaustividad de 0,21). Valores mayores de contaminación incrementan la exhaustividad a costa de reducir la precisión de forma sostenida.
+
+Como línea base de comparación se evaluó una regla de umbral simple equivalente al criterio de etiquetado (utilización media de CPU inferior a un umbral de referencia): dicha regla alcanza una exhaustividad de 0,99 y una precisión de 0,84. La comparación es elocuente: para la noción de ineficiencia basada en niveles de utilización —la que primó en el juicio del etiquetador—, un umbral directo resulta más efectivo que el detector no supervisado, cuyo conjunto de instancias señaladas queda prácticamente contenido dentro del de la regla. El aporte del modelo en este escenario es acotado pero distintivo: su precisión (0,95) supera a la de la línea base, por lo que opera como un mecanismo de señalización de alta confianza, útil para priorizar la revisión del administrador.
+
+La comparación contra las reglas de umbrales operativos del propio motor de recomendaciones añade, sin embargo, un matiz a favor del enfoque no supervisado. Las reglas del motor operan como bandas con condiciones conjuntas —la condición de subutilización exige simultáneamente utilización baja de CPU y de memoria, y la de CPU sobredimensionado exige un uso de CPU muy bajo junto con una memoria alta—, lo que deja fuera una zona intermedia: instancias con utilización de CPU baja y memoria moderada que ninguna banda alcanza. Aplicadas a la muestra etiquetada, las reglas del motor detectan 32 de las 85 instancias ineficientes, y el modelo aporta 5 detecciones únicas que ninguna regla captura: instancias con utilización de CPU de entre el 6\% y el 30\% y memoria de entre el 33\% y el 76\%, situadas precisamente en esa zona intermedia. Este aporte es estructural y no desaparece al recalibrar los umbrales de las reglas: las bandas con condiciones conjuntas no pueden alcanzar configuraciones intermedias por diseño, mientras que el detector no supervisado, que mide la desviación global respecto del patrón de referencia, sí lo hace.
+
+Estos resultados deben leerse a la luz de las características del conjunto de datos disponible. El clúster del trace es homogéneo y está fuertemente optimizado: tres cuartas partes de sus máquinas operan con utilización de CPU entre el 35\% y el 44\%, y la memoria se mantiene en torno al 90\% en prácticamente todas ellas. En un espacio de características tan concentrado, las desviaciones presentes son primordialmente de nivel —territorio en el que los umbrales resultan más efectivos— y las combinaciones atípicas detectables se limitan a configuraciones intermedias como las descriptas en el párrafo anterior. El valor diferencial del enfoque no supervisado —señalar configuraciones cuya combinación de métricas resulta inusual sin una definición previa— no puede demostrarse en toda su extensión sobre este conjunto de datos. Validarlo requeriría datos de infraestructuras de negocio reales, con cargas de trabajo heterogéneas y patrones conjuntos más ricos; dichos datos son de acceso restringido, lo que motivó el uso de un conjunto público.
+
+Sobre la base de esta evaluación se adoptaron tres decisiones de diseño. La primera, mantener el valor de contaminación en 0,03: es el único punto de operación en el que el modelo supera a la línea base en precisión (0,95 frente a 0,84), lo que respalda su rol de mecanismo de señalización de alta confianza. La segunda, aplicar las reglas de recomendación sobre la totalidad de las instancias analizadas y no únicamente sobre las señaladas por el modelo: dado que el criterio del administrador se basa primordialmente en niveles de utilización, las reglas capturan directamente esos casos, mientras que el modelo complementa con sus señales de alta precisión. La tercera, recalibrar el umbral de CPU de la regla de migración hacia tipos de instancia optimizados para memoria, elevándolo del 30\% al 35\%: la evaluación mostró que un conjunto de instancias con utilización de CPU levemente superior al umbral y memoria alta —que el administrador consideró ineficientes— quedaba fuera de la regla por un margen mínimo; tras la recalibración, el conjunto de reglas del motor pasa de detectar 32 a 74 de las 85 instancias ineficientes de la muestra.
+
+Como limitaciones de la evaluación deben señalarse: las etiquetas provienen del juicio de los propios autores (un único etiquetador), por lo que idealmente deberían validarse con especialistas externos; el criterio aplicado se centró en el nivel de utilización de CPU, dejando de lado posibles ineficiencias expresables solo en combinaciones de métricas; y la muestra proviene de un único clúster, por lo que los resultados no generalizan a otros entornos.
+
+\subsection{Verificación funcional en entorno controlado}
+
+La verificación funcional se realizó sobre infraestructura desplegada en Huawei Cloud, en un entorno controlado. El circuito verificado comprende las etapas completas de la solución: la obtención de las métricas desde el servicio de monitoreo del proveedor con una ventana de análisis de, por defecto, los últimos treinta días y el período de agregación seleccionado automáticamente según la retención del servicio; la validación de la consistencia de la información antes de ejecutar el análisis; la construcción de las quince características estadísticas que representan a cada instancia; la detección de anomalías mediante Isolation Forest; la aplicación de las reglas de umbrales operativos sobre la totalidad de las instancias por parte del motor de recomendaciones; y la generación del código Terraform correspondiente, acompañado de la descripción de la anomalía detectada y de la acción sugerida.
+
+La visualización de los resultados en el dashboard web permitió comprobar que el usuario puede revisar el estado de la infraestructura analizada, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto antes de aprobar cualquier modificación, manteniendo la validación humana como parte del proceso de optimización. La persistencia de las recomendaciones en la base de datos, junto con su código Terraform y su descripción asociada, verifica la trazabilidad entre la detección realizada y la acción recomendada.
+
+En conjunto, las tres instancias de validación permitieron tomar decisiones de diseño fundamentadas en resultados y evaluar la viabilidad técnica de la propuesta. La evaluación con etiquetas humanas respaldó la adopción del valor 0,03 para el parámetro de contaminación (precisión de 0,95) y la decisión de aplicar las reglas de recomendación sobre la totalidad de las instancias, en concordancia con el rol de apoyo a la decisión que cumple la plataforma. La suite de pruebas automatizadas verificó el comportamiento del motor de recomendaciones y de las reglas de negocio, y quedó disponible como base de regresión para el mantenimiento del sistema. La verificación funcional comprobó el funcionamiento del circuito completo de análisis, desde la obtención de métricas hasta la generación y visualización del código Terraform, incluyendo la persistencia trazable de las recomendaciones. Sobre la base de estos resultados, el prototipo se considera apto para asistir la identificación de recursos ineficientes y la generación de recomendaciones de optimización dentro del alcance definido, y establece las bases para desarrollos futuros que incorporen funcionalidades adicionales.

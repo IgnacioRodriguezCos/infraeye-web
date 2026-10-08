@@ -2,10 +2,34 @@
 
 \section{Resumen de aportes}
 
-Completar.
+El presente trabajo abordó el problema de la detección de ineficiencias en la utilización de recursos de infraestructura cloud, una de las principales causas del desperdicio de gasto en las organizaciones que adoptan modelos de computación en la nube. El análisis del estado del arte permitió determinar que, si bien el mercado ofrece soluciones consolidadas de monitoreo y observabilidad, persisten tres brechas fundamentales: la dependencia del proveedor cloud, que restringe la portabilidad y resulta especialmente crítica en el ecosistema de Huawei Cloud; las recomendaciones basadas en reglas y verificadores predefinidos, sin control ni transparencia sobre los modelos subyacentes; y la escasa integración con Infraestructura como Código, que requiere intervención manual para implementar cambios.
+
+Frente a este panorama, la tesis contribuyó con el diseño y desarrollo de InfraEye, un prototipo funcional que integra la obtención de métricas directamente desde las APIs del proveedor sin requerir la instalación de agentes sobre la infraestructura del cliente, la detección de comportamientos anómalos mediante el algoritmo no supervisado Isolation Forest, un motor de recomendaciones basado en reglas de umbrales operativos que evalúa la totalidad de las instancias, complementado por la señalización de alta precisión del modelo no supervisado, y la generación de código Terraform que permite materializar dichas propuestas dentro de los procesos de Infraestructura como Código de la organización. Esta combinación cierra el ciclo entre detección y acción, aspecto que no se observa de forma integrada ni en las herramientas comerciales ni en los antecedentes académicos analizados.
+
+La validación del prototipo se apoyó en pruebas automatizadas del software, en la evaluación del modelo de detección contra etiquetas humanas sobre una muestra de instancias reales, que respaldó la adopción de un valor de contaminación de 0,03 con una precisión de 0,95, y en la verificación funcional del circuito completo de análisis en un entorno controlado con servicios de Huawei Cloud. Los resultados obtenidos permitieron evaluar la viabilidad técnica de la propuesta y confirmar la factibilidad de combinar monitoreo, análisis mediante aprendizaje automático y automatización en una única plataforma.
+
+\section{Cumplimiento de los objetivos}
+
+En relación con el objetivo general, el trabajo diseñó y desarrolló una plataforma de optimización de infraestructura cloud capaz de detectar recursos ineficientes mediante el algoritmo Isolation Forest, generar recomendaciones orientadas a reducir costos y mejorar la utilización de recursos, y proponer cambios de infraestructura mediante código de Terraform. Los objetivos específicos planteados fueron abordados de la siguiente manera:
+
+\begin{itemize}
+\item La arquitectura de la plataforma fue definida a partir de una organización modular que separa la adquisición y el preprocesamiento de datos, el análisis mediante aprendizaje automático, el motor de recomendaciones y la aplicación web, y se documentó mediante los diagramas de componentes, de flujo, de arquitectura y el modelo Entidad-Relación.
+\item Los mecanismos de recolección de datos se implementaron sobre los SDK oficiales de Huawei Cloud, que permiten consultar instancias Elastic Cloud Server, métricas de Cloud Eye, volúmenes de Elastic Volume Service y configuraciones de red virtual.
+\item El módulo de análisis fue desarrollado en base al algoritmo Isolation Forest, entrenado sobre el conjunto de datos Alibaba Cluster Trace 2018 y aplicado sobre características estadísticas construidas a partir de las métricas de utilización.
+\item El componente de generación de recomendaciones aplica reglas basadas en umbrales operativos sobre la totalidad de las instancias y propone acciones concretas de optimización, tales como el redimensionamiento y la eliminación de recursos ociosos.
+\item El módulo de integración con Terraform genera una representación de la infraestructura como código sobre la cual se materializan las recomendaciones, facilitando su revisión, versionado e implementación.
+\item La interfaz gráfica permite visualizar el estado de la infraestructura, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto.
+\item El funcionamiento del prototipo fue validado mediante pruebas automatizadas, la evaluación empírica del modelo de detección y la verificación funcional del circuito completo de análisis en un entorno controlado.
+\end{itemize}
 
 \section{Trabajo futuro}
 
-\Nico{Este es un ejemplo de comentario}
+El alcance del presente trabajo dejó fuera del prototipo un conjunto de capacidades que constituyen líneas naturales de extensión. En primer lugar, la extensión de la plataforma a otros proveedores de servicios cloud, como AWS, Microsoft Azure o Google Cloud Platform, aprovechando la arquitectura modular que separa la obtención de información del resto del procesamiento. Esta ampliación permitiría, además, la distribución del producto mediante los marketplaces especializados de cada proveedor.
 
-Completar.
+En segundo lugar, capacidades mencionadas como oportunidades de extensión durante la investigación, como la operación multicloud, la proyección de costos, la gobernanza y la gestión de permisos, requieren desarrollos adicionales que exceden el alcance del prototipo actual.
+
+En tercer lugar, la evolución del sistema hacia la optimización automática de recursos y la predicción de costos y de demanda futura, incorporando los resultados de la detección de anomalías como insumo para anticipar necesidades de capacidad, en línea con los antecedentes académicos analizados.
+
+En cuarto lugar, la validación del enfoque de detección sobre infraestructuras de negocio reales, cuyos patrones multivariados son más ricos que los del conjunto público utilizado, y la evolución hacia enfoques supervisados aprovechando la muestra de instancias etiquetadas generada durante la evaluación.
+
+Finalmente, la evaluación del sistema sobre infraestructuras de mayor escala, que permita obtener evidencia sobre la escalabilidad del enfoque, complementando la validación realizada en un entorno controlado con un alcance acotado.

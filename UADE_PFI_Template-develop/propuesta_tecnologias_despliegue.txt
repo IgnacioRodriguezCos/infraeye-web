@@ -1,0 +1,194 @@
+================================================================================
+PROPUESTA: RESPUESTA A LA OBSERVACION DEL PROFESOR SOBRE TECNOLOGIAS
+================================================================================
+Observacion: "Las justificaciones se limitan a describir cada tecnología y no
+comparan alternativas... El documento no trata la arquitectura de red ni los
+protocolos... ni cómo se almacenan las credenciales de Huawei ni cómo se
+despliega. Falta aclarar dónde corre la aplicación."
+
+Decisiones confirmadas por el equipo:
+- La aplicacion corre (correra) en una instancia ECS de Huawei Cloud,
+  aprovechando los creditos de prueba disponibles.
+- Credenciales AK/SK con cifrado en reposo (esquema Fernet, clave fuera de la
+  base de datos) + pendiente de codigo.
+
+Verificado contra el codigo: hoy las credenciales viven en memoria
+(web/app.py:83) y no existe despliegue definido — la observacion es acertada
+y lo que la tesis declare debe quedar anotado como pendiente hasta que el
+codigo lo implemente.
+
+La propuesta tiene 3 partes: (1) subseccion de comparacion de alternativas,
+(2) subseccion de seguridad de credenciales y despliegue, (3) dos pendientes
+de codigo nuevos.
+
+--------------------------------------------------------------------------------
+PARTE 1 — COMPARACION DE ALTERNATIVAS (nueva subseccion en Tecnologías)
+--------------------------------------------------------------------------------
+Ubicacion: chapters/chapter03_descripcion.tex, insertar inmediatamente
+DESPUES de \section{Tecnologías} (como primera subseccion, de modo que la
+seleccion de las tecnologias clave quede justificada antes de las
+descripciones individuales).
+
+  ----------------------------------------------------------------
+  \subsection{Comparación de alternativas}
+
+  La selección de las tres tecnologías centrales del sistema —el algoritmo
+  de detección, el framework de backend y la herramienta de Infraestructura
+  como Código— se realizó comparando las alternativas principales de cada
+  categoría.
+
+  \subsubsection{Algoritmo de detección de anomalías}
+
+  La elección de Isolation Forest se evaluó frente a los enfoques habituales
+  para la detección de anomalías no supervisada \parencite{Chandola2009}.
+  Los métodos basados en densidad, como Local Outlier Factor, comparan la
+  densidad local de cada observación con la de sus vecinas, lo que resulta
+  costoso en espacios de alta dimensionalidad y sensible a la definición de
+  la vecindad. One-Class SVM aprende una frontera que separa las
+  observaciones normales del resto, pero exige la calibración de
+  hiperparámetros de fuerte impacto y su costo de entrenamiento crece con el
+  volumen de datos. Los enfoques de reconstrucción basados en autoencoders
+  requieren un esfuerzo de diseño y entrenamiento considerable y una mayor
+  cantidad de datos para generalizar. Los métodos de agrupamiento como
+  DBSCAN identifican anomalías como ruido, con resultados que dependen de
+  forma crítica de sus parámetros de radio y densidad mínima. Isolation
+  Forest, en cambio, no requiere etiquetas, opera con complejidad lineal,
+  es eficiente en espacios de alta dimensionalidad y produce un puntaje
+  interpretable basado en la facilidad con que cada observación puede ser
+  aislada \parencite{Liu2008}. A ello se suma el precedente de la
+  literatura sobre detección de anomalías en infraestructura: los
+  antecedentes analizados en el estado del arte emplean la familia de
+  Isolation Forest o mecanismos relacionados \parencite{Zou2022,
+  Natterdal2024, Nawrocki2022}, lo que aporta respaldo empírico a su
+  aplicación sobre métricas de utilización.
+
+  \subsubsection{Framework de backend}
+
+  La elección de Flask se evaluó frente a Django y FastAPI. Django es un
+  framework de alcance completo que incorpora mapeador objeto-relacional,
+  autenticación, panel de administración y un conjunto de convenciones
+  orientadas a aplicaciones de mayor escala; esa amplitud resulta
+  innecesaria para un prototipo cuyo backend se limita a una API REST y a
+  la renderización de un panel de control. FastAPI ofrece un enfoque
+  moderno basado en anotaciones de tipos y ejecución asincrónica,
+  especialmente adecuado para servicios de alta concurrencia; la aplicación
+  no presenta requisitos de concurrencia que justifiquen esa complejidad
+  adicional. Flask, como microframework, proporciona los componentes
+  necesarios —enrutamiento, manejo de solicitudes y renderizado de
+  plantillas— con una sobrecarga mínima, en línea con el tamaño del
+  prototipo.
+
+  \subsubsection{Herramienta de Infraestructura como Código}
+
+  La elección de Terraform se evaluó frente a las alternativas principales.
+  AWS CloudFormation se encuentra restringido al ecosistema de AWS, lo que
+  resulta incompatible con la operación sobre Huawei Cloud y con la
+  aspiración de extensión futura a otros proveedores. Pulumi permite definir
+  la infraestructura en lenguajes de propósito general, pero su ecosistema
+  es más reciente. Ansible, aunque ampliamente adoptado, está orientado
+  principalmente a la gestión de configuración de sistemas antes que al
+  aprovisionamiento declarativo de recursos cloud. Terraform, por su parte,
+  ofrece un modelo declarativo basado en un grafo de recursos, cuenta con
+  un proveedor mantenido para Huawei Cloud y es una de las herramientas de
+  mayor adopción en la industria, lo que facilita que las recomendaciones
+  generadas se integren en procesos de infraestructura como código
+  existentes \parencite{HashiCorp2026, Morris2016}.
+  ----------------------------------------------------------------
+
+NUEVA ENTRADA biblio.bib (necesaria para Chandola2009; el resto ya existe):
+
+  @Article{Chandola2009,
+  	AUTHOR = {Chandola, Varun and Banerjee, Arindam and Kumar, Vipin},
+  	TITLE = {Anomaly Detection: A Survey},
+  	JOURNAL = {ACM Computing Surveys},
+  	VOLUME = {41},
+  	NUMBER = {3},
+  	YEAR = {2009},
+  	PAGES = {1--58},
+  	DOI = {10.1145/1541880.1541882},
+  	URL = {https://dl.acm.org/doi/10.1145/1541880.1541882},
+  	NOTE = {[en línea][consulta: 6 octubre 2026]}
+  }
+
+--------------------------------------------------------------------------------
+PARTE 2 — SEGURIDAD DE CREDENCIALES Y DESPLIEGUE (nueva subseccion)
+--------------------------------------------------------------------------------
+Ubicacion: al FINAL de la seccion Tecnologías, despues de la subseccion
+"Arquitectura del software".
+
+  ----------------------------------------------------------------
+  \subsection{Seguridad de credenciales y despliegue}
+
+  Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra
+  en la plataforma constituyen el activo más sensible del sistema, dado que
+  habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres
+  principios. Primero, cifrado en reposo: las credenciales se almacenan
+  cifradas mediante un esquema de cifrado autenticado y reversible (Fernet,
+  de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado
+  que el sistema necesita recuperarlas en cada análisis para autenticarse
+  contra las APIs del proveedor; la clave de cifrado no reside en la base
+  de datos sino en la configuración del entorno de ejecución, de modo que
+  un eventual compromiso del almacenamiento no expone las credenciales por
+  sí solo. Segundo, uso acotado: las credenciales se emplean exclusivamente
+  para las consultas de lectura de recursos y métricas durante el análisis,
+  sin realizar operaciones de modificación sobre la infraestructura del
+  usuario. Tercero, no exposición: las credenciales no se registran en los
+  archivos de registro ni se incluyen en los reportes generados.
+
+  En cuanto a la comunicación, el tráfico entre el navegador del usuario y
+  la aplicación se protege mediante HTTPS/TLS, al igual que la comunicación
+  entre la aplicación y los servicios de Huawei Cloud, cuyos endpoints
+  oficiales operan sobre TLS. La extensión Flask-CORS configura las
+  políticas de intercambio de recursos de origen cruzado para restringir
+  los orígenes habilitados a consumir la API.
+
+  La aplicación se despliega en una instancia Elastic Cloud Server (ECS) de
+  Huawei Cloud junto con el servicio de base de datos PostgreSQL que
+  persiste las recomendaciones generadas. Esta decisión aprovecha los
+  créditos de prueba disponibles en dicho proveedor y permite operar el
+  producto en el mismo ecosistema al que se orienta. El acceso a la
+  aplicación se realiza mediante HTTPS, y las actualizaciones del servicio
+  consisten en el despliegue de una nueva versión del código en la
+  instancia y el reinicio del proceso correspondiente.
+  ----------------------------------------------------------------
+
+Consistencia: esto materializa RNF01 (confidencialidad de credenciales) y
+RNF02 (HTTPS/TLS), y es coherente con el modelo ER (ak_cifrada/sk_cifrada) y
+con la persistencia de recomendaciones ya declarada en la seccion de
+integracion con Huawei Cloud.
+
+--------------------------------------------------------------------------------
+PARTE 3 — PENDIENTES DE CODIGO NUEVOS (se agregan a pendientes_codigo.txt)
+--------------------------------------------------------------------------------
+PENDIENTE 7 — Cifrado de credenciales en reposo
+  Hoy: web/app.py mantiene las credenciales en memoria (estructura global,
+  linea ~83). La tesis declarara cifrado Fernet + clave por variable de
+  entorno.
+  Accion: implementar el cifrado (biblioteca cryptography / Fernet) para el
+  almacenamiento de AK/SK junto con la persistencia en PostgreSQL; clave
+  de cifrado via variable de entorno (no en la BD ni en el codigo). Nunca
+  loggear credenciales.
+
+PENDIENTE 8 — Despliegue en ECS de Huawei Cloud + PostgreSQL
+  Hoy: no existe despliegue definido (sin Dockerfile ni scripts; la app
+  corre como servidor de desarrollo local). La tesis declarara despliegue
+  en ECS + PostgreSQL + HTTPS.
+  Accion: provisionar la ECS (con los creditos disponibles), instalar/crear
+  imagen de la app (se recomienda Dockerfile para reproducibilidad),
+  configurar PostgreSQL para la persistencia de recomendaciones (declarada
+  en la tesis: recomendaciones + codigo Terraform + descripcion por
+  usuario), servir por HTTPS y verificar el flujo completo contra Huawei
+  Cloud desde la instancia.
+
+NOTA: el PENDIENTE 8 incluye implementar la persistencia en PostgreSQL, que
+la tesis ya declara (seccion de integracion con Huawei Cloud) y que hoy no
+existe en el codigo (los resultados se exportan a archivos).
+
+--------------------------------------------------------------------------------
+COBERTURA DE LA OBSERVACION
+--------------------------------------------------------------------------------
+- "No comparan alternativas" -> Parte 1 (algoritmo, framework, IaC).
+- "No trata arquitectura de red ni protocolos / credenciales" -> Parte 2
+  (cifrado, flujos HTTPS/TLS, CORS).
+- "Falta aclarar donde corre la aplicacion" -> Parte 2 (ECS + PostgreSQL).
+- Consistencia tesis-artefacto -> Partes 3 (pendientes 7 y 8).

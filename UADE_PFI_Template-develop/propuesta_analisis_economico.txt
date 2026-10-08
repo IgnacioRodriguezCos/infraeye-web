@@ -1,0 +1,170 @@
+================================================================================
+PROPUESTA: ANÁLISIS ECONÓMICO-FINANCIERO (rubric: escenarios + VAN/TIR/Payback/
+punto de equilibrio)
+================================================================================
+Requisito: "Incluye un análisis de al menos dos escenarios (optimista y
+pesimista), y la utilización de herramientas de análisis financiero-económico
+como ser TIR y VAN, Payback, punto de equilibrio, etc (al menos una de estas)".
+
+Veredicto actual: NO CUMPLE. No existe ningún análisis financiero-económico en
+el documento (verificado por búsqueda: sin VAN, TIR, Payback, punto de
+equilibrio ni escenarios de adopción). El modelo de negocio (4P) tiene precios
+y planes, pero eso no constituye el análisis que pide este rubric.
+
+PROPUESTA: nueva subsección 3.4.5 "Análisis económico-financiero" al final de
+la sección Competencias (después de "Estrategia competitiva", antes de
+"Metodología de desarrollo"), con:
+  - Dos escenarios (optimista y pesimista) de adopción año 1
+  - DOS herramientas: punto de equilibrio + payback (el rubric pide "al menos
+    una"; con dos queda holgado)
+  - VAN/TIR NO se incluyen (opcional): requerirían proyecciones multi-anuales
+    y una tasa de descuento altamente especulativa para un prototipo; si el
+    tutor las exige, se puede extender con una proyección a 3 años.
+
+IMPORTANTE — NATURALEZA DE LOS NÚMEROS: a diferencia de correcciones
+anteriores (donde había datos reales del proyecto), acá los valores son
+SUPUESTOS declarados. Es la naturaleza del ejercicio (el rubric pide
+escenarios, que son proyecciones), pero los supuestos de la sección 4 deben
+revisarlos y ajustarlos ustedes para que sean defendibles ante el tutor.
+
+Nada de esto se aplica todavía a los .tex: está acá para revisión.
+
+--------------------------------------------------------------------------------
+1. UBICACIÓN
+--------------------------------------------------------------------------------
+Archivo: chapters/chapter03_descripcion.tex
+Insertar DESPUÉS del último párrafo de "Estrategia competitiva" (el que
+comienza "La estrategia propuesta no busca competir por amplitud...") y ANTES
+de \section{Metodología de desarrollo}.
+
+--------------------------------------------------------------------------------
+2. TEXTO LaTeX PROPUESTO
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  \subsection{Análisis económico-financiero}
+
+  Con el fin de evaluar la viabilidad económica del producto más allá del
+  modelo de negocio descripto, se presenta a continuación un análisis basado
+  en escenarios. Dado que la plataforma se encuentra en etapa de prototipo,
+  las cifras involucradas constituyen estimaciones con supuestos declarados
+  de manera explícita, y deben interpretarse como un ejercicio de evaluación
+  de la sensibilidad del negocio frente a distintos niveles de adopción, y no
+  como una predicción de resultados.
+
+  \subsubsection{Costos e inversión}
+
+  La operación del servicio bajo el modelo SaaS implica costos fijos
+  mensuales estimados en US\$250, compuestos por el servidor de aplicación y
+  base de datos (US\$40), los servicios de dominio y correo (US\$10) y un
+  presupuesto inicial de difusión (US\$200). El costo marginal por cliente
+  adicional es prácticamente nulo: las consultas a las APIs del proveedor
+  cloud se realizan con las credenciales del propio cliente y el
+  procesamiento del análisis es de baja intensidad computacional. La
+  infraestructura utilizada durante el desarrollo y la validación del
+  prototipo fue cubierta con créditos de prueba de Huawei Cloud, por lo que
+  la inversión monetaria directa previa al lanzamiento se estima en US\$1.000,
+  correspondiente a los gastos de puesta en marcha. El esfuerzo de desarrollo,
+  estimado en aproximadamente 800 horas de trabajo de sus dos autores,
+  constituye un costo de oportunidad del proyecto académico que no representa
+  un desembolso efectivo.
+
+  \subsubsection{Escenarios de adopción}
+
+  Se definieron dos escenarios para el primer año de operación comercial,
+  construidos sobre el plan Freemium como puerta de entrada. El escenario
+  pesimista asume 750 registros en el plan gratuito y una conversión a planes
+  de pago del 2\%, lo que arroja 15 clientes de pago al cierre del año (12
+  del plan Starter y 3 del plan Professional). El escenario optimista asume
+  1.200 registros y una conversión del 5\%, es decir, 60 clientes de pago
+  (45 Starter y 15 Professional). Considerando un ingreso promedio ponderado
+  de US\$20 mensuales por cliente (75\% Starter a US\$10 y 25\% Professional a
+  US\$50), el ingreso recurrente mensual al cierre del primer año sería de
+  US\$300 en el escenario pesimista y de US\$1.200 en el optimista. El plan
+  Enterprise queda fuera del análisis por no tener precio definido, y su
+  eventual contratación constituiría un ingreso adicional no contemplado.
+
+  \subsubsection{Punto de equilibrio}
+
+  Con costos fijos de US\$250 mensuales y un margen de contribución promedio
+  de US\$20 por cliente, el punto de equilibrio se alcanza con 13 clientes de
+  pago. En el escenario optimista, este umbral se alcanzaría durante el
+  primer trimestre de operación; en el pesimista, hacia el final del primer
+  año. Dado que el componente principal de los costos fijos es el presupuesto
+  de difusión, su reducción a US\$50 mensuales disminuye el punto de
+  equilibrio a 5 clientes de pago, lo que otorga a la operación un margen de
+  maniobra relevante frente a una adopción menor a la esperada.
+
+  \subsubsection{Recupero de la inversión}
+
+  Bajo el escenario optimista, con una adquisición aproximada de 5 clientes
+  de pago por mes, el flujo neto acumulado alcanza la inversión inicial de
+  US\$1.000 hacia el octavo mes de operación. En el escenario pesimista, el
+  servicio opera durante la mayor parte del primer año en torno al punto de
+  equilibrio, por lo que el recupero de la inversión se extendería hacia el
+  segundo año de operación, condicionado a mantener la tasa de adquisición y
+  a aplicar la reducción del presupuesto de difusión descripta en la sección
+  anterior.
+
+  En conjunto, el análisis muestra que la estructura de costos del producto
+  ---un desarrollo ya realizado como proyecto académico, costos fijos bajos y
+  un costo marginal por cliente prácticamente nulo--- hace que la
+  sustentabilidad del servicio dependa principalmente de lograr una
+  conversión mínima desde el plan gratuito, y que incluso el escenario
+  pesimista resulta operativo con ajustes menores del gasto comercial.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. ARITMÉTICA DE RESPALDO (para que verifiquen los cálculos)
+--------------------------------------------------------------------------------
+- Ingreso ponderado por cliente: 0,75 × 10 + 0,25 × 50 = US$20/mes.
+- Punto de equilibrio: 250 / 20 = 12,5 -> 13 clientes.
+- Con difusión reducida: (40+10) / 20 = 2,5 -> 5 clientes (se redondea por
+  prudencia; con 2,5 el equilibrio exacto son 3 clientes, se declara 5 para
+  dejar margen).
+- Pesimista: 750 registros x 2% = 15 clientes -> MRR 15 x 20 = US$300.
+- Optimista: 1.200 x 5% = 60 clientes -> MRR 60 x 20 = US$1.200.
+- Payback optimista: adquisión lineal de 5 clientes/mes -> MRR(t) = 100t;
+  flujo neto mensual = 100t - 250; acumulado = 50t² - 250t; el acumulado
+  alcanza US$1.000 en t ~ 7,6 -> "hacia el octavo mes".
+- Payback pesimista: meses 1-3 con difusión completa (flujo negativo,
+  acumulado ~ -US$680); desde el mes 4 con difusión reducida (costos fijos
+  US$100), el flujo se vuelve positivo alrededor del mes 8 y el acumulado
+  alcanza la inversión durante el segundo año (~mes 16).
+- Conversión Freemium 2-5%: rango habitual reportado para productos SaaS
+  con capa gratuita; es el supuesto más "citable" si el tutor lo cuestiona.
+
+--------------------------------------------------------------------------------
+4. SUPUESTOS A CONFIRMAR/ AJUSTAR (LA PARTE MÁS IMPORTANTE)
+--------------------------------------------------------------------------------
+# | Supuesto | Valor usado | Qué verificar
+--+----------+-------------+----------------------------------------------
+1 | Esfuerzo de desarrollo | 800 h (2 pers. x 8 meses x ~10 h/sem) | Ajustar contra el Gantt del anexo y la realidad
+2 | Monetización del esfuerzo | NO (costo de oportunidad) | Decidir: si prefieren monetizarlo (p. ej. 800 h x tarifa), el payback se alienta mucho y hay que recalcular
+3 | Inversión directa | US$1.000 puesta en marcha | Ajustar al valor que consideren realista
+4 | Servidor + BD | US$40/mes | Verificar contra precios de Huawei Cloud/alternativas
+5 | Dominio y correo | US$10/mes | Menor
+6 | Difusión | US$200/mes (reducible a US$50) | Juicio de ustedes; es el supuesto que más mueve el punto de equilibrio
+7 | Mix de planes | 75% Starter / 25% Professional | Juicio; alternable
+8 | Registros Freemium año 1 | 750 / 1.200 | Juicio sobre alcance de difusión
+9 | Conversión | 2% / 5% | Rango estándar SaaS; defendible
+10 | Plan Enterprise | Excluido (precio "a definir") | Ya está así en la sección Precio; coherente
+11 | Precios planes | US$10 / US$50 | YA ESTÁN EN LA TESIS (4P): anclados, no tocar
+
+NOTA sobre el supuesto 2: la decisión de NO monetizar el esfuerzo es la más
+defendible para un proyecto académico (el desarrollo ya ocurrió como tesis;
+el análisis evalúa la operación futura). Si el tutor exige incluir el costo
+de desarrollo como inversión, el payback optimista pasa de ~8 meses a
+~2 años y el pesimista excede el horizonte razonable: conviene tener ese
+cálculo de respaldo por si lo piden (800 h x US$10 = US$8.000 adicionales).
+
+--------------------------------------------------------------------------------
+5. COBERTURA DEL RUBRIC
+--------------------------------------------------------------------------------
+- Dos escenarios (optimista y pesimista): SI (subsección "Escenarios de
+  adopción").
+- Herramientas financieras: DOS (punto de equilibrio + payback), el rubric
+  pide "al menos una".
+- VAN/TIR: no incluidas, con justificación implícita (prototipo, sin
+  proyecciones multi-anuales). Si el tutor las exige: extender con flujo a
+  3 años y tasa del 15-20% anual; puedo prepararlo como addendum.
+- Con esto el veredicto pasaría de "No cumple" a "Cumple".

@@ -1,0 +1,211 @@
+================================================================================
+PROPUESTA: RECUPERAR EL CUADRO COMPARATIVO DEL COMPANERO (commit 0d29cbb)
+================================================================================
+Requisito: "Cuenta con una tabla comparativa que aporta de manera visual y da
+comprensión al estudio dejando claro el diferencial de la propuesta. Utiliza
+al menos una de las herramientas de Marketing..."
+
+Veredicto actual: CUMPLE PARCIAL. Las herramientas de marketing existen
+(FODA, 4P, Porter en sección 3.4), pero la tabla comparativa NUNCA llega al
+PDF: fue agregada por Ignacio el 18/08 (commit 0d29cbb) dentro de
+chapters/chapter03.tex, archivo que main.tex NO compila (compila
+chapter03_descripcion.tex) y que además está borrado sin commit en el
+working tree actual.
+
+DECISIÓN: en lugar de escribir una tabla nueva, se RECUPERA la del compañero
+(crédito restaurado) con ajustes de consistencia contra el texto actual de
+la tesis. Cada ajuste está justificado celda por celda más abajo.
+
+Nada de esto se aplica todavía a los .tex: está acá para revisión.
+
+--------------------------------------------------------------------------------
+1. UBICACIÓN PROPUESTA
+--------------------------------------------------------------------------------
+Archivo: chapters/chapter02_antecedentes.tex
+Subsección: 2.2.4 "Análisis Comparativo" (hoy página 30)
+
+Insertar DESPUÉS del párrafo introductorio (línea 281, el que termina en
+"...generar recomendaciones orientadas a reducir costos o mejorar el
+rendimiento de los sistemas.") y ANTES del párrafo "No obstante, también se
+identifican limitaciones comunes..." (línea 283).
+
+Flujo resultante: párrafo introductorio -> tablas comparativas -> párrafos
+de limitaciones (que desarrollan lo que las tablas muestran) -> síntesis.
+El "No obstante..." conecta naturalmente con las tablas.
+
+--------------------------------------------------------------------------------
+2. TEXTO LaTeX A INSERTAR (tablas recuperadas CON ajustes aplicados)
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  Las Tablas \ref{tab:comparativo} y \ref{tab:comparativo2} sintetizan
+  la comparación entre las soluciones comerciales y de código abierto
+  analizadas y la propuesta de InfraEye, considerando dimensiones clave
+  tales como capacidades de monitoreo y observabilidad, detección de
+  anomalías, optimización de costos, integración con Infraestructura como
+  Código, enfoque operativo y automatización de la remediación.
+
+  \begin{table}[H]
+  \centering
+  \scriptsize
+  \caption{Comparativo de soluciones de gestión y optimización cloud}
+  \label{tab:comparativo}
+  \begin{tabular}{|p{2.5cm}|p{1.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+  \hline
+  \textbf{Solución} & \textbf{Tipo} & \textbf{Proveedor Principal} &
+  \textbf{Monitoreo y Observabilidad} & \textbf{Detección de Anomalías} &
+  \textbf{Optimización de Costos} & \textbf{Integración IaC} \\
+  \hline
+  AWS CloudWatch + Cost Explorer + Trusted Advisor & Comercial & AWS &
+  Integral & Básica (reglas predefinidas) & Avanzada & Limitada \\
+  \hline
+  Google Cloud Operations + Active Assist & Comercial & GCP & Integral &
+  Intermedia (ML cerrado) & Avanzada & Limitada \\
+  \hline
+  Azure Monitor + Advisor & Comercial & Azure & Integral & Básica (reglas
+  predefinidas) & Avanzada & Limitada \\
+  \hline
+  Huawei Cloud Eye + Cost Center & Comercial & Huawei Cloud & Básica & No
+  disponible & Intermedia & No disponible \\
+  \hline
+  VMware CloudHealth & Comercial & Multi-cloud & Intermedia & No
+  disponible & Avanzada & Limitada \\
+  \hline
+  Datadog & Comercial & Multi-cloud & Integral & Intermedia (asistentes
+  de IA) & Avanzada & Limitada \\
+  \hline
+  Dynatrace & Comercial & Multi-cloud & Integral & Avanzada (Davis AI
+  determinista) & Intermedia & Limitada \\
+  \hline
+  New Relic & Comercial & Multi-cloud & Integral & Intermedia (AIOps) &
+  Intermedia & Limitada \\
+  \hline
+  Prometheus + Grafana & Open Source & Agnóstico & Intermedia & No
+  disponible & No disponible & No disponible \\
+  \hline
+  OpenTelemetry & Open Source & Agnóstico & Básica (estándar) & No
+  disponible & No disponible & No disponible \\
+  \hline
+  \textbf{InfraEye (Propuesta)} & \textbf{Propuesta} & \textbf{Huawei
+  Cloud} & \textbf{Acotado (métricas de utilización)} & \textbf{Avanzada
+  (Isolation Forest)} & \textbf{Intermedia (vía redimensionamiento)} &
+  \textbf{Nativa (Terraform)} \\
+  \hline
+  \end{tabular}
+  \end{table}
+
+  \begin{table}[H]
+  \centering
+  \scriptsize
+  \caption{Comparativo de soluciones: enfoque operativo y características
+  adicionales}
+  \label{tab:comparativo2}
+  \begin{tabular}{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+  \hline
+  \textbf{Solución} & \textbf{Enfoque Operativo} & \textbf{Multi-cloud} &
+  \textbf{Personalización de Modelos} & \textbf{Automatización de
+  Remediación} \\
+  \hline
+  AWS CloudWatch + Cost Explorer + Trusted Advisor & Reactivo & No & No &
+  Limitada \\
+  \hline
+  Google Cloud Operations + Active Assist & Reactivo & No & No &
+  Limitada \\
+  \hline
+  Azure Monitor + Advisor & Reactivo & No & No & Limitada \\
+  \hline
+  Huawei Cloud Eye + Cost Center & Reactivo & No & No & No \\
+  \hline
+  VMware CloudHealth & Reactivo & Sí & No & No \\
+  \hline
+  Datadog & Reactivo & Sí & No & Intermedia \\
+  \hline
+  Dynatrace & Proactivo & Sí & No & Avanzada \\
+  \hline
+  New Relic & Reactivo & Sí & No & Intermedia \\
+  \hline
+  Prometheus + Grafana & Reactivo & Sí & N/A (sin modelo propio) & No \\
+  \hline
+  OpenTelemetry & N/A & Sí & N/A (sin modelo propio) & No \\
+  \hline
+  \textbf{InfraEye (Propuesta)} & \textbf{Proactivo} & \textbf{En
+  desarrollo} & \textbf{Sí (Isolation Forest)} & \textbf{Avanzada
+  (Terraform)} \\
+  \hline
+  \end{tabular}
+  \end{table}
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. AJUSTES APLICADOS Y SU JUSTIFICACIÓN (celda por celda)
+--------------------------------------------------------------------------------
+Los ajustes tocan SOLO celdas que contradicen el texto actual de la tesis:
+
+  # | Tabla | Celda | Decía | Pasa a | Justificación (cita del texto actual)
+  --+-------+-------+-------+--------+---------------------------------------
+  1 | 1 | Datadog, Detección | Intermedia (Bits AI) | Intermedia (asistentes de IA) | La tesis nunca nombra "Bits AI"; habla de "asistentes de inteligencia artificial orientados a la investigación y remediación de incidentes" (chapter02:217)
+  2 | 1 | Google, Detección | Intermedia (ML limitado) | Intermedia (ML cerrado) | La tesis describe Active Assist con "modelos cerrados y específicos por servicio" (chapter02:187)
+  3 | 1 | InfraEye, Monitoreo | Integral | Acotado (métricas de utilización) | La tesis posiciona a InfraEye como capa externa que "solo consume las métricas expuestas por el proveedor... a cambio de acotar el análisis a la telemetría disponible en esa fuente" (chapter02:235) y "no busca competir por amplitud de funcionalidades" (Estrategia competitiva, cap. 3). "Integral" contradice el posicionamiento propio.
+  4 | 1 | InfraEye, Costos | Avanzada | Intermedia (vía redimensionamiento) | [DECISIÓN PENDIENTE, ver sección 4] La proyección de costos está fuera de alcance (chapter03:270, trabajo futuro). CloudHealth (análisis financiero completo) también tiene "Avanzada": igualarlo es overclaim.
+  5 | 2 | New Relic, Enfoque | Proactivo | Reactivo | La tesis dice explícitamente que su IA "se concentra en la gestión reactiva de incidentes... y no en la identificación proactiva de patrones sostenidos de ineficiencia" (chapter02:235)
+  6 | 2 | Datadog, Personalización | Limitada | No | "cajas negras que el administrador no puede inspeccionar ni ajustar a los patrones de su organización" (chapter02:219)
+  7 | 2 | New Relic, Personalización | Limitada | No | "el usuario no dispone de control ni visibilidad sobre el modelo utilizado" (chapter02:285)
+  8 | 2 | Prometheus+Grafana y OpenTelemetry, Personalización | Sí | N/A (sin modelo propio) | No tienen modelos de detección: "la detección de comportamientos anómalos requiere herramientas externas" (chapter02:245); "no detecta anomalías ni genera recomendaciones" (chapter02:255)
+
+CELDA REVISADAS Y MANTENIDAS (consistentes con el texto):
+- Dynatrace "Avanzada (Davis AI determinista)" ✓ (chapter02:225)
+- Dynatrace Enfoque "Proactivo": se mantiene. La tesis lo describe con
+  detección de anomalías automatizada, y la afirmación general de que las
+  herramientas son "principalmente" reactivas (chapter02:289) admite la
+  excepción. [Si el tutor lo cuestiona, bajar a "Reactivo"]
+- Dynatrace Remediación "Avanzada": la tesis no lo documenta explícitamente
+  (habla de automatización de la instrumentación, no de la remediación);
+  se mantiene como síntesis del compañero. [Ídem nota anterior]
+- InfraEye Remediación "Avanzada (Terraform)" ✓ — "cerrando el ciclo entre
+  detección y acción" (chapter02:277); la aprobación humana previa es parte
+  del diseño (F4), no un recorte.
+- InfraEye Multi-cloud "En desarrollo" ✓ (chapter03:1255)
+- El resto de las celdas son consistentes con las subsecciones 2.2.1-2.2.3.
+
+AJUSTES DE FORMATO (menores):
+- Captions movidas ARRIBA de las tablas (el original las tenía abajo), para
+  mantener consistencia con la tabla de calibración (tab:contamination).
+- Caption de la tabla 2: " - " reemplazado por ": " (puntuación).
+- Se mantiene el estilo de grilla con barras verticales del original.
+  [Opcional: unificar estilo con tab:contamination si se prefiere]
+
+--------------------------------------------------------------------------------
+4. DECISIÓN PENDIENTE (única): InfraEye "Optimización de Costos"
+--------------------------------------------------------------------------------
+  Opción A (RECOMENDADA): "Intermedia (vía redimensionamiento)".
+    Honesta con el alcance: InfraEye optimiza costos indirectamente
+    (rightsizing); la proyección/forecasting de costos está declarada
+    fuera de alcance como oportunidad de extensión (chapter03:270) y como
+    trabajo futuro (conclusión). CloudHealth, que hace análisis financiero
+    completo, tiene "Avanzada" en la misma columna.
+  Opción B: mantener "Avanzada".
+    Defendible solo si se lee la columna como "capacidad de optimización
+    del dimensionamiento" y no como "gestión financiera cloud". Riesgo:
+    un revisor que coteje contra el alcance puede leerlo como overclaim.
+
+--------------------------------------------------------------------------------
+5. QUÉ NO SE RECUPERA DEL MATERIAL ORIGINAL (y por qué)
+--------------------------------------------------------------------------------
+- Los 3 párrafos posteriores a las tablas ("Las tablas comparativas
+  evidencian...", "La integración nativa con Terraform representa una
+  ventaja competitiva significativa...", "El enfoque proactivo de
+  InfraEye contrasta..."): su contenido ya está desarrollado en los
+  párrafos de limitaciones de la propia subsección 2.2.4 (chapter02:285,
+  287 y 289). Incluirlos duplicaría el análisis.
+- La sección "Conclusiones del Estado del Arte" (agregada en el mismo
+  commit, punto 8 del feedback del 25%): su función la cumple el párrafo
+  "En síntesis" (chapter02:291). No se recupera.
+
+--------------------------------------------------------------------------------
+6. NOTA DE GIT (housekeeping, aparte de la tesis)
+--------------------------------------------------------------------------------
+- chapters/chapter03.tex está BORRADO sin commit en el working tree. Una
+  vez recuperadas las tablas a chapter02, ese borrado puede commitearse
+  (el archivo legacy ya no aporta nada compilable).
+- Todos los cambios de esta sesión (validación, metodología, dataset,
+  marco teórico, conclusión, biblio) siguen SIN commitear. Cuando quieras,
+  los agrupo en commits ordenados.

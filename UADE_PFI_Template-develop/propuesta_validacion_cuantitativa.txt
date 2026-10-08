@@ -1,0 +1,266 @@
+================================================================================
+PROPUESTA: FORTALECER LA SECCIÓN DE VALIDACIÓN (v2 — DECISIÓN RESUELTA: 0,03)
+================================================================================
+Requisito: "Existen conclusiones y/o discusiones sobre las validaciones y
+pruebas. Las mismas son sólidas y su carácter no es superficial. Toda
+decisión sobre los resultados."
+
+DECISIÓN DEL EQUIPO (resuelta): el modelo final se entrena con
+contamination = 0,03. Esta versión incorpora el valor en todos los puntos
+necesarios para que el documento sea CONSISTENTE:
+
+  a) Sección 3.8 "Evaluación empírica del modelo de detección": tabla de
+     resultados + adopción explícita de 0,03 + justificación + limitación.
+  b) Sección "Tecnologías" (párrafo de configuración del modelo, línea
+     ~1637): el valor pasa a figurar en la configuración declarada.
+  c) Sección "Tecnologías" (párrafo de calibración, línea ~1643): cierra
+     declarando la adopción de 0,03 (hoy dice "el valor de configuración
+     adoptado" sin especificar).
+  d) Cierre de la sección 3.8: párrafo de conclusiones de la validación con
+     las decisiones tomadas en función de los resultados.
+  e) Opcional: ajuste de una frase en la conclusión del trabajo.
+
+ACCIÓN REQUERIDA DEL LADO DEL PROYECTO (para que el artefacto coincida con
+la tesis): reentrenar el modelo final con 0,03. Hoy src/main.py:27 y
+train_model.bat usan 0,05. Mientras no se reentrene, el modelo entregado no
+coincidiría con lo declarado en el documento.
+
+Nada de esto se aplica todavía a los .tex: está acá para revisión.
+
+--------------------------------------------------------------------------------
+1. CAMBIO EN "PRUEBAS AUTOMATIZADAS DEL SOFTWARE" (sección 3.8)
+--------------------------------------------------------------------------------
+(Sin cambios respecto de la v1.) REEMPLAZAR el párrafo actual por:
+
+  ----------------------------------------------------------------
+  El funcionamiento de los módulos desarrollados se verificó mediante una
+  suite de 267 pruebas automatizadas, unitarias y de integración,
+  construidas con el framework Pytest. Las pruebas del motor de
+  recomendaciones cubren los principales casos de clasificación:
+  instancias con utilización normal, infrautilización, sobreutilización
+  crítica y alta de CPU y memoria, instancias sobredimensionadas, cuellos
+  de botella de disco y de red, comportamientos mixtos y casos límite
+  tales como valores exactamente en los umbrales, valores extremos y
+  valores nulos o negativos. De forma complementaria, la extensión
+  Pytest-cov se empleó para medir la cobertura del código fuente: los
+  componentes centrales del módulo de recomendaciones presentan coberturas
+  elevadas, con el clasificador de anomalías y las reglas de clasificación
+  integradas cubiertos en su totalidad, el calculador de confianza en un
+  96\% y el analizador de métricas en un 93\%. Este conjunto de pruebas
+  constituye además una base de regresión que permite verificar que
+  modificaciones posteriores sobre los módulos no introduzcan errores en
+  funcionalidades ya verificadas.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+2. CAMBIO EN "EVALUACIÓN EMPÍRICA DEL MODELO DE DETECCIÓN" (sección 3.8)
+--------------------------------------------------------------------------------
+REEMPLAZAR los dos párrafos actuales por:
+
+  ----------------------------------------------------------------
+  La calibración del componente de aprendizaje automático se centró en el
+  parámetro contamination, dado que su valor incide directamente en el
+  umbral de clasificación y, por lo tanto, en la proporción de instancias
+  identificadas como anómalas. Dado que los datos de utilización reales no
+  incluyen etiquetas que indiquen qué instancias eran efectivamente
+  ineficientes, no es posible calcular métricas de precisión y
+  exhaustividad directamente sobre ellos. Por este motivo, la calibración
+  se realizó mediante el esquema estándar en detección de anomalías: el
+  modelo se entrenó con datos reales y se evaluó sobre conjuntos con
+  anomalías inyectadas y etiquetadas, cuya tasa de anomalía se conoce de
+  antemano.
+
+  Los modelos se entrenaron con cinco millones de observaciones reales del
+  conjunto Alibaba Cluster Trace 2018, probando ocho valores de
+  contaminación (entre 0,03 y 0,20). Cada modelo se evaluó sobre cuatro
+  conjuntos sintéticos de 300 máquinas con tasas de anomalía conocidas del
+  5\%, 10\%, 15\% y 20\%. Estos conjuntos se generaron a partir de las
+  distribuciones estadísticas de los datos reales (media y desvío de cada
+  métrica), inyectando anomalías etiquetadas de cuatro tipos: utilización
+  alta de CPU, de memoria o de disco, y subutilización. La Tabla
+  \ref{tab:contamination} resume los resultados promediados sobre los
+  cuatro conjuntos.
+
+  \begin{table}[H]
+  \centering
+  \caption{Resultados de la calibración del parámetro de contaminación}
+  \label{tab:contamination}
+  \begin{tabular}{c c c c}
+  \hline
+  Contaminación & Precisión media & Exhaustividad media & F1 medio \\
+  \hline
+  0,03 & 0,98 & 0,27 & 0,42 \\
+  0,05 & 0,28 & 0,27 & 0,26 \\
+  0,08 & 0,08 & 0,53 & 0,13 \\
+  0,10 & 0,12 & 0,91 & 0,20 \\
+  0,12 & 0,13 & 1,00 & 0,22 \\
+  0,15 & 0,13 & 1,00 & 0,22 \\
+  0,18 & 0,13 & 1,00 & 0,22 \\
+  0,20 & 0,13 & 1,00 & 0,22 \\
+  \hline
+  \end{tabular}
+  \end{table}
+
+  Los resultados muestran dos comportamientos. Por un lado, con el valor
+  más bajo de contaminación (0,03) el modelo alcanza una precisión media
+  de 0,98: prácticamente todas las instancias señaladas como anómalas lo
+  eran realmente, a costa de una exhaustividad media de 0,27, es decir, el
+  modelo no identifica todas las anomalías presentes. Por otro lado, a
+  partir del valor 0,12 el modelo clasifica como anómalas la totalidad de
+  las instancias, con lo cual la precisión se reduce al valor de la tasa
+  de anomalía de cada conjunto y la exhaustividad deja de aportar
+  información. Los valores intermedios incrementan la exhaustividad a
+  costa de una caída pronunciada de la precisión.
+
+  Sobre la base de esta calibración se adoptó el valor 0,03 para el modelo
+  final. La decisión responde al rol que cumple la detección dentro de la
+  arquitectura: las instancias señaladas son posteriormente caracterizadas
+  por el motor de recomendaciones y revisadas por un administrador antes
+  de aplicar cualquier cambio, por lo que un falso positivo tiene un
+  costo acotado (tiempo de revisión), mientras que no detectar una
+  ineficiencia en una ejecución particular solo implica una oportunidad de
+  optimización postergada. Bajo estas condiciones, maximizar la precisión
+  de las detecciones resulta más valioso que maximizar la cantidad de
+  anomalías identificadas.
+
+  Cabe señalar la limitación de esta evaluación: las anomalías inyectadas
+  se construyen desplazando las distribuciones reales en dos desviaciones
+  estándar, por lo que pueden resultar más evidentes que las ineficiencias
+  presentes en una infraestructura real. Por este motivo, los valores de
+  la tabla deben interpretarse como una comparación relativa entre
+  configuraciones del parámetro y no como una medida del rendimiento del
+  modelo en producción; la validación definitiva del prototipo fue
+  funcional y se describe a continuación.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. CAMBIO EN "VERIFICACIÓN FUNCIONAL EN ENTORNO CONTROLADO" (sección 3.8)
+--------------------------------------------------------------------------------
+3a. AGREGAR este párrafo después del primero (el que describe el circuito
+    verificado):
+
+  ----------------------------------------------------------------
+  De manera complementaria al circuito sobre Huawei Cloud, la verificación
+  funcional se apoyó en conjuntos de datos de prueba que se cargan a
+  través de la propia interfaz web, lo que permitió ejercitar el flujo
+  completo de análisis sin depender de una infraestructura activa. Uno de
+  estos conjuntos corresponde a datos reales de producción del trace de
+  clústeres GPU de Alibaba (versión 2020), un conjunto público que
+  registra aproximadamente 1.800 máquinas con GPUs durante dos meses, del
+  cual se seleccionaron cincuenta máquinas. Otro conjunto combina datos
+  reales con instancias de comportamiento normal definido, lo que permite
+  verificar que el sistema distingue entre ambos tipos de patrones. Estos
+  conjuntos tienen comportamientos esperados definidos, de modo que las
+  detecciones y recomendaciones generadas pueden contrastarse con los
+  patrones efectivamente presentes en los datos.
+  ----------------------------------------------------------------
+
+3b. REEMPLAZAR el párrafo de cierre actual de la sección ("En conjunto, la
+    validación del prototipo permitió evaluar la viabilidad técnica...")
+    por este párrafo de conclusiones sobre las validaciones:
+
+  ----------------------------------------------------------------
+  En conjunto, las tres instancias de validación permitieron tomar
+  decisiones de diseño fundamentadas en resultados y evaluar la viabilidad
+  técnica de la propuesta. La calibración del modelo determinó la
+  adopción del valor 0,03 para el parámetro de contaminación, priorizando
+  la precisión de las detecciones en concordancia con el rol de apoyo a
+  la decisión que cumple la plataforma. La suite de pruebas automatizadas
+  verificó el comportamiento del motor de recomendaciones y de las reglas
+  de negocio, y quedó disponible como base de regresión para el
+  mantenimiento del sistema. La verificación funcional comprobó el
+  funcionamiento del circuito completo de análisis, desde la obtención de
+  métricas hasta la generación y visualización del código Terraform,
+  incluyendo la persistencia trazable de las recomendaciones. Sobre la
+  base de estos resultados, el prototipo se considera apto para asistir
+  la identificación de recursos ineficientes y la generación de
+  recomendaciones de optimización dentro del alcance definido, y establece
+  las bases para desarrollos futuros que incorporen funcionalidades
+  adicionales.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+4. AJUSTES DE CONSISTENCIA EN "TECNOLOGÍAS" (mismo capítulo 3)
+--------------------------------------------------------------------------------
+4a. Línea ~1637, REEMPLAZAR:
+
+  "El modelo utilizado se configura con 100 árboles, buscando obtener una
+  representación estable del espacio de características a partir de
+  múltiples particiones aleatorias. Asimismo, se establece una semilla
+  aleatoria fija para garantizar que los experimentos puedan ser
+  reproducidos bajo las mismas condiciones."
+
+  POR:
+
+  "El modelo utilizado se configura con 100 árboles y un parámetro de
+  contaminación de 0,03, buscando obtener una representación estable del
+  espacio de características a partir de múltiples particiones aleatorias.
+  Asimismo, se establece una semilla aleatoria fija para garantizar que
+  los experimentos puedan ser reproducidos bajo las mismas condiciones."
+
+4b. Línea ~1651, REEMPLAZAR la frase final del párrafo de calibración:
+
+  "Esta evaluación permitió observar la sensibilidad de los resultados
+  frente al parámetro y fundamentar el valor de configuración adoptado
+  para el modelo final."
+
+  POR:
+
+  "Esta evaluación permitió observar la sensibilidad de los resultados
+  frente al parámetro y fundamentar la adopción del valor 0,03 para el
+  modelo final, decisión que se analiza en detalle en la sección de
+  validación."
+
+--------------------------------------------------------------------------------
+5. AJUSTE OPCIONAL EN LA CONCLUSIÓN (chapters/conclusion.tex)
+--------------------------------------------------------------------------------
+En "Resumen de aportes", tercer párrafo, REEMPLAZAR:
+
+  "...en la calibración empírica del modelo de detección sobre conjuntos
+  de datos con tasas de anomalía conocidas..."
+
+POR:
+
+  "...en la calibración empírica del modelo de detección sobre conjuntos
+  de datos con tasas de anomalía conocidas, que determinó la adopción de
+  un valor de contaminación de 0,03 orientado a maximizar la precisión de
+  las detecciones..."
+
+--------------------------------------------------------------------------------
+6. FUENTES DE TODOS LOS NÚMEROS (verificadas contra el proyecto)
+--------------------------------------------------------------------------------
+- Barrido: data/synthetic/optimal_contamination_results.json (corrida del
+  27-07-2026): 8 valores × 4 tasas, entrenamiento sobre 5.000.000 de filas
+  reales. Promedios calculados de ese archivo (los de la tabla).
+- Generación de sintéticos: src/evaluation/generate_realistic_synthetic.py
+  (distribuciones reales + anomalías etiquetadas a 2 desvíos estándar,
+  4 tipos, 300 máquinas por conjunto).
+- Metodología: src/evaluation/find_optimal_contamination.py.
+- Suite de tests: corrida de hoy -> 267 aprobadas en 11,4 s; coberturas
+  citadas: clasificador 100%, reglas integradas 100%, confianza 96%,
+  analizador de métricas 93%.
+- Dataset real de prueba: data/raw/README.md (50 máquinas del trace GPU
+  v2020, ~1800 máquinas, 2 meses) + endpoints /api/load-test-dataset/.
+
+--------------------------------------------------------------------------------
+7. RECORDATORIO: CONSISTENCIA CON EL ARTEFACTO ENTREGADO
+--------------------------------------------------------------------------------
+La tesis declarará 0,03. Para que sea cierto:
+- Actualizar src/main.py (hoy contamination=0.05 en línea 27) y
+  train_model.bat a 0,03.
+- Reejecutar el entrenamiento para regenerar el modelo persistido
+  (joblib) que usa la aplicación.
+- Verificar que la demo y la app web usan el modelo reentrenado.
+
+--------------------------------------------------------------------------------
+8. CONFIRMACIONES MENORES (no bloquean)
+--------------------------------------------------------------------------------
+- Confirmar que los endpoints de datasets de prueba se usaron durante la
+  verificación funcional (el texto lo da por hecho; están documentados en
+  el README del proyecto).
+- Recorrer la suite de pruebas antes de la entrega para que "267 pruebas
+  aprobadas" siga siendo cierto.
+- Caption de la tabla arriba (convención española); ajustar si el tutor
+  prefiere otra forma. La tabla usa [H] (paquete float ya cargado) y la
+  numeración capítulo.romano del template (main.tex:109) no requiere
+  cambios.

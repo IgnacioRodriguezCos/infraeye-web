@@ -1,0 +1,190 @@
+================================================================================
+PROPUESTA: SECCIÓN "METODOLOGÍA DE DESARROLLO" (v2, CON DETALLES CONFIRMADOS)
+================================================================================
+Requisito a cumplir: "Menciona la metodología, técnica o ciclo de vida
+utilizado y se justifica en forma válida conduciendo los aspectos de esa
+metodología, técnica o ciclo de vida, sin importar si es ágil o
+estructurada."
+
+Veredicto actual: NO SE CUMPLE. El documento describe un prototipo funcional
+y una secuencia implícita (relevamiento -> requerimientos -> diseño ->
+tecnologías -> validación), pero nunca nombra ni justifica una metodología
+de desarrollo. Las menciones a "metodologías" y "ciclo de vida" existentes
+corresponden a los entrevistados y al marco teórico (Terraform, DevOps),
+no al desarrollo del proyecto.
+
+Cambios respecto de la v1 (según confirmación del equipo):
+- Reuniones semanales de avances, de duración variable (agregado).
+- Tablero: se nombra Trello.
+- Revisión cruzada de código: confirmada, se mantiene.
+- Orden de construcción: datos -> modelo -> web -> recomendaciones ->
+  Terraform (corregido).
+- Iteraciones de 2 semanas, con revisión de avances cada 1 semana.
+
+Nada de esto se aplica todavía a los .tex ni al .bib: está acá para revisión.
+
+--------------------------------------------------------------------------------
+1. UBICACIÓN PROPUESTA
+--------------------------------------------------------------------------------
+Archivo: chapters/chapter03_descripcion.tex
+Insertar ANTES de \section{Diagramas} (línea 1336), es decir, a
+continuación del párrafo final de "Estrategia competitiva" (línea 1334).
+
+Con esta ubicación, el capítulo 3 queda:
+  ... Requerimientos -> Competencias -> METODOLOGÍA -> Diagramas ->
+  Tecnologías -> Validación
+que reproduce el bloque "Metodología de desarrollo" del README del template
+(Metodología / Arquitectura y tecnologías / Validación del sistema).
+
+--------------------------------------------------------------------------------
+2. TEXTO LaTeX PROPUESTO
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  \section{Metodología de desarrollo}
+
+  El desarrollo de la plataforma se abordó mediante un enfoque ágil
+  adaptado a las características del equipo de trabajo, compuesto por dos
+  integrantes. La elección de un enfoque ágil respondió a tres factores.
+  En primer lugar, el producto constituía un prototipo cuyos
+  requerimientos podían refinarse a medida que avanzaba la comprensión
+  del problema de optimización de infraestructura cloud, un escenario que
+  favorece los enfoques ágiles, orientados a la entrega incremental de
+  software funcional y a la adaptación al cambio por sobre la planificación
+  exhaustiva inicial \parencite{AgileManifesto2001}. En segundo lugar, la
+  experimentación asociada al componente de aprendizaje automático, que
+  incluyó la selección de características y la calibración empírica del
+  parámetro de contaminación, implicaba incertidumbre técnica que se
+  beneficiaba de ciclos cortos de implementación, prueba y ajuste.
+  Finalmente, el tamaño reducido del equipo hacía inviable la adopción
+  literal de marcos de trabajo diseñados para equipos más numerosos, por
+  lo que se adoptaron las prácticas esenciales de los enfoques ágiles con
+  los roles simplificados que se describen a continuación.
+
+  \subsection{Adaptación del enfoque ágil al equipo}
+
+  Marcos de referencia como Scrum prescriben equipos de entre tres y nueve
+  integrantes con roles diferenciados \parencite{ScrumGuide2020}, por lo
+  que su aplicación literal a un equipo de dos personas no resultaba
+  adecuada. En consecuencia, se realizó una adaptación: las
+  responsabilidades de priorización del trabajo y de facilitación del
+  proceso fueron asumidas de manera compartida por ambos integrantes,
+  quienes participaron en todas las etapas del desarrollo. La comunicación
+  directa y permanente, posible gracias al tamaño del equipo, permitía
+  tomar las decisiones técnicas en conjunto y resolver consultas a medida
+  que surgían, sin necesidad de ceremonias formales de sincronización
+  diaria. Como instancia estructurada de seguimiento, el equipo realizaba
+  una reunión semanal de avances en la que se revisaban el estado de las
+  tareas, los obstáculos encontrados y los resultados obtenidos hasta el
+  momento; la duración de estas reuniones no era fija, sino que se ajustaba
+  a los temas a tratar en cada ocasión.
+
+  \subsection{Gestión del trabajo}
+
+  El trabajo se organizó a partir de un listado de funcionalidades
+  priorizadas derivado de los requerimientos funcionales y no funcionales
+  definidos en la sección anterior. Cada funcionalidad se desagregó en
+  tareas concretas de diseño, implementación y prueba, que fueron
+  distribuidas entre los integrantes según su disponibilidad y afinidad
+  con cada componente. El seguimiento del estado de las tareas se realizó
+  mediante un tablero visual en Trello, organizado a la manera de Kanban
+  con los estados pendiente, en curso y finalizada, lo que permitía
+  mantener visibilidad del avance global con una sobrecarga mínima de
+  gestión. De manera complementaria, el avance macro del proyecto se
+  controló contra el cronograma incluido en el anexo, que agrupaba los
+  grandes hitos del proyecto.
+
+  \subsection{Prácticas de desarrollo}
+
+  El desarrollo se apoyó en un conjunto de prácticas orientadas a
+  mantener la calidad del código en un contexto de entrega incremental.
+  El control de versiones se realizó con Git, y el código fuente se
+  encuentra disponible en los repositorios públicos del proyecto incluidos
+  en el anexo. Cada integrante revisaba el código producido por el otro
+  antes de su integración, mecanismo que funcionó como control de calidad
+  y como transferencia de conocimiento dentro del equipo. La verificación
+  mediante pruebas automatizadas con Pytest, descripta en la sección de
+  validación, se incorporó al propio ciclo de desarrollo: las pruebas del
+  módulo afectado se ejecutaban como parte de la definición de
+  finalización de cada tarea. Finalmente, la arquitectura modular del
+  sistema, descripta en las secciones siguientes, permitió que los
+  componentes pudieran desarrollarse y probarse de forma relativamente
+  independiente.
+
+  \subsection{Ciclo de las iteraciones}
+
+  El trabajo se organizó en iteraciones de una duración aproximada de dos
+  semanas. Cada iteración siguió un patrón repetido: selección de un
+  conjunto acotado de tareas del listado priorizado, diseño o ajuste de
+  los módulos involucrados, implementación, verificación mediante las
+  pruebas automatizadas y revisión conjunta de los resultados. De manera
+  complementaria, al cierre de cada semana se presentaban y revisaban los
+  avances obtenidos, lo que permitía detectar desvíos y replanificar sin
+  esperar al final de la iteración. El cierre de cada iteración alimentaba
+  la replanificación: se reevaluaba la prioridad de las funcionalidades
+  pendientes a la luz de lo aprendido, incorporando los ajustes que la
+  experimentación sugería. La construcción del prototipo avanzó de manera
+  incremental: primero los módulos de obtención y preprocesamiento de
+  datos, luego el modelo de detección de anomalías, posteriormente la
+  aplicación web, y finalmente el motor de recomendaciones y la generación
+  de código Terraform.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. ENTRADAS PROPUESTAS PARA biblio.bib
+--------------------------------------------------------------------------------
+(Al final del archivo, formato @Online como las existentes. Necesarias si
+se mantienen las citas del texto propuesto.)
+
+  @Online{AgileManifesto2001,
+  	AUTHOR = {Beck, Kent and others},
+  	TITLE = {Manifesto for Agile Software Development},
+  	YEAR = {2001},
+  	URL = {https://agilemanifesto.org/},
+  	NOTE = {[en línea][consulta: 6 octubre 2026]}
+  }
+
+  @Online{ScrumGuide2020,
+  	AUTHOR = {Schwaber, Ken and Sutherland, Jeff},
+  	TITLE = {The Definitive Guide to Scrum: The Rules of the Game},
+  	YEAR = {2020},
+  	URL = {https://scrumguides.org/scrum-guide.html},
+  	NOTE = {[en línea][consulta: 6 octubre 2026]}
+  }
+
+--------------------------------------------------------------------------------
+4. ANCLAJES CON EL RESTO DEL DOCUMENTO (ya existentes, no requieren cambios)
+--------------------------------------------------------------------------------
+- Requerimientos RF/RNF (sección previa): el "listado de funcionalidades
+  priorizadas" deriva de ellos.
+- Repositorios GitHub (anexo "Repositorios"): infraeye-web y pfi-infraeye
+  sostienen la afirmación sobre Git.
+- Cronograma Gantt (anexo): sostiene el control macro de avance.
+- Pytest (sección Tecnologías + Validación): sostiene la práctica de
+  pruebas por iteración.
+- Arquitectura modular (sección Diagramas/Tecnologías): sostiene el
+  desarrollo incremental por componentes.
+
+--------------------------------------------------------------------------------
+5. DETALLES CONFIRMADOS E INCORPORADOS EN ESTA VERSIÓN
+--------------------------------------------------------------------------------
+- [x] Reunión semanal de avances con duración variable (subsección
+      "Adaptación del enfoque ágil al equipo").
+- [x] Tablero Trello, mencionado por su nombre (subsección "Gestión del
+      trabajo").
+- [x] Revisión cruzada de código entre integrantes: confirmada, se
+      mantiene (subsección "Prácticas de desarrollo").
+- [x] Orden de construcción: datos -> modelo -> web -> recomendaciones ->
+      Terraform (subsección "Ciclo de las iteraciones"). Se eliminó la
+      frase "siguiendo las dependencias entre componentes" de la v1 porque
+      el orden real no responde estrictamente a dependencias técnicas.
+- [x] Iteraciones de ~2 semanas con revisión de avances semanal
+      (subsección "Ciclo de las iteraciones").
+
+Único detalle menor pendiente (opcional, no bloquea la aplicación):
+- Estrategia de ramas de Git: no se menciona en el texto. Si usaban ramas
+  por funcionalidad, se puede sumar una frase en "Prácticas de
+  desarrollo"; si trabajaban directo sobre la rama principal, dejarlo como
+  está.
+- Hitos del cronograma: el texto dice genéricamente "los grandes hitos del
+  proyecto" (no puedo visualizar el Gantt del anexo). Si se quiere
+  precisar, revisar las fases del Gantt y ajustar la frase.
