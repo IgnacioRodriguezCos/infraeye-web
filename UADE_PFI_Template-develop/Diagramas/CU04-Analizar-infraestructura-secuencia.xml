@@ -1,0 +1,130 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU04 - Analizar infraestructura - Secuencia" id="CU04-secuencia">
+    <mxGraphModel dx="1414" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" value="Usuario" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="120" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" value="Sistema" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="160" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="lifModelo" value="Modelo Isolation Forest" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="615" y="40" width="190" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="395" y="125" width="10" height="563" as="geometry" />
+        </mxCell>
+        <mxCell id="actModelo" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="705" y="445" width="10" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1. Selecciona analizar&#xa;infraestructura" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="120" y="130" />
+            <mxPoint as="targetPoint" x="400" y="130" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Carga la representación&#xa;(CU03)" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="175" />
+            <mxPoint as="targetPoint" x="400" y="203" />
+            <Array as="points">
+              <mxPoint x="455" y="175" />
+              <mxPoint x="455" y="203" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. Recupera las métricas&#xa;de los recursos" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="230" />
+            <mxPoint as="targetPoint" x="400" y="258" />
+            <Array as="points">
+              <mxPoint x="455" y="230" />
+              <mxPoint x="455" y="258" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4. Preprocesa las&#xa;métricas" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="285" />
+            <mxPoint as="targetPoint" x="400" y="313" />
+            <Array as="points">
+              <mxPoint x="455" y="285" />
+              <mxPoint x="455" y="313" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5. Construye los feature&#xa;vectors" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="340" />
+            <mxPoint as="targetPoint" x="400" y="368" />
+            <Array as="points">
+              <mxPoint x="455" y="340" />
+              <mxPoint x="455" y="368" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6. Carga el modelo&#xa;entrenado" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="395" />
+            <mxPoint as="targetPoint" x="400" y="423" />
+            <Array as="points">
+              <mxPoint x="455" y="395" />
+              <mxPoint x="455" y="423" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7. Ejecuta el modelo" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="450" />
+            <mxPoint as="targetPoint" x="710" y="450" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8-9. Clasificación y&#xa;puntaje de anomalía" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="710" y="495" />
+            <mxPoint as="targetPoint" x="400" y="495" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="10. Identifica recursos&#xa;anómalos (umbral)" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="550" />
+            <mxPoint as="targetPoint" x="400" y="578" />
+            <Array as="points">
+              <mxPoint x="455" y="550" />
+              <mxPoint x="455" y="578" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="11. Almacena los resultados" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="605" />
+            <mxPoint as="targetPoint" x="400" y="633" />
+            <Array as="points">
+              <mxPoint x="455" y="605" />
+              <mxPoint x="455" y="633" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="12. Presenta el listado de&#xa;recursos y criticidad" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="678" />
+            <mxPoint as="targetPoint" x="120" y="678" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

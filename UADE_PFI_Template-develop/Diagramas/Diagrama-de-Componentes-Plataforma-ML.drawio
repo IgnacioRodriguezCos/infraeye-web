@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="componentes-plataforma-ml" name="Diagrama de Componentes - Plataforma ML">
+    <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="995" pageHeight="570" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titulo" value="Diagrama de Componentes: Plataforma ML para Infraestructura Cloud" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;fontColor=#1F4E79;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="620" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="n-usuario" value="Usuario" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n-frontend" value="Frontend Web&#10;(Dashboard)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="180" y="100" width="115" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n-backend" value="Backend API&#10;(Flask)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="335" y="80" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n-recoleccion" value="Módulo de&#10;Recolección de&#10;Métricas" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="525" y="95" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-preprocesamiento" value="Módulo de&#10;Preprocesamiento&#10;de Datos" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="685" y="95" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-feature" value="Módulo de&#10;Feature&#10;Engineering" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="845" y="95" width="110" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-huawei" value="Huawei Cloud&#10;(infraestructura&#10;analizada)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="510" y="230" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n-scaler" value="StandardScaler" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="845" y="400" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n-modelo" value="Modelo de ML:&#10;Isolation Forest" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="680" y="400" width="125" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n-motor" value="Motor de&#10;Recomendaciones" style="rhombus;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="490" y="380" width="150" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="n-reportes" value="Generador de&#10;Reportes" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="335" y="400" width="115" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="n-db" value="Base de Datos&#10;PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="160" y="390" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e-usuario-frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-usuario" target="n-frontend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-frontend-backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-frontend" target="n-backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-backend-frontend-ret" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-backend" target="n-frontend">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="215" />
+              <mxPoint x="237" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-backend-recoleccion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-backend" target="n-recoleccion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-recoleccion-preprocesamiento" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-recoleccion" target="n-preprocesamiento">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-preprocesamiento-feature" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-preprocesamiento" target="n-feature">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-huawei-recoleccion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-huawei" target="n-recoleccion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-feature-scaler" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-feature" target="n-scaler">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-scaler-modelo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-scaler" target="n-modelo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-modelo-motor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-modelo" target="n-motor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-motor-reportes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-motor" target="n-reportes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-reportes-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-reportes" target="n-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-backend-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-backend" target="n-db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="330" />
+              <mxPoint x="225" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-motor-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="n-motor" target="n-db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="565" y="530" />
+              <mxPoint x="225" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

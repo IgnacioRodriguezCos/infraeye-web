@@ -1361,7 +1361,7 @@ En este diagrama se visualiza la arquitectura de componentes de la plataforma, m
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.9\textwidth]{media/image3.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Diagrama-de-Componentes-Plataforma-ML.png}
 \caption{Diagrama de componentes de la plataforma}
 \label{fig:componentes}
 \end{figure}
@@ -1372,7 +1372,7 @@ El siguiente diagrama presenta el flujo general de información de la plataforma
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{media/image5.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Diagrama-de-Flujo-Informacion-Plataforma-Cloud.png}
 \caption{Diagrama de flujo de la plataforma}
 \label{fig:flujo}
 \end{figure}
@@ -1383,7 +1383,7 @@ El diagrama de arquitectura presenta una visión general de la estructura tecnol
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{media/image4.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Arquitectura-de-Plataforma-ML-Optimizacion-Cloud.png}
 \caption{Diagrama de arquitectura de la solución}
 \label{fig:arquitectura}
 \end{figure}
@@ -1394,9 +1394,138 @@ El Diagrama Entidad-Relación presentado en la Figura representa el modelo de da
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{media/image2.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/DER-Plataforma-Optimizacion-Cloud.png}
 \caption{Modelo Entidad-Relación de la plataforma}
 \label{fig:er}
+\end{figure}
+
+\subsection{Diagrama de casos de uso}
+
+El diagrama de casos de uso presenta la funcionalidad que la plataforma ofrece a sus usuarios. El actor principal es el administrador de infraestructura, quien interactúa con los ocho casos de uso identificados durante la especificación de requerimientos: iniciar sesión, vincular la cuenta de Huawei Cloud, obtener y modelar la infraestructura cloud, analizar la infraestructura, generar recomendaciones de optimización, revisar y aprobar recomendaciones, consultar el historial de análisis y exportar el informe de análisis. Las relaciones de dependencia entre los casos de uso reflejan las precondiciones definidas en la especificación: la obtención y el modelado de la infraestructura requiere una conexión válida con Huawei Cloud, el análisis requiere la infraestructura modelada, la generación de recomendaciones requiere el análisis completado y la revisión de recomendaciones requiere que las recomendaciones hayan sido generadas.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Diagrama-general-casos-de-uso.png}
+\caption{Diagrama general de casos de uso de la plataforma}
+\label{fig:cu-general}
+\end{figure}
+
+A continuación se presenta el diagrama de casos de uso correspondiente a cada caso de uso individual.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU01-Iniciar-sesion-caso-de-uso.png}
+\caption{Caso de uso CU01 -- Iniciar sesión}
+\label{fig:cu01}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU02-Vincular-cuenta-Huawei-Cloud.png}
+\caption{Caso de uso CU02 -- Vincular cuenta de Huawei Cloud}
+\label{fig:cu02}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU03-Obtener-y-modelar-infraestructura.png}
+\caption{Caso de uso CU03 -- Obtener y modelar la infraestructura cloud}
+\label{fig:cu03}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU04-Analizar-infraestructura.png}
+\caption{Caso de uso CU04 -- Analizar infraestructura}
+\label{fig:cu04}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU05-Generar-recomendaciones.png}
+\caption{Caso de uso CU05 -- Generar recomendaciones de optimización}
+\label{fig:cu05}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU06-Revisar-y-aprobar-recomendaciones.png}
+\caption{Caso de uso CU06 -- Revisar y aprobar recomendaciones}
+\label{fig:cu06}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU07-Consultar-historial.png}
+\caption{Caso de uso CU07 -- Consultar historial de análisis y recomendaciones}
+\label{fig:cu07}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Diagramas/imagenes/CU08-Exportar-informe.png}
+\caption{Caso de uso CU08 -- Exportar informe de análisis}
+\label{fig:cu08}
+\end{figure}
+
+\subsection{Diagramas de secuencia}
+
+Los diagramas de secuencia detallan, para cada caso de uso, la interacción temporal entre el usuario, el sistema y los participantes externos involucrados, tales como la API de Huawei Cloud, el modelo de Isolation Forest y la base de reglas de recomendación. Las solicitudes del usuario hacia el sistema se representan con flechas sólidas, las respuestas del sistema con flechas punteadas y los procesamientos internos del sistema mediante mensajes de autorreceptor. De esta manera, estos diagramas complementan la especificación textual de los casos de uso presentada en la sección de requerimientos.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU01-Iniciar-sesion-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU01 -- Iniciar sesión}
+\label{fig:seq-cu01}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU02-Vincular-cuenta-Huawei-Cloud-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU02 -- Vincular cuenta de Huawei Cloud}
+\label{fig:seq-cu02}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU03-Obtener-y-modelar-infraestructura-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU03 -- Obtener y modelar la infraestructura cloud}
+\label{fig:seq-cu03}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU04-Analizar-infraestructura-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU04 -- Analizar infraestructura}
+\label{fig:seq-cu04}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU05-Generar-recomendaciones-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU05 -- Generar recomendaciones de optimización}
+\label{fig:seq-cu05}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU06-Revisar-y-aprobar-recomendaciones-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU06 -- Revisar y aprobar recomendaciones}
+\label{fig:seq-cu06}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU07-Consultar-historial-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU07 -- Consultar historial de análisis y recomendaciones}
+\label{fig:seq-cu07}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramas/imagenes/CU08-Exportar-informe-secuencia.png}
+\caption{Diagrama de secuencia del caso de uso CU08 -- Exportar informe de análisis}
+\label{fig:seq-cu08}
 \end{figure}
 
 \section{Tecnologías}

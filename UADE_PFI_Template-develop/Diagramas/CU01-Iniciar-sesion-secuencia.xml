@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU01 - Iniciar sesión - Secuencia" id="CU01-secuencia">
+    <mxGraphModel dx="1414" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" value="Usuario" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="120" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" value="Sistema" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="160" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="395" y="125" width="10" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1. Ingresa usuario y contraseña" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="120" y="130" />
+            <mxPoint as="targetPoint" x="400" y="130" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Valida credenciales" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="175" />
+            <mxPoint as="targetPoint" x="400" y="203" />
+            <Array as="points">
+              <mxPoint x="455" y="175" />
+              <mxPoint x="455" y="203" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. Crea la sesión" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="220" />
+            <mxPoint as="targetPoint" x="400" y="248" />
+            <Array as="points">
+              <mxPoint x="455" y="220" />
+              <mxPoint x="455" y="248" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4. Muestra el panel principal" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="265" />
+            <mxPoint as="targetPoint" x="120" y="265" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

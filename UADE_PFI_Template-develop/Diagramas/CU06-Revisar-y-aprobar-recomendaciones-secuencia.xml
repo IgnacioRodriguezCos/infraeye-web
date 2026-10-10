@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU06 - Revisar y aprobar recomendaciones - Secuencia" id="CU06-secuencia">
+    <mxGraphModel dx="1414" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" value="Usuario" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="120" height="545" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" value="Sistema" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="160" height="545" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="455" y="125" width="10" height="406" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1. Selecciona revisar&#xa;recomendaciones" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="180" y="130" />
+            <mxPoint as="targetPoint" x="460" y="130" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Presenta el listado de&#xa;recomendaciones" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="460" y="175" />
+            <mxPoint as="targetPoint" x="180" y="175" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="3. Revisa las&#xa;recomendaciones" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="180" y="220" />
+            <mxPoint as="targetPoint" x="180" y="248" />
+            <Array as="points">
+              <mxPoint x="235" y="220" />
+              <mxPoint x="235" y="248" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="4. Selecciona cuáles aplicar&#xa;y cuáles descartar" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="180" y="293" />
+            <mxPoint as="targetPoint" x="460" y="293" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="5. Registra la decisión&#xa;de cada recomendación" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="460" y="338" />
+            <mxPoint as="targetPoint" x="460" y="366" />
+            <Array as="points">
+              <mxPoint x="515" y="338" />
+              <mxPoint x="515" y="366" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="6. Genera la nueva&#xa;versión del modelo" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="460" y="393" />
+            <mxPoint as="targetPoint" x="460" y="421" />
+            <Array as="points">
+              <mxPoint x="515" y="393" />
+              <mxPoint x="515" y="421" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="7. Actualiza el&#xa;Terraform" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="460" y="448" />
+            <mxPoint as="targetPoint" x="460" y="476" />
+            <Array as="points">
+              <mxPoint x="515" y="448" />
+              <mxPoint x="515" y="476" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="8. Presenta el resumen de&#xa;las modificaciones" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="460" y="521" />
+            <mxPoint as="targetPoint" x="180" y="521" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

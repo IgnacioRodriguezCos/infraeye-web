@@ -1,0 +1,139 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="arquitectura-capas-plataforma-ml" name="Arquitectura de Plataforma ML - Capas">
+    <mxGraphModel dx="817" dy="429" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titulo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontColor=#333333;fontStyle=1;fontSize=12;" value="Arquitectura de Plataforma ML para Optimización de Infraestructura Cloud" vertex="1">
+          <mxGeometry height="28" width="520" x="40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="capa1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 1 · Usuario" vertex="1">
+          <mxGeometry height="135" width="205" x="40" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="n-usuario" parent="capa1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Usuario:&#xa;Administrador/Arquitecto&#xa;Cloud&#xa;Acceso: Navegador web" vertex="1">
+          <mxGeometry height="85" width="170" x="18" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="capa2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 2 · Presentación" vertex="1">
+          <mxGeometry height="155" width="225" x="255" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="n-dashboard" parent="capa2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Dashboard Web&#xa;- Visualización de métricas&#xa;- Anomalías y&#xa;recomendaciones&#xa;- Configuración de análisis" vertex="1">
+          <mxGeometry height="100" width="185" x="20" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="capa3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 3 · Backend (Flask)" vertex="1">
+          <mxGeometry height="175" width="220" x="525" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="n-backend" parent="capa3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Backend Flask&#xa;- API REST&#xa;- Gestión de solicitudes&#xa;- Orquestación de análisis&#xa;- Consulta/almacenamiento&#xa;de resultados" vertex="1">
+          <mxGeometry height="120" width="180" x="20" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="capa4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 4 · Motor de IA" vertex="1">
+          <mxGeometry height="755" width="215" x="785" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="n-recoleccion" parent="capa4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Recolección de&#xa;métricas&#xa;( CPU • Memoria&#xa;• Disco • Red )" vertex="1">
+          <mxGeometry height="85" width="170" x="23" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="n-prepro" parent="capa4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Preprocesamiento +&#xa;Feature Engineering&#xa;Limpieza • Media • P95 •&#xa;P5&#xa;( CPU • Memoria • Disco&#xa;• Red_in • Red_out )" vertex="1">
+          <mxGeometry height="120" width="170" x="23" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="n-normal" parent="capa4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Normalización&#xa;StandardScaler" vertex="1">
+          <mxGeometry height="50" width="170" x="23" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="n-modelo" parent="capa4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Modelo Isolation&#xa;Forest&#xa;Detecta instancias&#xa;con comportamiento&#xa;anómalo" vertex="1">
+          <mxGeometry height="100" width="170" x="23" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="n-motor" parent="capa4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Motor de Recomendaciones&#xa;Solo sobre instancias anómalas&#xa;Clasifica problema y sugiere:&#xa;- reducir CPU&#xa;- aumentar memoria&#xa;- mantener&#xa;- revisar almacenamiento&#xa;- investigar" vertex="1">
+          <mxGeometry height="170" width="170" x="23" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="capa5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 5 · Persistencia" vertex="1">
+          <mxGeometry height="130" width="200" x="1030" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="n-pg" parent="capa5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="PostgreSQL&#xa;Historial de análisis •&#xa;Resultados •&#xa;Recomendaciones" vertex="1">
+          <mxGeometry height="85" width="160" x="20" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="capa6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;fontSize=11;fontStyle=1;fontColor=#666666;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="CAPA 6 · Fuentes de datos" vertex="1">
+          <mxGeometry height="490" width="220" x="520" y="462" as="geometry" />
+        </mxCell>
+        <mxCell id="n-dataset" parent="capa6" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Dataset Alibaba Cluster&#xa;Trace 2018&#xa;(uso exclusivo:&#xa;entrenamiento de&#xa;Isolation Forest)" vertex="1">
+          <mxGeometry height="100" width="160" x="20" y="33" as="geometry" />
+        </mxCell>
+        <mxCell id="n-huawei" parent="capa6" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=12;" value="Huawei Cloud&#xa;ECS • EVS •&#xa;VPC • Cloud Eye" vertex="1">
+          <mxGeometry height="70" width="160" x="20" y="388" as="geometry" />
+        </mxCell>
+        <mxCell id="e-usuario-dashboard" edge="1" parent="1" source="n-usuario" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.47;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" target="n-dashboard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dashboard-backend" edge="1" parent="1" source="n-dashboard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.33;entryDx=0;entryDy=0;" target="n-backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-backend-recoleccion" edge="1" parent="1" source="n-backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.47;entryDx=0;entryDy=0;" target="n-recoleccion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dashboard-pg" edge="1" parent="1" source="n-dashboard" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.673;exitY=0.001;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;exitPerimeter=0;" target="n-pg">
+          <mxGeometry relative="1" x="-0.0926" as="geometry">
+            <Array as="points">
+              <mxPoint x="399.5" y="58" />
+              <mxPoint x="1170" y="58" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl-consulta" connectable="0" parent="e-dashboard-pg" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="consulta" vertex="1">
+          <mxGeometry relative="1" x="-0.3199" as="geometry" />
+        </mxCell>
+        <mxCell id="e-backend-pg" edge="1" parent="1" source="n-backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.715;exitY=0.008;exitDx=0;exitDy=0;entryX=0.938;entryY=0;entryDx=0;entryDy=0;exitPerimeter=0;entryPerimeter=0;" target="n-pg">
+          <mxGeometry relative="1" x="-0.0158" as="geometry">
+            <Array as="points">
+              <mxPoint x="673.7" y="46" />
+              <mxPoint x="1200.1" y="46" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl-consulta-almacena" connectable="0" parent="e-backend-pg" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="consulta/almacena" vertex="1">
+          <mxGeometry relative="1" x="-0.2666" as="geometry" />
+        </mxCell>
+        <mxCell id="e-huawei-recoleccion" edge="1" parent="1" source="n-huawei" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.47;entryDx=0;entryDy=0;" target="n-recoleccion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1015" y="885" />
+              <mxPoint x="1015" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl-metricas" connectable="0" parent="e-huawei-recoleccion" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="métricas (inferencia)" vertex="1">
+          <mxGeometry relative="1" x="0.39" as="geometry">
+            <mxPoint y="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-dataset-modelo" edge="1" parent="1" source="n-dataset" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="n-modelo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-entrenamiento" connectable="0" parent="e-dataset-modelo" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="entrenamiento" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-recoleccion-prepro" edge="1" parent="1" source="n-recoleccion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n-prepro">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-prepro-normal" edge="1" parent="1" source="n-prepro" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n-normal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-normal-modelo" edge="1" parent="1" source="n-normal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n-modelo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-modelo-motor" edge="1" parent="1" source="n-modelo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="n-motor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl-solo-anomalias" connectable="0" parent="e-modelo-motor" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="solo anomalías" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-motor-pg" edge="1" parent="1" source="n-motor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="n-pg">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1130" y="730" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl-resultados" connectable="0" parent="e-motor-pg" style="edgeLabel;html=1;fontSize=11;fontStyle=1;fontColor=#333333;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;resizable=0;points=[];" value="resultados" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
