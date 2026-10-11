@@ -1,0 +1,323 @@
+==========================================================================================
+INFRAEYE - FLUJO DE FONDOS Y EVALUACIÓN ECONÓMICA
+Explicación de los supuestos, los números y los escenarios
+Complemento del archivo: "InfraEye - Flujo de Fondos y Evaluacion Economica.xlsx"
+==========================================================================================
+
+1. OBJETIVO Y ALCANCE
+------------------------------------------------------------------------------------------
+Este documento explica cómo se construyó el flujo de fondos del negocio InfraEye y
+cómo se interpretan los indicadores de evaluación económica (TIR, VAN, payback y punto
+de equilibrio) bajo dos escenarios contrastantes: optimista y pesimista. Todos los
+montos están expresados en dólares estadounidenses (USD), coherente con una estrategia
+de precios definida en esa moneda, y el horizonte de proyección es de 5 años, estándar
+para emprendimientos tecnológicos de etapa temprana.
+
+El modelo completo está implementado en el Excel adjunto con fórmulas dinámicas: si se
+modifica cualquier supuesto en la hoja "Supuestos" (precios, clientes, costos, tasa de
+descuento), los flujos y todos los indicadores se recalculan automáticamente.
+
+
+2. SUPUESTOS DEL MODELO
+------------------------------------------------------------------------------------------
+
+2.1 INVERSIÓN INICIAL (AÑO 0) - TOTAL: USD 27.000
+
+    - Desarrollo del MVP (2 desarrolladores, 6 meses) ....... USD 18.000
+    - Infraestructura y herramientas iniciales .............. USD  2.000
+    - Marketing de lanzamiento .............................. USD  3.000
+    - Gastos legales y de registración ...................... USD  1.500
+    - Capital de trabajo inicial ............................ USD  2.500
+
+    El ítem dominante es el desarrollo del producto. Al tratarse de una plataforma
+    SaaS que obtiene la información desde las APIs del proveedor cloud (sin agentes
+    que instalar), no se requiere inversión en hardware ni en componentes on-premise:
+    toda la infraestructura se contrata como servicio y se paga como gasto operativo.
+
+2.2 MODELO DE INGRESOS
+
+    La estrategia de precios define tres planes de suscripción mensual:
+
+    - Plan Starter ........... USD 10/mes  (hasta 10 recursos)   = USD 120/año
+    - Plan Professional ...... USD 50/mes  (hasta 25 recursos)   = USD 600/año
+    - Plan Enterprise ........ USD 200/mes (estimado, plan "a    = USD 2.400/año
+                                         definir" del plan de
+                                         negocios)
+
+    Ingreso anual de cada plan = clientes activos promedio x precio mensual x 12.
+    El plan Freemium no genera ingresos: su función es reducir la barrera de entrada
+    y alimentar el embudo de conversión hacia los planes pagos.
+
+2.3 ESTRUCTURA DE COSTOS
+
+    Costos fijos anuales (crecen cada año con la inflación de costos):
+
+    ESCENARIO OPTIMISTA - Año 1: USD 35.400 (crecimiento 10% anual)
+        - Personal (2 desarrolladores + soporte) ............ USD 24.000
+        - Marketing y ventas ................................ USD  4.800
+        - Infraestructura cloud (backend, BD, monitoreo) .... USD  3.600
+        - Herramientas y licencias .......................... USD  1.200
+        - Gastos administrativos y contables ............... USD  1.800
+
+    ESCENARIO PESIMISTA - Año 1: USD 18.000 (crecimiento 8% anual)
+        - Personal (soporte part-time, socios sin retiro) ... USD  9.600
+        - Marketing y ventas (reducido) ..................... USD  2.400
+        - Infraestructura cloud ............................. USD  3.600
+        - Herramientas y licencias .......................... USD  1.200
+        - Gastos administrativos y contables ................ USD  1.200
+
+    La diferencia clave entre escenarios no está solo en los ingresos: en el pesimista
+    se asume una estructura de gastos defensiva (los fundadores no perciben retiro y
+    el marketing se recorta), lo que reduce el punto de equilibrio pero también la
+    velocidad de adquisición de clientes.
+
+    Costos variables: USD 6 por cliente/año. Representan las llamadas a las APIs del
+    proveedor cloud, el almacenamiento del historial de recomendaciones y el consumo
+    de servicios asociado a cada cuenta. Es un valor deliberadamente bajo y es la
+    consecuencia económica del diferencial técnico del producto: al no instalar
+    agentes ni procesar telemetría continua, el costo marginal por cliente adicional
+    es mínimo. Esto produce un margen de contribución sobre ingresos de ~97-98%, un
+    rasgo típico del modelo SaaS.
+
+2.4 TASA DE DESCUENTO Y HORIZONTE
+
+    - Tasa de descuento (WACC): 18% anual. Es la rentabilidad mínima exigida a un
+      proyecto tecnológico de riesgo temprano; combina el costo del capital propio y
+      del eventual financiamiento. Todo flujo futuro se descuenta a esta tasa.
+    - Horizonte: 5 años (Año 0 = inversión, Años 1 a 5 = operación).
+
+
+3. ESCENARIO OPTIMISTA
+------------------------------------------------------------------------------------------
+
+3.1 HIPÓTESIS
+
+    - El Freemium convierte eficazmente: la adopción inicial es fuerte y crece por
+      marketing de contenidos, comunidades DevOps y alianzas con proveedores cloud.
+    - Clientes activos promedio por año (Starter / Professional / Enterprise):
+
+        Año 1:   120 /   30 /   3        Año 4: 1.000 / 320 / 45
+        Año 2:   300 /   80 /  10        Año 5: 1.500 / 500 / 70
+        Año 3:   600 /  180 /  25
+
+    - El mix migra hacia planes superiores: el ingreso promedio por cliente sube de
+      ~USD 259/año (Año 1) a ~USD 313/año (Año 5), porque crece más rápido la base
+      Professional y Enterprise, que aporta 5 a 20 veces más ingresos por cuenta.
+
+3.2 FLUJO DE FONDOS (USD)
+
+    AÑO | CLIENTES (S/P/E) | INGRESOS | COSTOS FIJOS | COSTOS VAR. | EGRESOS | FLUJO NETO | ACUMULADO
+    ----+------------------+----------+--------------+-------------+---------+------------+-----------
+      0 |        -         |    -     |      -       |     -       |    -    |  -27.000   |  -27.000
+      1 |    120/30/3      |  39.600  |   35.400     |     918     | 36.318  |    3.282   |  -23.718
+      2 |    300/80/10     | 108.000  |   38.940     |   2.340     | 41.280  |   66.720   |   43.002
+      3 |   600/180/25     | 240.000  |   42.834     |   4.830     | 47.664  |  192.336   |  235.338
+      4 |  1.000/320/45    | 420.000  |   47.117     |   8.190     | 55.307  |  364.693   |  600.031
+      5 |  1.500/500/70    | 648.000  |   51.829     |  12.420     | 64.249  |  583.751   | 1.183.781
+
+3.3 LECTURA DE LOS NÚMEROS
+
+    - El negocio es operativamente rentable desde el Año 1: los ingresos (39.600)
+      superan a los egresos (36.318) ya en el primer año de operación.
+    - La inversión se recupera durante el Año 2 (ver payback en la sección 5).
+    - A partir del Año 2 los ingresos crecen mucho más rápido que los costos: entre
+      el Año 1 y el Año 5 los ingresos se multiplican por 16,4 mientras los egresos
+      totales solo se multiplican por 1,8. Esa tijera es la palanca de rentabilidad
+      del modelo SaaS: los costos fijos crecen de forma moderada y el margen de
+      contribución es casi del 98%.
+    - El flujo acumulado al cierre del Año 5 es de USD 1.183.781, es decir, 44 veces
+      la inversión inicial.
+
+
+4. ESCENARIO PESIMISTA
+------------------------------------------------------------------------------------------
+
+4.1 HIPÓTESIS
+
+    - La conversión del Freemium es débil (~3-4%), el mercado adopta con lentitud y
+      el plan Enterprise recién aparece en el Año 2.
+    - Estructura de gastos defensiva: socios fundadores sin retiro, soporte
+      part-time y marketing reducido (costos fijos de USD 18.000 en el Año 1).
+    - Clientes activos promedio por año (Starter / Professional / Enterprise):
+
+        Año 1:    40 /   8 /   0        Año 4:  150 / 35 / 3
+        Año 2:    70 /  15 /   1        Año 5:  190 / 45 / 4
+        Año 3:   110 /  25 /   2
+
+4.2 FLUJO DE FONDOS (USD)
+
+    AÑO | CLIENTES (S/P/E) | INGRESOS | COSTOS FIJOS | COSTOS VAR. | EGRESOS | FLUJO NETO | ACUMULADO
+    ----+------------------+----------+--------------+-------------+---------+------------+-----------
+      0 |        -         |    -     |      -       |     -       |    -    |  -27.000   |  -27.000
+      1 |     40/8/0       |  9.600   |   18.000     |     288     | 18.288  |   -8.688   |  -35.688
+      2 |     70/15/1      | 19.800   |   19.440     |     516     | 19.956  |     -156   |  -35.844
+      3 |    110/25/2      | 33.000   |   20.995     |     822     | 21.817  |   11.183   |  -24.661
+      4 |    150/35/3      | 46.200   |   22.675     |   1.128     | 23.803  |   22.397   |   -2.264
+      5 |    190/45/4      | 59.400   |   24.489     |   1.434     | 25.923  |   33.477   |   31.213
+
+4.3 LECTURA DE LOS NÚMEROS
+
+    - Los Años 1 y 2 son deficitarios: los ingresos de USD 9.600 del primer año
+      cubren apenas el 52% del punto de equilibrio (USD 18.557).
+    - El Año 2 queda a un paso del equilibrio operativo (19.800 de ingresos contra
+      un punto de equilibrio de 19.960: 99% de cobertura).
+    - Recién en el Año 3 el flujo neto se vuelve positivo (11.183) y a partir de
+      allí cada año aporta entre USD 11.000 y 33.000.
+    - La inversión se recupera recién en el Año 5 y el acumulado final es de apenas
+      USD 31.213. El proyecto "vuelve a cero" pero no genera la rentabilidad exigida.
+    - Aun así, la pérdida máxima del ciclo es acotada: el punto más profundo del
+      acumulado es de USD -35.844 (Año 2), es decir, USD 8.844 por debajo de la
+      inversión inicial, gracias a la estructura de costos flexible.
+
+
+5. INDICADORES DE EVALUACIÓN
+------------------------------------------------------------------------------------------
+
+5.1 TIR (TASA INTERNA DE RETORNO)
+
+    Definición: es la tasa de descuento que hace que el VAN sea igual a cero; en
+    otros términos, la rentabilidad anual implícita del proyecto. Se compara contra
+    la tasa mínima exigida (WACC = 18%): si la TIR la supera, el proyecto crea valor.
+
+    - Optimista: TIR = 182,6%  >>  18%  -> cada dólar invertido se paga varias
+      veces dentro del horizonte; la rentabilidad es excepcional.
+    - Pesimista: TIR = 16,7%   <   18%  -> el proyecto rinde por debajo del costo
+      de oportunidad del capital: no destruye mucho valor, pero tampoco lo crea.
+
+5.2 VAN (VALOR ACTUAL NETO)
+
+    Definición: es la suma de todos los flujos descontados al 18% anual, incluida la
+    inversión inicial. Mide cuánto valor (en dólares de hoy) agrega el proyecto por
+    encima de la rentabilidad exigida. VAN > 0 significa que el proyecto conviene.
+
+        VAN = -27.000 + FN1/(1,18) + FN2/(1,18)^2 + ... + FN5/(1,18)^5
+
+    - Optimista: VAN = USD 584.028. Descontando todos los flujos a la tasa exigida,
+      el proyecto genera más de medio millón de dólares de valor presente neto.
+    - Pesimista: VAN = USD -1.483. Prácticamente neutro: cubre casi exactamente el
+      18% exigido, quedando apenas por debajo.
+
+5.3 PAYBACK (PERÍODO DE RECUPERACIÓN)
+
+    Definición: cantidad de años que tarda el flujo acumulado en volver a cero, es
+    decir, en recuperar la inversión inicial. Se calcula interpolando dentro del año
+    en que se produce el cruce.
+
+    - Optimista: payback = 1,36 años. El acumulado llega a Año 1 con -23.718 y el
+      Año 2 genera 66.720; el cruce ocurre a 23.718/66.720 = 0,36 del segundo año.
+      La inversión se recupera en menos de año y medio de operación.
+    - Pesimista: payback = 4,07 años. El acumulado llega a Año 4 con -2.264 y el
+      Año 5 genera 33.477; la recuperación se completa apenas iniciado el Año 5.
+
+5.4 PUNTO DE EQUILIBRIO
+
+    Definición: nivel de ingresos anuales necesario para cubrir todos los costos,
+    calculado como:
+
+        PE = Costos fijos / (1 - Costos variables / Ingresos)
+           = Costos fijos / margen de contribución
+
+    Como el margen de contribución es ~97-98%, el punto de equilibrio queda apenas
+    por encima del valor de los costos fijos: cada dólar de ingreso adicional casi
+    íntegramente cubre estructura.
+
+    ESCENARIO OPTIMISTA:
+    Año   |  Punto de equilibrio  |  Ingresos reales  |  Situación
+    ------+-----------------------+-------------------+---------------------------
+      1   |       36.240          |      39.600       |  Supera (109% del PE)
+      2   |       39.802          |     108.000       |  Supera holgadamente
+      3   |       43.714          |     240.000       |  Supera holgadamente
+      4   |       48.054          |     420.000       |  Supera holgadamente
+      5   |       52.842          |     648.000       |  Supera holgadamente
+
+    ESCENARIO PESIMISTA:
+    Año   |  Punto de equilibrio  |  Ingresos reales  |  Situación
+    ------+-----------------------+-------------------+---------------------------
+      1   |       18.557          |       9.600       |  No alcanza (52% del PE)
+      2   |       19.960          |      19.800       |  No alcanza (99% del PE)
+      3   |       21.532          |      33.000       |  Supera (equilibrio)
+      4   |       23.242          |      46.200       |  Supera
+      5   |       25.095          |      59.400       |  Supera
+
+    La lectura es directa: en el escenario optimista el negocio nace por encima del
+    punto de equilibrio; en el pesimista opera dos años por debajo y lo alcanza en
+    el Año 3, a partir del cual la brecha se abre a favor.
+
+
+6. CUADRO COMPARATIVO DE RESULTADOS
+------------------------------------------------------------------------------------------
+
+    INDICADOR                             |  OPTIMISTA     |  PESIMISTA
+    --------------------------------------+----------------+----------------
+    Inversión inicial (USD)               |  27.000        |  27.000
+    TIR                                   |  182,6%        |  16,7%
+    VAN al 18% (USD)                      |  584.028       |  -1.483
+    Payback (años)                        |  1,36          |  4,07
+    Primer año con flujo neto positivo    |  Año 1         |  Año 3
+    Punto de equilibrio Año 1 (USD)       |  36.240        |  18.557
+    Ingresos Año 1 (USD)                  |  39.600        |  9.600
+    Ingresos Año 5 (USD)                  |  648.000       |  59.400
+    Flujo acumulado al Año 5 (USD)        |  1.183.781     |  31.213
+
+
+7. LECTURA CONJUNTA Y CONCLUSIONES
+------------------------------------------------------------------------------------------
+
+    a) El proyecto presenta una asimetría de resultados fuertemente favorable: en el
+       escenario optimista el valor generado es enorme (VAN de USD 584.028, TIR de
+       182,6%), mientras que en el pesimista el daño máximo es acotado y el negocio
+       igualmente retorna la inversión (acumulado final de USD 31.213). El downside
+       está limitado por la estructura de costos flexible del modelo SaaS sin
+       agentes: sin hardware, sin instalaciones en el cliente y con el consumo de
+       APIs como principal costo variable.
+
+    b) La viabilidad depende de una variable crítica: la conversión del plan Freemium
+       a planes pagos y la retención de esos clientes. El salto entre escenarios no
+       proviene de los precios (idénticos en ambos) sino de cuántas organizaciones
+       pasan de la capa gratuita al Starter, Professional o Enterprise.
+
+    c) El escenario pesimista es "casi viable": su TIR (16,7%) queda a solo 1,3
+       puntos porcentuales del WACC y su VAN es de apenas USD -1.483. Pequeñas
+       mejoras (por ejemplo, un 10% más de clientes o una reducción marginal de
+       costos fijos) alcanzan para volverlo positivo. Esto sugiere que el proyecto
+       no tiene un riesgo de pérdida grave, sino un riesgo de rentabilidad
+       insuficiente si la adopción es lenta.
+
+    d) Recomendación de gestión: lanzar con inversión por etapas (tranches atados a
+       hitos de conversión y retención), monitorear el embudo Freemium -> pago como
+       indicador principal y activar la estructura de gastos completa (segundo
+       desarrollador, marketing agresivo) solo cuando los indicadores se aproximen
+       a la trayectoria optimista.
+
+    e) El punto de equilibrio bajo (USD 18.500-36.000 de ingresos anuales según
+       estructura de costos) es una fortaleza estructural: equivale a entre 155 y
+       300 clientes Starter (o su equivalente en mix de planes), un objetivo
+       alcanzable incluso con conversión moderada del Freemium.
+
+
+8. LIMITACIONES Y SENSIBILIDAD DEL MODELO
+------------------------------------------------------------------------------------------
+
+    - El precio del plan Enterprise (USD 200/mes) es una estimación, dado que el
+      plan de negocios lo define como "a definir". Es el supuesto con mayor
+      incidencia en el resultado: en el escenario optimista el Enterprise aporta
+      entre el 18% y el 26% de los ingresos anuales.
+    - Los "clientes activos promedio" incorporan implícitamente la rotación
+      (churn): representan cuentas pagas simultáneas durante el año, no ventas
+      acumuladas.
+    - El modelo es pre-impuestos y no descuenta impuestos a las ganancias, IVA ni
+      retenciones; tampoco incluye financiamiento (la inversión se asume con
+      capital propio).
+    - No se modela inflación diferencial ni riesgo cambiario: todo el modelo está
+      en USD, coherente con un SaaS que cobra en dólares pero opera con costos
+      mayormente en dólares (infraestructura cloud).
+    - Sensibilidad: los indicadores responden con mayor elasticidad a (1) la
+      conversión Freemium -> pago, (2) la retención anual y (3) el precio
+      Enterprise; y con menor elasticidad al costo variable por cliente (por su
+      peso marginal en la estructura).
+
+    Todos estos supuestos son editables en la hoja "Supuestos" del Excel adjunto,
+      lo que permite recalcular TIR, VAN, payback y punto de equilibrio ante
+      cualquier variante que se desee evaluar.
+
+==========================================================================================
