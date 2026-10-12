@@ -1,0 +1,120 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU09 - Instalar agente de monitoreo - Secuencia" id="CU09-secuencia">
+    <mxGraphModel dx="1414" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" value="Usuario" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="120" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" value="Sistema" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="160" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="lifHuawei" value="Huawei Cloud" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="40" width="180" height="680" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="395" y="125" width="10" height="570" as="geometry" />
+        </mxCell>
+        <mxCell id="actHuawei" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="705" y="170" width="10" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1. Selecciona instancia y opci&#243;n&#10;Instalar agente de monitoreo" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="120" y="130" />
+            <mxPoint as="targetPoint" x="400" y="130" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" value="2. Consulta m&#233;tricas del agente (AGT.ECS)" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="175" />
+            <mxPoint as="targetPoint" x="710" y="175" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" value="Agente no instalado" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="710" y="220" />
+            <mxPoint as="targetPoint" x="400" y="220" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" value="3. Solicita confirmaci&#243;n (requiere reinicio)" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="265" />
+            <mxPoint as="targetPoint" x="120" y="265" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" value="4. Confirma la instalaci&#243;n" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="120" y="310" />
+            <mxPoint as="targetPoint" x="400" y="310" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" value="5. Inyecta script de instalaci&#243;n&#10;en los datos de usuario" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="355" />
+            <mxPoint as="targetPoint" x="710" y="355" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" value="Datos de usuario actualizados" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="710" y="400" />
+            <mxPoint as="targetPoint" x="400" y="400" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" value="6. Reinicia la instancia" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="445" />
+            <mxPoint as="targetPoint" x="710" y="445" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" value="Reinicio en curso" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="710" y="490" />
+            <mxPoint as="targetPoint" x="400" y="490" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" value="7. Espera el arranque y&#10;la ejecuci&#243;n del script" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="535" />
+            <mxPoint as="targetPoint" x="400" y="563" />
+            <Array as="points">
+              <mxPoint x="455" y="535" />
+              <mxPoint x="455" y="563" />
+            </Array>
+            <mxPoint as="offset" x="95" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" value="8. Verifica m&#233;tricas del agente (AGT.ECS)" style="html=1;endArrow=block;endFill=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="590" />
+            <mxPoint as="targetPoint" x="710" y="590" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m12" value="M&#233;tricas del agente presentes" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="710" y="635" />
+            <mxPoint as="targetPoint" x="400" y="635" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m13" value="9. Informa instalaci&#243;n completada&#10;(memoria y disco habilitados)" style="html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="sourcePoint" x="400" y="680" />
+            <mxPoint as="targetPoint" x="120" y="680" />
+            <mxPoint as="offset" x="0" y="-14" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
