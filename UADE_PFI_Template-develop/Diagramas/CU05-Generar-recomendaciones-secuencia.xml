@@ -1,0 +1,130 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU05 - Generar recomendaciones de optimización - Secuencia" id="CU05-secuencia">
+    <mxGraphModel dx="471" dy="248" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Usuario" vertex="1">
+          <mxGeometry height="700" width="120" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Sistema" vertex="1">
+          <mxGeometry height="700" width="160" x="320" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lifReglas" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Base de reglas" vertex="1">
+          <mxGeometry height="700" width="180" x="620" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="563" width="10" x="395" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="actReglas" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="55" width="10" x="705" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="1. Selecciona generar&#xa;recomendaciones">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="120" y="130" as="sourcePoint" />
+            <mxPoint x="400" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="2. Carga el Terraform y&#xa;los resultados (CU04)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="175" />
+              <mxPoint x="455" y="203" />
+            </Array>
+            <mxPoint x="400" y="175" as="sourcePoint" />
+            <mxPoint x="400" y="203" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="3. Identifica los&#xa;recursos anómalos">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="230" />
+              <mxPoint x="455" y="258" />
+            </Array>
+            <mxPoint x="400" y="230" as="sourcePoint" />
+            <mxPoint x="400" y="258" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="4. Analiza cada recurso&#xa;(métricas, criticidad)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="285" />
+              <mxPoint x="455" y="313" />
+            </Array>
+            <mxPoint x="400" y="285" as="sourcePoint" />
+            <mxPoint x="400" y="313" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="5. Consulta las reglas&#xa;de recomendación">
+          <mxGeometry relative="1" x="-0.0323" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="400" y="340" as="sourcePoint" />
+            <mxPoint x="710" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="html=1;dashed=1;endArrow=open;endFill=0;" value="Reglas aplicables">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="710" y="385" as="sourcePoint" />
+            <mxPoint x="400" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="6. Genera las&#xa;recomendaciones">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="440" />
+              <mxPoint x="455" y="468" />
+            </Array>
+            <mxPoint x="400" y="440" as="sourcePoint" />
+            <mxPoint x="400" y="468" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="7. Aplica los cambios&#xa;(nueva versión Terraform)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="495" />
+              <mxPoint x="455" y="523" />
+            </Array>
+            <mxPoint x="400" y="495" as="sourcePoint" />
+            <mxPoint x="400" y="523" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="8. Valida la consistencia&#xa;y dependencias">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="550" />
+              <mxPoint x="455" y="578" />
+            </Array>
+            <mxPoint x="400" y="550" as="sourcePoint" />
+            <mxPoint x="400" y="578" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m10" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="9. Genera el informe">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="605" />
+              <mxPoint x="455" y="633" />
+            </Array>
+            <mxPoint x="400" y="605" as="sourcePoint" />
+            <mxPoint x="400" y="633" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m11" edge="1" parent="1" style="html=1;dashed=1;endArrow=open;endFill=0;" value="10. Presenta el informe y&#xa;el nuevo Terraform">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="400" y="678" as="sourcePoint" />
+            <mxPoint x="120" y="678" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

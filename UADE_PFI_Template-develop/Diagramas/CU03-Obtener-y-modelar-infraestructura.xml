@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU03 - Obtener y modelar la infraestructura cloud" id="CU03-caso-de-uso">
+    <mxGraphModel dx="1414" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="actor" value="Usuario" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="260" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="sistema" value="Sistema" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=none;verticalAlign=top;align=left;fontStyle=1;fontSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="120" width="480" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="cu03" value="CU03&#xa;Obtener y modelar la&#xa;infraestructura cloud" style="ellipse;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="260" width="280" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc" style="html=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="actor" target="cu03">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

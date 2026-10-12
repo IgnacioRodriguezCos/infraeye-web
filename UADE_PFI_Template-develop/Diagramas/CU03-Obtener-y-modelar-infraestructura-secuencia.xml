@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="CU03 - Obtener y modelar la infraestructura cloud - Secuencia" id="CU03-secuencia">
+    <mxGraphModel dx="1178" dy="619" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lifUsuario" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Usuario" vertex="1">
+          <mxGeometry height="580" width="120" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lifSistema" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Sistema" vertex="1">
+          <mxGeometry height="580" width="160" x="320" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="lifHuawei" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fontStyle=1;" value="Huawei Cloud" vertex="1">
+          <mxGeometry height="580" width="180" x="620" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="actSistema" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="443" width="10" x="395" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="actHuawei" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="55" width="10" x="705" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="1. Selecciona recuperar&#xa;infraestructura y modelar">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="120" y="130" as="sourcePoint" />
+            <mxPoint x="400" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m2" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="2. Verifica la conexión&#xa;con Huawei Cloud">
+          <mxGeometry relative="1" x="-0.2029" y="95" as="geometry">
+            <mxPoint y="-5" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="175" />
+              <mxPoint x="455" y="203" />
+            </Array>
+            <mxPoint x="400" y="175" as="sourcePoint" />
+            <mxPoint x="400" y="203" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m3" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="3. Consulta las APIs de&#xa;Huawei Cloud">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="400" y="230" as="sourcePoint" />
+            <mxPoint x="710" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m4" edge="1" parent="1" style="html=1;dashed=1;endArrow=open;endFill=0;" value="4. Información de los&#xa;recursos disponibles">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="710" y="275" as="sourcePoint" />
+            <mxPoint x="400" y="275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m5" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="5. Valida la información&#xa;(completa y consistente)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="320" />
+              <mxPoint x="455" y="348" />
+            </Array>
+            <mxPoint x="400" y="320" as="sourcePoint" />
+            <mxPoint x="400" y="348" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="6. Construye el modelo&#xa;interno (relaciones)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="375" />
+              <mxPoint x="455" y="403" />
+            </Array>
+            <mxPoint x="400" y="375" as="sourcePoint" />
+            <mxPoint x="400" y="403" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m7" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="7. Traduce el modelo&#xa;a Terraform">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="430" />
+              <mxPoint x="455" y="458" />
+            </Array>
+            <mxPoint x="400" y="430" as="sourcePoint" />
+            <mxPoint x="400" y="458" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m8" edge="1" parent="1" style="html=1;endArrow=block;endFill=1;" value="8. Almacena la&#xa;representación">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="95" as="offset" />
+            <Array as="points">
+              <mxPoint x="455" y="485" />
+              <mxPoint x="455" y="513" />
+            </Array>
+            <mxPoint x="400" y="485" as="sourcePoint" />
+            <mxPoint x="400" y="513" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m9" edge="1" parent="1" style="html=1;dashed=1;endArrow=open;endFill=0;" value="9. Infraestructura lista&#xa;para el análisis">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <mxPoint x="400" y="558" as="sourcePoint" />
+            <mxPoint x="120" y="558" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
