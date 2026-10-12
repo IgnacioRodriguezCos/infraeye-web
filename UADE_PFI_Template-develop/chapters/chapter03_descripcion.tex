@@ -778,6 +778,69 @@ En el paso 5:
 
 Al finalizar el caso de uso el usuario obtiene un informe exportable con el detalle del análisis realizado, las anomalías detectadas, las recomendaciones propuestas, las decisiones tomadas sobre ellas y el resumen de los cambios sugeridos para la infraestructura.
 
+\subsubsection{CU09 -- Instalar agente de monitoreo en una instancia}
+
+\paragraph*{Objetivo}
+
+Habilitar la recolección de las métricas de memoria y de utilización de disco en instancias Linux que no exponen dichas métricas por ausencia del agente de monitoreo del proveedor.
+
+\paragraph*{Precondiciones}
+
+\begin{itemize}
+\item El usuario ha iniciado sesión.
+\item La cuenta de Huawei Cloud se encuentra vinculada (CU02).
+\item La instancia objetivo se encuentra encendida.
+\end{itemize}
+
+\paragraph*{Flujo principal}
+
+\begin{enumerate}
+\item El usuario selecciona la instancia que presenta métricas faltantes y la opción \textbf{Instalar agente de monitoreo}.
+\item El sistema consulta las métricas del espacio de nombres del agente (AGT.ECS) para verificar si el agente ya se encuentra instalado.
+\item El sistema solicita la confirmación del usuario, informando que la instalación requiere el reinicio de la instancia.
+\item El usuario confirma la operación.
+\item El sistema inyecta el script de instalación del agente en los datos de usuario de la instancia.
+\item El sistema reinicia la instancia para que el script se ejecute durante el arranque.
+\item El sistema verifica la instalación comprobando la presencia de las métricas del agente.
+\item El sistema informa al usuario que la instancia quedó habilitada para la recolección de memoria y disco.
+\end{enumerate}
+
+\paragraph*{Flujos alternativos}
+
+\subparagraph{A1 -- El agente ya se encuentra instalado}
+
+En el paso 2:
+
+\begin{itemize}
+\item El sistema detecta métricas del agente en la instancia.
+\item Informa al usuario que el agente ya se encuentra instalado y no se reinstala.
+\item Finaliza el caso de uso.
+\end{itemize}
+
+\subparagraph{A2 -- La instancia se encuentra apagada}
+
+En el paso 1:
+
+\begin{itemize}
+\item El sistema detecta que la instancia está apagada.
+\item Informa al usuario que la instalación requiere la instancia encendida.
+\item Si el usuario enciende la instancia, el caso de uso continúa en el paso 2; de lo contrario, finaliza.
+\end{itemize}
+
+\subparagraph{A3 -- Error durante la instalación}
+
+En los pasos 5 a 7:
+
+\begin{itemize}
+\item El sistema detecta un error al inyectar el script, reiniciar la instancia o verificar las métricas.
+\item Informa el problema al usuario.
+\item Finaliza el caso de uso sin dejar la instalación en estado inconsistente.
+\end{itemize}
+
+\paragraph*{Resultado}
+
+Al finalizar el caso de uso la instancia ejecuta el agente de monitoreo del proveedor y expone las métricas de memoria y de utilización de disco, que quedan disponibles para los análisis posteriores.
+
 \subsection{Requerimientos Funcionales}
 
 \subsubsection{RF01 -- Autenticación de usuarios}
@@ -993,6 +1056,20 @@ Media.
 \noindent \textbf{Casos de uso relacionados:}
 
 \noindent CU08 -- Exportar informe.
+
+\subsubsection{RF15 -- Instalación del agente de monitoreo}
+
+\noindent \textbf{Descripción:}
+
+El sistema deberá detectar las instancias que no exponen métricas de memoria o de utilización de disco por ausencia del agente de monitoreo del proveedor, informar la limitación en los resultados del análisis y, con la autorización explícita del usuario, instalar el agente de forma automatizada, verificando su presencia antes de intentar la instalación y su funcionamiento después de completada.
+
+\noindent \textbf{Prioridad:}
+
+Media.
+
+\noindent \textbf{Casos de uso relacionados:}
+
+\noindent CU09 -- Instalar agente de monitoreo en una instancia.
 
 \subsection{Requerimientos no funcionales}
 
@@ -1236,7 +1313,7 @@ Finalmente, el producto ha sido concebido bajo una arquitectura modular que favo
 
 La estrategia de precios propuesta toma como referencia el modelo de comercialización utilizado por herramientas líderes del mercado como Datadog, Dynatrace y New Relic, las cuales ofrecen sus servicios bajo un esquema de \textbf{Software como Servicio (SaaS)} mediante suscripciones periódicas. En estos casos, el costo del servicio se determina principalmente en función de la cantidad de recursos monitoreados, el volumen de datos procesados o las funcionalidades contratadas. Sin embargo, estas plataformas requieren, en la mayoría de los casos, la instalación de agentes sobre los sistemas o la infraestructura del cliente para recopilar métricas en tiempo real, lo que incrementa la complejidad de implementación y las orienta principalmente a organizaciones con necesidades avanzadas de observabilidad.
 
-La solución propuesta adopta un modelo de suscripción similar, pero con una menor barrera de entrada. A diferencia de las herramientas mencionadas, la plataforma obtiene la información necesaria mediante las APIs del proveedor cloud, sin requerir la instalación de agentes adicionales sobre la infraestructura. Esto simplifica significativamente el proceso de adopción, reduce el esfuerzo inicial de implementación y permite que pequeñas y medianas empresas puedan acceder a funcionalidades de análisis y optimización sin incorporar componentes adicionales a sus entornos productivos.
+La solución propuesta adopta un modelo de suscripción similar, pero con una menor barrera de entrada. A diferencia de las herramientas mencionadas, la plataforma obtiene la información necesaria mediante las APIs del proveedor cloud, sin requerir la instalación de agentes de terceros sobre la infraestructura. Esto simplifica significativamente el proceso de adopción, reduce el esfuerzo inicial de implementación y permite que pequeñas y medianas empresas puedan acceder a funcionalidades de análisis y optimización sin incorporar componentes de terceros a sus entornos productivos.
 
 Como estrategia de comercialización, la plataforma adoptará un modelo \textbf{Freemium}, permitiendo que los potenciales clientes evalúen el funcionamiento de la solución antes de contratar un plan de pago. El \textbf{Plan Freemium} ofrecerá la posibilidad de conectar una cuenta cloud y analizar hasta tres recursos por 60 días, generando recomendaciones básicas y permitiendo al usuario familiarizarse con las principales funcionalidades de la plataforma. Esta modalidad busca reducir la barrera de entrada y facilitar la adopción inicial del producto sin necesidad de realizar una inversión económica.
 
@@ -1244,7 +1321,7 @@ A partir de esta capa gratuita, la plataforma ofrecerá tres niveles de suscripc
 
 Este esquema de comercialización permite que el costo del servicio evolucione de forma proporcional al tamaño de la infraestructura administrada y al valor generado para cada cliente. A medida que aumenta la cantidad de recursos gestionados, también crece el potencial de ahorro derivado de la optimización de la infraestructura, justificando la incorporación de funcionalidades avanzadas y planes de mayor capacidad. De esta manera, la estrategia de precios acompaña el crecimiento de las organizaciones, permitiendo que la plataforma evolucione junto con las necesidades de sus clientes y mantenga un modelo de ingresos recurrentes alineado con las prácticas comerciales predominantes en la industria del software como servicio.
 
-La estrategia de precios propuesta no solo busca establecer un modelo de ingresos recurrentes, sino también reforzar el posicionamiento de la plataforma como una solución de optimización de infraestructura cloud de rápida adopción y bajo impacto operativo. A diferencia de otras herramientas del mercado que requieren la instalación de agentes para realizar un monitoreo continuo, la solución desarrollada obtiene la información necesaria directamente desde los servicios del proveedor cloud, permitiendo analizar la infraestructura y generar recomendaciones de optimización sin introducir componentes adicionales en los entornos del cliente. Esta característica constituye un diferencial competitivo, especialmente para organizaciones que administran infraestructuras privadas o con políticas estrictas de seguridad, donde la incorporación de agentes de terceros puede representar una limitación técnica u operativa.
+La estrategia de precios propuesta no solo busca establecer un modelo de ingresos recurrentes, sino también reforzar el posicionamiento de la plataforma como una solución de optimización de infraestructura cloud de rápida adopción y bajo impacto operativo. A diferencia de otras herramientas del mercado que requieren la instalación de agentes propietarios para realizar un monitoreo continuo, la solución desarrollada obtiene la información necesaria directamente desde los servicios del proveedor cloud, apoyándose —para las métricas de memoria y disco en instancias Linux— en el agente nativo de la plataforma, que la propia solución puede instalar de forma automatizada. De este modo, el análisis no introduce componentes de terceros en los entornos del cliente. Esta característica constituye un diferencial competitivo, especialmente para organizaciones que administran infraestructuras privadas o con políticas estrictas de seguridad, donde la incorporación de agentes de terceros puede representar una limitación técnica u operativa.
 
 \subsubsection{Plaza}
 
@@ -1264,13 +1341,13 @@ Adicionalmente, la comercialización podría complementarse mediante alianzas es
 
 La estrategia de promoción de la solución se orienta al mercado \textbf{Business to Business (B2B)}, ya que el producto está dirigido a organizaciones que administran infraestructuras cloud, equipos DevOps, administradores de infraestructura y consultoras especializadas en servicios tecnológicos. A diferencia de los productos de consumo masivo, la decisión de adoptar una herramienta de este tipo se fundamenta principalmente en criterios técnicos y económicos, por lo que las acciones de promoción deben enfocarse en demostrar el valor que la plataforma aporta en términos de optimización de recursos, reducción de costos y simplificación de las tareas de administración.
 
-Uno de los principales ejes de la estrategia de promoción consiste en destacar los elementos diferenciadores de la solución frente a las alternativas disponibles en el mercado. En particular, la plataforma combina técnicas de aprendizaje automático para identificar recursos potencialmente mal dimensionados con la generación de recomendaciones sobre una representación de la infraestructura mediante Terraform, sin requerir la instalación de agentes propios sobre los recursos del cliente. Este enfoque permite reducir la complejidad de adopción y ofrecer una propuesta de valor claramente diferenciada respecto de herramientas de observabilidad tradicionales, cuyo objetivo principal es el monitoreo continuo de la infraestructura.
+Uno de los principales ejes de la estrategia de promoción consiste en destacar los elementos diferenciadores de la solución frente a las alternativas disponibles en el mercado. En particular, la plataforma combina técnicas de aprendizaje automático para identificar recursos potencialmente mal dimensionados con la generación de recomendaciones sobre una representación de la infraestructura mediante Terraform, sin requerir la instalación de agentes de terceros sobre los recursos del cliente. Este enfoque permite reducir la complejidad de adopción y ofrecer una propuesta de valor claramente diferenciada respecto de herramientas de observabilidad tradicionales, cuyo objetivo principal es el monitoreo continuo de la infraestructura.
 
 Como mecanismo para incentivar la adopción inicial, el modelo Freemium constituye una herramienta de promoción en sí misma, permitiendo que potenciales clientes utilicen la plataforma con una cantidad limitada de recursos antes de contratar un plan de pago. Esta estrategia disminuye la incertidumbre asociada a la incorporación de una nueva solución tecnológica, ya que las organizaciones pueden evaluar la calidad de las recomendaciones generadas y comprobar los beneficios obtenidos sobre su propia infraestructura antes de realizar una inversión económica.
 
 La difusión del producto debería apoyarse principalmente en canales especializados donde se concentra el público objetivo. Entre ellos se destacan redes profesionales como LinkedIn, comunidades DevOps y Cloud Computing, eventos tecnológicos, conferencias sobre infraestructura cloud y automatización, así como la publicación de artículos técnicos y casos de estudio que demuestren el funcionamiento de la plataforma. Estas acciones permiten aumentar la visibilidad del producto entre profesionales y responsables de la toma de decisiones dentro de las organizaciones, fortaleciendo su posicionamiento como una herramienta especializada en la optimización de infraestructuras cloud.
 
-Finalmente, una estrategia de promoción efectiva debe centrarse en comunicar los beneficios económicos que la solución puede generar para las organizaciones. La posibilidad de identificar recursos sobredimensionados, optimizar su utilización y reducir costos operativos constituye un argumento de alto valor para empresas que buscan maximizar el retorno de sus inversiones en infraestructura cloud. Complementariamente, la generación automática de una versión optimizada de la infraestructura mediante Terraform y la eliminación de la necesidad de instalar agentes propios representan ventajas competitivas que contribuyen a diferenciar la plataforma dentro de un mercado caracterizado por la creciente demanda de soluciones inteligentes para la gestión de infraestructura.
+Finalmente, una estrategia de promoción efectiva debe centrarse en comunicar los beneficios económicos que la solución puede generar para las organizaciones. La posibilidad de identificar recursos sobredimensionados, optimizar su utilización y reducir costos operativos constituye un argumento de alto valor para empresas que buscan maximizar el retorno de sus inversiones en infraestructura cloud. Complementariamente, la generación automática de una versión optimizada de la infraestructura mediante Terraform y la eliminación de la necesidad de instalar agentes de terceros representan ventajas competitivas que contribuyen a diferenciar la plataforma dentro de un mercado caracterizado por la creciente demanda de soluciones inteligentes para la gestión de infraestructura.
 
 \subsection{Análisis de las Cinco Fuerzas de Porter}
 
@@ -1294,7 +1371,7 @@ Por este motivo, la amenaza de nuevos competidores puede considerarse media, sie
 
 Los potenciales clientes cuentan con un elevado poder de negociación (alto) debido a la amplia oferta de herramientas disponibles para el monitoreo y la administración de infraestructuras cloud. La existencia de soluciones comerciales consolidadas, así como de herramientas nativas ofrecidas por los propios proveedores cloud, facilita que las organizaciones comparen funcionalidades, costos y modelos de comercialización antes de adoptar una nueva plataforma.
 
-En este escenario, la propuesta de valor de la solución debe centrarse en aquellos aspectos que la diferencian de las alternativas existentes. La posibilidad de detectar recursos potencialmente mal dimensionados mediante técnicas de aprendizaje automático, generar recomendaciones sobre una representación de la infraestructura en Terraform y operar sin requerir la instalación de agentes propios constituyen características que pueden disminuir la sensibilidad del cliente frente al precio y favorecer la adopción del producto.
+En este escenario, la propuesta de valor de la solución debe centrarse en aquellos aspectos que la diferencian de las alternativas existentes. La posibilidad de detectar recursos potencialmente mal dimensionados mediante técnicas de aprendizaje automático, generar recomendaciones sobre una representación de la infraestructura en Terraform y operar sin requerir la instalación de agentes de terceros constituyen características que pueden disminuir la sensibilidad del cliente frente al precio y favorecer la adopción del producto.
 
 Adicionalmente, la incorporación de un modelo Freemium reduce la barrera de entrada para nuevos usuarios, permitiéndoles evaluar el funcionamiento de la plataforma antes de comprometerse con una suscripción de pago.
 
@@ -1327,11 +1404,11 @@ Del análisis realizado mediante las herramientas de marketing estratégico se d
 
 En este contexto, la estrategia competitiva de la solución se basa en la \textbf{diferenciación}. En lugar de competir directamente con herramientas de observabilidad de propósito general, la plataforma se posiciona como una solución especializada en la detección de recursos potencialmente mal dimensionados y en la generación de recomendaciones de optimización sobre Infraestructura como Código (IaC). Esta propuesta de valor combina técnicas de aprendizaje automático para identificar comportamientos anómalos con la generación automática de configuraciones en Terraform, facilitando la incorporación de las recomendaciones dentro de los procesos de administración y automatización de infraestructura.
 
-Desde el punto de vista tecnológico, uno de los principales factores diferenciadores consiste en la obtención de información directamente desde las APIs del proveedor cloud, evitando la necesidad de instalar agentes propios sobre la infraestructura del cliente. Esta característica reduce la complejidad de implementación, disminuye el impacto operativo y favorece la adopción de la solución en organizaciones que administran entornos con políticas estrictas de seguridad o que buscan minimizar la incorporación de componentes adicionales en sus arquitecturas.
+Desde el punto de vista tecnológico, uno de los principales factores diferenciadores consiste en la obtención de información directamente desde las APIs del proveedor cloud, evitando la necesidad de instalar agentes de terceros sobre la infraestructura del cliente. Esta característica reduce la complejidad de implementación, disminuye el impacto operativo y favorece la adopción de la solución en organizaciones que administran entornos con políticas estrictas de seguridad o que buscan minimizar la incorporación de componentes adicionales en sus arquitecturas.
 
 La estrategia comercial acompaña este posicionamiento mediante un modelo de distribución SaaS y un esquema Freemium, permitiendo que potenciales clientes evalúen el funcionamiento de la plataforma sin realizar una inversión inicial. Este enfoque reduce las barreras de adopción y facilita la incorporación progresiva de organizaciones de distintos tamaños, mientras que los planes de suscripción escalonados permiten que el crecimiento de los ingresos acompañe la expansión de la infraestructura administrada por cada cliente.
 
-La estrategia propuesta no busca competir por amplitud de funcionalidades frente a las grandes plataformas de observabilidad, sino por la especialización en un problema concreto: la optimización inteligente del dimensionamiento de recursos cloud. La combinación de aprendizaje automático, generación de recomendaciones sobre Infraestructura como Código, ausencia de agentes propios y un modelo comercial de baja barrera de entrada constituye una propuesta de valor diferenciada que permite posicionar a la solución como una alternativa innovadora dentro del mercado de herramientas para la administración y optimización de infraestructuras cloud.
+La estrategia propuesta no busca competir por amplitud de funcionalidades frente a las grandes plataformas de observabilidad, sino por la especialización en un problema concreto: la optimización inteligente del dimensionamiento de recursos cloud. La combinación de aprendizaje automático, generación de recomendaciones sobre Infraestructura como Código, ausencia de agentes de terceros y un modelo comercial de baja barrera de entrada constituye una propuesta de valor diferenciada que permite posicionar a la solución como una alternativa innovadora dentro del mercado de herramientas para la administración y optimización de infraestructuras cloud.
 
 \section{Metodología de desarrollo}
 
@@ -1537,6 +1614,8 @@ ineficiencia sostenida de una situación circunstancial, mientras que
 ventanas excesivamente extensas diluyen los cambios recientes de
 comportamiento; por este motivo la ventana permanece configurable por
 solicitud.
+
+La disponibilidad de las métricas depende del tipo de instancia y de la presencia del agente de monitoreo de Huawei Cloud. Las métricas de CPU y de tráfico de red se exponen de forma nativa, mientras que las de utilización de memoria y de disco en instancias Linux solo las reporta el agente del proveedor (espacio de nombres AGT.ECS). El sistema consulta las métricas en los espacios de nombres del sistema y del agente; cuando el agente no se encuentra instalado, identifica las métricas faltantes por instancia, lo informa en los resultados del análisis y ofrece la instalación automatizada del agente con autorización del usuario (véase CU09). Las instancias que se encuentran apagadas se identifican por su estado y se excluyen del análisis, informando el motivo.
 
 En cuanto a la persistencia de datos, el sistema distingue dos planos.
 Las métricas crudas no se almacenan: en cada ejecución del análisis, el
@@ -1755,7 +1834,7 @@ escalabilidad y reutilización de los distintos componentes del sistema.
 
 \subsection{Seguridad de credenciales y despliegue}
 
-Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado: las credenciales se emplean exclusivamente para las consultas de lectura de recursos y métricas durante el análisis, sin realizar operaciones de modificación sobre la infraestructura del usuario. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
+Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado y autorizado: las operaciones de lectura —consulta de recursos y métricas— se ejecutan de manera automatizada en cada análisis, mientras que las operaciones de escritura sobre la infraestructura (instalación del agente de monitoreo, que implica el reinicio de la instancia, y encendido o apagado de instancias) requieren la autorización explícita del usuario para cada acción y no se ejecutan de manera automática. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
 
 En cuanto a la comunicación, el tráfico entre el navegador del usuario y la aplicación se protege mediante HTTPS/TLS, al igual que la comunicación entre la aplicación y los servicios de Huawei Cloud, cuyos endpoints oficiales operan sobre TLS. La extensión Flask-CORS configura las políticas de intercambio de recursos de origen cruzado para restringir los orígenes habilitados a consumir la API.
 
@@ -1810,7 +1889,7 @@ Como limitaciones de la evaluación deben señalarse: las etiquetas provienen de
 
 \subsection{Verificación funcional en entorno controlado}
 
-La verificación funcional se realizó sobre infraestructura desplegada en Huawei Cloud, en un entorno controlado. El circuito verificado comprende las etapas completas de la solución: la obtención de las métricas desde el servicio de monitoreo del proveedor con una ventana de análisis de, por defecto, los últimos treinta días y el período de agregación seleccionado automáticamente según la retención del servicio; la validación de la consistencia de la información antes de ejecutar el análisis; la construcción de las quince características estadísticas que representan a cada instancia; la detección de anomalías mediante Isolation Forest; la aplicación de las reglas de umbrales operativos sobre la totalidad de las instancias por parte del motor de recomendaciones; y la generación del código Terraform correspondiente, acompañado de la descripción de la anomalía detectada y de la acción sugerida.
+La verificación funcional se realizó sobre infraestructura desplegada en Huawei Cloud, en un entorno controlado. El circuito verificado comprende las etapas completas de la solución: la obtención de las métricas desde el servicio de monitoreo del proveedor con una ventana de análisis de, por defecto, los últimos treinta días y el período de agregación seleccionado automáticamente según la retención del servicio; la identificación de instancias apagadas y de métricas faltantes por ausencia del agente de monitoreo; la validación de la consistencia de la información antes de ejecutar el análisis; la construcción de las quince características estadísticas que representan a cada instancia; la detección de anomalías mediante Isolation Forest; la aplicación de las reglas de umbrales operativos sobre la totalidad de las instancias por parte del motor de recomendaciones; y la generación del código Terraform correspondiente, acompañado de la descripción de la anomalía detectada y de la acción sugerida.
 
 La visualización de los resultados en el dashboard web permitió comprobar que el usuario puede revisar el estado de la infraestructura analizada, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto antes de aprobar cualquier modificación, manteniendo la validación humana como parte del proceso de optimización. La persistencia de las recomendaciones en la base de datos, junto con su código Terraform y su descripción asociada, verifica la trazabilidad entre la detección realizada y la acción recomendada.
 

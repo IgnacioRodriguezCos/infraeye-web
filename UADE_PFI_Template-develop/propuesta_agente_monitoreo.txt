@@ -1,0 +1,273 @@
+================================================================================
+PROPUESTA: AGENTE DE MONITOREO (CES AGENT) — IMPACTO EN LA TESIS (v2)
+================================================================================
+DECISION DEL EQUIPO: solo CU09 y RF15. Sin CU10/RF16 (el encendido/apagado
+queda como funcionalidad menor de la aplicacion, sin caso de uso propio).
+
+HECHO NUEVO VERIFICADO EN EL CODIGO (commits 0af5cc5 y b24b750):
+- Las metricas de memoria (mem_usedPercent) y disco (disk_usedPercent) en
+  instancias Linux solo las expone el agente de Cloud Eye (CES Agent /
+  UniAgent, namespace AGT.ECS). Sin el agente solo hay CPU, tasas de red y
+  tasas de disco.
+- La plataforma: detecta la ausencia (notas de "datos faltantes" por
+  instancia), verifica si el agente esta instalado (metricas AGT.ECS) y
+  puede instalarlo de forma automatizada via user data + reinicio, con
+  autorizacion del usuario (endpoint install-ces-agent + botones en la web).
+- Ademas: encendido/apagado de instancias desde la plataforma y exclusion
+  del analisis de las instancias apagadas (SHUTOFF) con motivo informado.
+
+REPOSICIONAMIENTO (que muere y que sobrevive):
+- MUERE: "sin agentes" a secas, "capa de analisis externa que no despliega
+  componentes", "las credenciales solo se usan para lecturas".
+- SOBREVIVE: "sin agentes DE TERCEROS". InfraEye no instala software
+  propietario externo (como Datadog/Dynatrace/New Relic); depende del agente
+  NATIVO del proveedor (componente estandar de la telemetria de la
+  plataforma), y su instalacion es automatizada y autorizada caso por caso.
+- Las operaciones de escritura (instalar agente + reinicio, encender/apagar)
+  son explicitas y autorizadas por el usuario; el analisis en si sigue
+  siendo de solo lectura.
+
+Nada de esto se aplica todavia a los .tex: esta aca para revision.
+
+--------------------------------------------------------------------------------
+1. NUEVO CASO DE USO (despues de CU08, antes de Requerimientos Funcionales)
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  \subsubsection{CU09 -- Instalar agente de monitoreo en una instancia}
+
+  \paragraph*{Objetivo}
+
+  Habilitar la recolección de las métricas de memoria y de utilización de disco en instancias Linux que no exponen dichas métricas por ausencia del agente de monitoreo del proveedor.
+
+  \paragraph*{Precondiciones}
+
+  \begin{itemize}
+  \item El usuario ha iniciado sesión.
+  \item La cuenta de Huawei Cloud se encuentra vinculada (CU02).
+  \item La instancia objetivo se encuentra encendida.
+  \end{itemize}
+
+  \paragraph*{Flujo principal}
+
+  \begin{enumerate}
+  \item El usuario selecciona la instancia que presenta métricas faltantes y la opción \textbf{Instalar agente de monitoreo}.
+  \item El sistema consulta las métricas del espacio de nombres del agente (AGT.ECS) para verificar si el agente ya se encuentra instalado.
+  \item El sistema solicita la confirmación del usuario, informando que la instalación requiere el reinicio de la instancia.
+  \item El usuario confirma la operación.
+  \item El sistema inyecta el script de instalación del agente en los datos de usuario de la instancia.
+  \item El sistema reinicia la instancia para que el script se ejecute durante el arranque.
+  \item El sistema verifica la instalación comprobando la presencia de las métricas del agente.
+  \item El sistema informa al usuario que la instancia quedó habilitada para la recolección de memoria y disco.
+  \end{enumerate}
+
+  \paragraph*{Flujos alternativos}
+
+  \subparagraph{A1 -- El agente ya se encuentra instalado}
+
+  En el paso 2:
+
+  \begin{itemize}
+  \item El sistema detecta métricas del agente en la instancia.
+  \item Informa al usuario que el agente ya se encuentra instalado y no se reinstala.
+  \item Finaliza el caso de uso.
+  \end{itemize}
+
+  \subparagraph{A2 -- La instancia se encuentra apagada}
+
+  En el paso 1:
+
+  \begin{itemize}
+  \item El sistema detecta que la instancia está apagada.
+  \item Informa al usuario que la instalación requiere la instancia encendida.
+  \item Si el usuario enciende la instancia, el caso de uso continúa en el paso 2; de lo contrario, finaliza.
+  \end{itemize}
+
+  \subparagraph{A3 -- Error durante la instalación}
+
+  En los pasos 5 a 7:
+
+  \begin{itemize}
+  \item El sistema detecta un error al inyectar el script, reiniciar la instancia o verificar las métricas.
+  \item Informa el problema al usuario.
+  \item Finaliza el caso de uso sin dejar la instalación en estado inconsistente.
+  \end{itemize}
+
+  \paragraph*{Resultado}
+
+  Al finalizar el caso de uso la instancia ejecuta el agente de monitoreo del proveedor y expone las métricas de memoria y de utilización de disco, que quedan disponibles para los análisis posteriores.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+2. NUEVO REQUERIMIENTO (despues de RF14, antes de los RNF)
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  \subsubsection{RF15 -- Instalación del agente de monitoreo}
+
+  \noindent \textbf{Descripción:}
+
+  El sistema deberá detectar las instancias que no exponen métricas de memoria o de utilización de disco por ausencia del agente de monitoreo del proveedor, informar la limitación en los resultados del análisis y, con la autorización explícita del usuario, instalar el agente de forma automatizada, verificando su presencia antes de intentar la instalación y su funcionamiento después de completada.
+
+  \noindent \textbf{Prioridad:}
+
+  Media.
+
+  \noindent \textbf{Casos de uso relacionados:}
+
+  \noindent CU09 -- Instalar agente de monitoreo en una instancia.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+3. PARRAFO NUEVO EN "INTEGRACION CON HUAWEI CLOUD"
+--------------------------------------------------------------------------------
+Insertar DESPUES del parrafo de granularidad/paginacion:
+
+  ----------------------------------------------------------------
+  La disponibilidad de las métricas depende del tipo de instancia y de la
+  presencia del agente de monitoreo de Huawei Cloud. Las métricas de CPU y
+  de tráfico de red se exponen de forma nativa, mientras que las de
+  utilización de memoria y de disco en instancias Linux solo las reporta el
+  agente del proveedor (espacio de nombres AGT.ECS). El sistema consulta las
+  métricas en los espacios de nombres del sistema y del agente; cuando el
+  agente no se encuentra instalado, identifica las métricas faltantes por
+  instancia, lo informa en los resultados del análisis y ofrece la
+  instalación automatizada del agente con autorización del usuario (véase
+  CU09). Las instancias que se encuentran apagadas se identifican por su
+  estado y se excluyen del análisis, informando el motivo.
+  ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+4. ESTADO DEL ARTE: 2 pasajes + celda de la tabla 2.II
+--------------------------------------------------------------------------------
+4a. Parrafo de Dynatrace (~linea 227), FRASE FINAL:
+
+  ACTUAL: "...la profundidad de los datos de Dynatrace se paga con intrusión
+  sobre la infraestructura monitoreada, mientras que InfraEye opera como una
+  capa de análisis externa que no despliega componentes sobre los recursos
+  ni consume capacidad de ellos."
+
+  NUEVO: "...la profundidad de los datos de Dynatrace se paga con la
+  instalación de un agente propietario que se inyecta en los procesos de
+  las aplicaciones, mientras que InfraEye no despliega software de terceros:
+  se apoya en la telemetría nativa del proveedor y, cuando una instancia no
+  expone las métricas que este reserva a su agente nativo, la plataforma
+  detecta la ausencia y puede instalarlo de manera automatizada y
+  autorizada."
+
+4b. Parrafo de New Relic (~linea 235), FRASE FINAL:
+
+  ACTUAL: "InfraEye se aparta de ambos supuestos: opera como capa de
+  análisis externa que solo consume las métricas expuestas por el proveedor,
+  sin instalar agentes ni consumir recursos de la infraestructura
+  monitoreada, a cambio de acotar el análisis a la telemetría disponible en
+  esa fuente."
+
+  NUEVO: "InfraEye se aparta de ambos supuestos: el análisis se realiza
+  fuera de la infraestructura monitoreada, consumiendo la telemetría que
+  expone el propio proveedor y sin desplegar agentes de terceros. Para las
+  métricas que el proveedor solo expone a través de su agente nativo
+  ---memoria y disco en instancias Linux---, la plataforma detecta la
+  ausencia, lo informa y puede instalarlo de forma automatizada con
+  autorización del usuario."
+
+4c. TABLA 2.II, celda "Instalación de agentes" de InfraEye:
+
+  ACTUAL: "No requiere (consume APIs)"
+  NUEVO: "Agente nativo del proveedor"
+  (Las demas filas dicen "Requiere agente" — el contraste sigue: agentes
+  propietarios de terceros vs. agente nativo de la plataforma.)
+
+--------------------------------------------------------------------------------
+5. CHAPTER 3: 7 pasajes con el claim "sin agentes"
+--------------------------------------------------------------------------------
+Cambios minimos (sustitucion de termino + nuance donde hace falta):
+
+5a. ~1239 (Precio): "sin requerir la instalación de agentes adicionales
+    sobre la infraestructura" -> "sin requerir la instalación de agentes de
+    terceros sobre la infraestructura"; y "sin incorporar componentes
+    adicionales a sus entornos productivos" -> "sin incorporar componentes
+    de terceros a sus entornos productivos".
+
+5b. ~1247 (Precio): "A diferencia de otras herramientas del mercado que
+    requieren la instalación de agentes para realizar un monitoreo
+    continuo, la solución desarrollada obtiene la información necesaria
+    directamente desde los servicios del proveedor cloud, permitiendo
+    analizar la infraestructura y generar recomendaciones de optimización
+    sin introducir componentes adicionales en los entornos del cliente."
+    -> "A diferencia de otras herramientas del mercado que requieren la
+    instalación de agentes propietarios para realizar un monitoreo
+    continuo, la solución desarrollada obtiene la información necesaria
+    directamente desde los servicios del proveedor cloud, apoyándose —para
+    las métricas de memoria y disco en instancias Linux— en el agente
+    nativo de la plataforma, que la propia solución puede instalar de forma
+    automatizada. De este modo, el análisis no introduce componentes de
+    terceros en los entornos del cliente."
+    (El resto del parrafo, que ya habla de "agentes de terceros" como
+    limitacion, queda consistente sin cambios.)
+
+5c. ~1267 (Promocion): "sin requerir la instalación de agentes propios
+    sobre los recursos del cliente" -> "sin requerir la instalación de
+    agentes de terceros sobre los recursos del cliente".
+
+5d. ~1273 (Promocion): "la eliminación de la necesidad de instalar agentes
+    propios" -> "la eliminación de la necesidad de instalar agentes de
+    terceros".
+
+5e. ~1297 (Porter): "operar sin requerir la instalación de agentes propios"
+    -> "operar sin requerir la instalación de agentes de terceros".
+
+5f. ~1330 (Estrategia competitiva): "evitando la necesidad de instalar
+    agentes propios sobre la infraestructura del cliente" -> "evitando la
+    necesidad de instalar agentes de terceros sobre la infraestructura del
+    cliente".
+
+5g. ~1334 (Estrategia competitiva): "ausencia de agentes propios" ->
+    "ausencia de agentes de terceros".
+
+--------------------------------------------------------------------------------
+6. SEGURIDAD DE CREDENCIALES: principio de "uso acotado" (~linea 1758)
+--------------------------------------------------------------------------------
+ACTUAL: "Segundo, uso acotado: las credenciales se emplean exclusivamente
+para las consultas de lectura de recursos y métricas durante el análisis,
+sin realizar operaciones de modificación sobre la infraestructura del
+usuario."
+
+NUEVO: "Segundo, uso acotado y autorizado: las operaciones de lectura
+—consulta de recursos y métricas— se ejecutan de manera automatizada en
+cada análisis, mientras que las operaciones de escritura sobre la
+infraestructura (instalación del agente de monitoreo, que implica el
+reinicio de la instancia, y encendido o apagado de instancias) requieren la
+autorización explícita del usuario para cada acción y no se ejecutan de
+manera automática."
+
+--------------------------------------------------------------------------------
+7. CONCLUSION (linea 7)
+--------------------------------------------------------------------------------
+ACTUAL: "...que integra la obtención de métricas directamente desde las
+APIs del proveedor sin requerir la instalación de agentes sobre la
+infraestructura del cliente..."
+
+NUEVO: "...que integra la obtención de métricas directamente desde las
+APIs del proveedor sin requerir agentes de terceros —con instalación
+automatizada del agente nativo del proveedor cuando resulta necesaria—..."
+
+--------------------------------------------------------------------------------
+8. VALIDACION: circuito verificado (una clausula)
+--------------------------------------------------------------------------------
+En la enumeracion del circuito, despues de "...el período de agregación
+seleccionado automáticamente según la retención del servicio;", insertar:
+"la identificación de instancias apagadas y de métricas faltantes por
+ausencia del agente de monitoreo;"
+
+--------------------------------------------------------------------------------
+NOTA SOBRE EL ENCENDIDO/APAGADO (sin CU propio)
+--------------------------------------------------------------------------------
+Al no tener CU10, el encendido/apagado queda mencionado donde corresponde
+sin caso de uso: en el parrafo de integracion (punto 3, "instancias
+apagadas... se excluyen del análisis") y en el principio de seguridad
+(punto 6, "encendido o apagado de instancias" como escritura autorizada).
+Si el tutor preguntara, la funcionalidad existe en la aplicacion como
+operacion puntual de gestion, sin flujo formalizado.
+
+Nada de esto toca los objetivos ni el cumplimiento: el agente es un detalle
+de implementacion de la obtencion de metricas (objetivo especifico 2), no
+un cambio de alcance.
