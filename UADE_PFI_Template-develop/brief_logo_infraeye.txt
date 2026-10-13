@@ -1,0 +1,91 @@
+================================================================================
+BRIEF DE DISEÑO — LOGO INFRAEYE
+================================================================================
+Para: diseñador/a del logo
+Producto: InfraEye — plataforma web de optimización de infraestructura cloud
+
+--------------------------------------------------------------------------------
+QUÉ ES (EN UNA FRASE)
+--------------------------------------------------------------------------------
+Una plataforma web que "mira" tu infraestructura cloud, detecta los servidores
+que desperdician recursos (subutilizados, sobredimensionados) y te dice
+exactamente cómo arreglarlos.
+
+--------------------------------------------------------------------------------
+CÓMO FUNCIONA (LA ESENCIA PARA EL ARTISTA)
+--------------------------------------------------------------------------------
+Un ojo que ve lo que el administrador no ve a simple vista. La plataforma
+analiza millones de métricas de uso (CPU, memoria, disco, red), encuentra los
+patrones anómalos mediante aprendizaje automático y genera recomendaciones
+concretas de optimización — incluso el código (Terraform) para aplicarlas.
+El humano siempre tiene la última palabra: la plataforma señala, propone y
+facilita, nunca decide sola.
+
+--------------------------------------------------------------------------------
+EL NOMBRE
+--------------------------------------------------------------------------------
+Infra + Eye. Infraestructura + ojo. La metáfora central ya está en el nombre:
+LA VISIÓN QUE REVELA LO OCULTO — el desperdicio escondido en los servidores.
+
+--------------------------------------------------------------------------------
+PERSONALIDAD DE LA MARCA
+--------------------------------------------------------------------------------
+- Inteligente pero cercana: asistente que muestra la evidencia, no oráculo
+  autónomo.
+- Precisa y confiable: de cada 20 instancias que señala, 19 son realmente
+  ineficientes (verificado con evaluación).
+- Moderna, técnica, limpia. Audiencia: ingenieros DevOps y administradores
+  cloud.
+- Eficiencia sin drama: optimizar recursos y ahorrar costos, sin
+  sensacionalismo.
+
+--------------------------------------------------------------------------------
+CONCEPTOS VISUALES POSIBLES (MATERIALES PARA EXPLORAR)
+--------------------------------------------------------------------------------
+1. EL OJO — el camino literal: un ojo estilizado cuya pupila o iris puede ser
+   un servidor, un rack, un nodo, o estar formado por líneas de métricas o
+   gráficos. Un ojo que "observa infraestructura".
+
+2. REVELAR LO OCULTO — algo que estaba invisible y se vuelve nítido: un
+   servidor que emerge de líneas difusas, una silueta que se define.
+
+3. EL AJUSTE PERFECTO (right-sizing) — un objeto que calza justo: un servidor
+   "entrando" en su medida exacta, flechas que convergen.
+
+4. EL CICLO — detección -> recomendación -> acción: flechas circulares
+   cerrando un loop (el producto cierra el ciclo entre detectar un problema
+   y ejecutar la solución).
+
+--------------------------------------------------------------------------------
+DÓNDE VIVIRÁ EL LOGO
+--------------------------------------------------------------------------------
+- Header de un dashboard web (chico, junto al nombre, alto ~40 px).
+- Página de login.
+- Reportes exportables (PDF/informes).
+- Repositorios de GitHub.
+- A futuro: marketplaces de cloud (Huawei Cloud Marketplace, etc.).
+- Debe funcionar como favicon (16 px) y en monocromo (usos chicos).
+- El dashboard tiene modo claro y oscuro: el logo debe funcionar sobre ambos
+  fondos.
+
+--------------------------------------------------------------------------------
+QUÉ EVITAR
+--------------------------------------------------------------------------------
+- Ojos vigilantes o invasivos (sensación "Gran Hermano"): el ojo debe
+  transmitir INSIGHT PROTECTOR, no vigilancia.
+- Clichés de circuito impresionante o estética tech sobrecargada.
+- Parecerse a la identidad de Huawei Cloud (operamos sobre su nube, pero
+  somos un producto independiente).
+
+--------------------------------------------------------------------------------
+SUGERENCIA DE PALETA (NO TAXATIVA)
+--------------------------------------------------------------------------------
+- Azules técnicos / verdes de eficiencia.
+- Algo que respire "claridad" y "ahorro".
+- Monocromo amigable para usos chicos y fondos oscuros.
+
+--------------------------------------------------------------------------------
+RESUMEN EN UNA LÍNEA PARA EL ARTISTA
+--------------------------------------------------------------------------------
+"Un ojo inteligente que descubre el desperdicio escondido en la nube y
+convierte lo invisible en decisiones claras."

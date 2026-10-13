@@ -1,0 +1,238 @@
+================================================================================
+PROPUESTA: RNFs MEDIBLES + VINCULO HALLAZGOS-REQUERIMIENTOS
+================================================================================
+Observaciones del profesor a responder:
+1. "Los RNF son casi todos cualitativos ('tiempo adecuado', 'rendimiento
+   aceptable') sin numeros."
+2. "El texto no vincula cada hallazgo de las entrevistas con un RF concreto."
+3. (Opcional) "No hay historias de usuario, aunque el criterio acepta casos
+   de uso." -> NO requerido; se ofrece como opcional.
+
+PRINCIPIO DE LA CORRECCION: cada RNF recibe un criterio VERIFICABLE (numero o
+condicion inspeccionable), anclado donde sea posible a evidencia real del
+proyecto (suite de pruebas, configuracion del pipeline, evaluacion). Las
+Justificaciones se mantienen (el profesor las valoro bien). RNF11 no se toca
+(el profesor lo elogio).
+
+Nada de esto se aplica todavia a los .tex: esta aca para revision.
+
+--------------------------------------------------------------------------------
+PARTE 1 — RNFs CON CRITERIOS MEDIBLES
+--------------------------------------------------------------------------------
+RNF01 -- Seguridad de la informacion
+
+  ACTUAL: "El sistema debera garantizar la confidencialidad de las
+  credenciales utilizadas para acceder a Huawei Cloud, evitando su
+  almacenamiento en texto plano y utilizando mecanismos seguros para su
+  proteccion."
+
+  NUEVO: "El sistema debera almacenar las credenciales de acceso a Huawei
+  Cloud cifradas en reposo mediante un esquema de cifrado autenticado
+  (AES-128) cuya clave no resida en la base de datos, y las mismas no
+  deberan aparecer en texto plano en la base de datos, en los archivos de
+  registro ni en los reportes generados."
+
+  ANCLO: mecanismo Fernet ya declarado en la subseccion de seguridad.
+
+RNF02 -- Comunicacion segura
+
+  ACTUAL: "Toda comunicacion entre la aplicacion y los servicios de Huawei
+  Cloud debera realizarse mediante protocolos seguros (HTTPS/TLS)."
+
+  NUEVO: "Toda comunicacion debera realizarse mediante HTTPS con TLS 1.2 o
+  superior, tanto la del navegador del usuario con la aplicacion como la de
+  la aplicacion con los endpoints oficiales de Huawei Cloud."
+
+RNF03 -- Rendimiento (el ejemplo exacto del profesor)
+
+  ACTUAL: "...en un tiempo adecuado al tamano de la infraestructura
+  analizada, evitando demoras que afecten la experiencia del usuario."
+
+  NUEVO: "Las operaciones de consulta (listado de instancias, historial,
+  estado de analisis) deberan responder en menos de 5 segundos. El analisis
+  completo de una infraestructura de hasta 50 instancias debera completarse
+  en un maximo de 15 minutos, informando el progreso al usuario durante la
+  ejecucion."
+
+  ANCLO: por instancia se realizan 5 consultas de metricas (una por metrica,
+  720 datapoints a 3.600 s); con tiempos de API de 1-3 s por consulta, 50
+  instancias quedan holgadamente dentro de los 15 minutos.
+
+RNF04 -- Escalabilidad
+
+  ACTUAL: "...aumentar la cantidad de recursos analizados sin requerir
+  modificaciones significativas en el diseno de la aplicacion."
+
+  NUEVO: "El sistema debera analizar infraestructuras de entre 1 y 100
+  instancias por ejecucion sin requerir modificaciones en el diseno, y
+  permitir la incorporacion de nuevos tipos de recursos cloud sin alterar
+  los modulos de analisis. El modulo de deteccion debera mantener tiempos
+  de inferencia del orden de segundos aun para miles de instancias, como se
+  verifico en la evaluacion sobre 4.023 maquinas."
+
+  ANCLO: la evaluacion de la seccion 3.8 proceso las features de las 4.023
+  maquinas del trace.
+
+RNF05 -- Mantenibilidad
+
+  ACTUAL: "...arquitectura modular que permita modificar o reemplazar
+  componentes de forma independiente..."
+
+  NUEVO: "La aplicacion debera desarrollarse con una arquitectura modular
+  que permita modificar o reemplazar componentes de forma independiente.
+  La suite de pruebas automatizadas debera mantenerse en estado aprobado
+  ante cada cambio, y la cobertura de los modulos centrales del motor de
+  recomendaciones no debera ser inferior al 80%."
+
+  ANCLO: real — suite de 291 pruebas, cobertura 84-100% en los modulos
+  centrales (declarado en la seccion de validacion).
+
+RNF06 -- Portabilidad
+
+  ACTUAL: "...incorporar soporte para otros proveedores cloud... sin
+  modificar el funcionamiento general de la aplicacion."
+
+  NUEVO: "La incorporacion de un nuevo proveedor cloud debera poder
+  realizarse implementando unicamente el modulo de integracion
+  correspondiente, sin modificaciones en el modelo de deteccion ni en el
+  motor de recomendaciones."
+
+  ANCLO: verificable por inspeccion del diseno modular (seccion de
+  arquitectura).
+
+RNF07 -- Disponibilidad (hoy es manejo de errores)
+
+  ACTUAL: "El sistema debera detectar e informar al usuario cualquier
+  inconveniente que impida establecer comunicacion con Huawei Cloud o
+  recuperar la informacion necesaria..."
+
+  NUEVO: "Ante un error de comunicacion con Huawei Cloud, el sistema debera
+  informarlo al usuario dentro del plazo del timeout de consulta (60
+  segundos), identificando el recurso afectado; el fallo de un recurso no
+  debera interrumpir el analisis de los demas."
+
+  ANCLO: timeout de 60 s del cliente (DEFAULT_TIMEOUT) y comportamiento del
+  pipeline (errores por instancia no abortan la ejecucion).
+
+RNF08 -- Usabilidad
+
+  ACTUAL: "La interfaz debera presentar de forma clara las anomalias..."
+
+  NUEVO: "Cada recomendacion debera presentarse acompanada de la evidencia
+  que la fundamenta (metricas de utilizacion de la instancia), y el usuario
+  debera poder acceder desde el panel principal a la lista de anomalias,
+  recomendaciones y codigo Terraform de una instancia en un maximo de tres
+  interacciones."
+
+  ANCLO: verificable por inspeccion de la interfaz (el dashboard ya lo
+  cumple: panel -> instancia -> detalle).
+
+RNF09 -- Trazabilidad
+
+  ACTUAL: ya es concreta (persistir recomendaciones + Terraform +
+  descripcion).
+
+  NUEVO (afinado): "El sistema debera persistir la totalidad de las
+  recomendaciones de optimizacion generadas para cada usuario, incluyendo
+  el codigo Terraform asociado y una descripcion de la anomalia detectada y
+  de la accion propuesta, de modo que cualquier recomendacion pueda
+  recuperarse integramente en consultas posteriores al historial."
+
+RNF10 -- Confiabilidad
+
+  ACTUAL: "...validar la consistencia de la informacion obtenida desde
+  Huawei Cloud antes de ejecutar el analisis, evitando que datos incompletos
+  o inconsistentes afectan los resultados..."
+
+  NUEVO: "El sistema debera excluir del analisis, informando el motivo, a
+  las instancias apagadas y a las que presenten menos de tres muestras
+  validas por metrica, en lugar de incorporarlas con valores por defecto.
+  Los datos invalidos reportados por el proveedor deberan descartarse antes
+  del calculo de caracteristicas."
+
+  ANCLO: real — min_data_points=3 en la configuracion, exclusion de SHUTOFF
+  y gate de datos del pipeline (documentado en pendientes).
+
+RNF11 -- Integridad de la infraestructura
+
+  SIN CAMBIOS (el profesor lo destaco como decision bien justificada).
+
+RNF12 -- Reproducibilidad del analisis
+
+  ACTUAL: "...produzca resultados consistentes."
+
+  NUEVO: "El sistema debera garantizar que un mismo analisis ejecutado sobre
+  la misma version de la infraestructura, con el mismo conjunto de metricas
+  y la misma version del modelo, produzca resultados identicos. Para ello,
+  el modelo debera entrenarse con una semilla aleatoria fija y las
+  configuraciones del analisis deberan permanecer versionadas."
+
+  ANCLO: real — random_state=42 en el entrenamiento (declarado en la seccion
+  del algoritmo).
+
+--------------------------------------------------------------------------------
+PARTE 2 — VINCULO HALLAZGOS DE ENTREVISTAS -> REQUERIMIENTOS
+--------------------------------------------------------------------------------
+Ubicacion: al final de la subseccion "Implicancias para el diseno" (seccion
+de entrevistas), antes de "Conclusiones del analisis de entrevistas".
+
+Texto de apertura + tabla:
+
+  ----------------------------------------------------------------
+  Los hallazgos del relevamiento se tradujeron en requerimientos concretos
+  del sistema. La Tabla \ref{tab:hallazgos-rf} resume la correspondencia
+  entre cada hallazgo y los requerimientos derivados.
+
+  \begin{table}[H]
+  \centering
+  \scriptsize
+  \caption{Correspondencia entre hallazgos del relevamiento y requerimientos}
+  \label{tab:hallazgos-rf}
+  \begin{tabular}{|p{7.5cm}|p{5.5cm}|}
+  \hline
+  \textbf{Hallazgo del relevamiento} & \textbf{Requerimientos derivados} \\
+  \hline
+  Recursos sobredimensionados, ociosos o con capacidad superior a las necesidades reales & RF05 (obtencion de metricas), RF07 (deteccion de anomalias), RF09 (recomendaciones) \\
+  \hline
+  Deteccion manual de ineficiencias dificil de sistematizar & RF04 (modelado de la infraestructura), RF05, RF07 \\
+  \hline
+  La deteccion sin accion concreta no resulta util & RF09 (recomendaciones accionables), RF10 (generacion de Terraform) \\
+  \hline
+  Necesidad de justificar las recomendaciones con evidencia & RF08 (clasificacion de anomalias), RNF09 (trazabilidad) \\
+  \hline
+  Revision humana antes de aplicar cambios & RF11 (aprobacion de recomendaciones), RNF11 (integridad de la infraestructura) \\
+  \hline
+  Desconfianza hacia agentes de terceros sobre la infraestructura & RF15 (instalacion del agente nativo del proveedor, autorizada) \\
+  \hline
+  \end{tabular}
+  \end{table}
+  ----------------------------------------------------------------
+
+NOTA: la tabla usa p{} simple (sin \cell) porque es una tabla de texto con
+dos columnas anchas; el estilo de grilla coincide con las tablas
+comparativas.
+
+--------------------------------------------------------------------------------
+PARTE 3 — HISTORIAS DE USUARIO (OPCIONAL, NO REQUERIDO)
+--------------------------------------------------------------------------------
+El profesor explicito que el criterio acepta casos de uso, asi que las
+historias NO son necesarias. Si aun asi quieren sumarlas como complemento
+(4-5 historias cortas antes de los casos de uso), alcanza con pedirlo; no
+se incluyen en esta propuesta para no inflar el alcance.
+
+--------------------------------------------------------------------------------
+ANCLOS DE EVIDENCIA (resumen para la defensa)
+--------------------------------------------------------------------------------
+| RNF | Numero declarado | Evidencia |
+|-----|------------------|-----------|
+| 01  | AES-128, sin texto plano | Subseccion de seguridad (Fernet) |
+| 02  | TLS 1.2+ | Endpoints oficiales Huawei |
+| 03  | 5 s consultas / 15 min analisis 50 inst. | 5 queries/inst a 1-3 s c/u |
+| 04  | 1-100 inst. / miles en inferencia | Evaluacion sobre 4.023 maquinas |
+| 05  | Cobertura >= 80% | Suite real: 291 tests, 84-100% |
+| 06  | Solo modulo de integracion | Arquitectura modular |
+| 07  | Timeout 60 s, fallo no aborta | DEFAULT_TIMEOUT + pipeline |
+| 08  | 3 interacciones max. | Dashboard real |
+| 09  | 100% persistidas | Diseno de persistencia |
+| 10  | 3 muestras validas, apagadas fuera | min_data_points=3 + SHUTOFF |
+| 12  | Resultados identicos, semilla fija | random_state=42 |

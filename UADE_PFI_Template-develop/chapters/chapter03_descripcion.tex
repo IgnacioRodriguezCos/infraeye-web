@@ -261,6 +261,32 @@ Los hallazgos obtenidos permiten establecer requerimientos concretos para la sol
 
 La transparencia constituye otro requerimiento derivado directamente de las entrevistas. Cada recomendación deberá estar acompañada por información que permita comprender su origen, particularmente las métricas y el comportamiento histórico utilizados para fundamentarla. Esta característica permitirá que el administrador pueda revisar la evidencia antes de aceptar una modificación sobre una infraestructura, manteniendo la validación humana como parte del proceso de optimización.
 
+Los hallazgos del relevamiento se tradujeron en requerimientos concretos del sistema. La Tabla \ref{tab:hallazgos-rf} resume la correspondencia entre cada hallazgo y los requerimientos derivados.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Correspondencia entre hallazgos del relevamiento y requerimientos}
+\label{tab:hallazgos-rf}
+\begin{tabular}{|p{7.5cm}|p{5.5cm}|}
+\hline
+\textbf{Hallazgo del relevamiento} & \textbf{Requerimientos derivados} \\
+\hline
+Recursos sobredimensionados, ociosos o con capacidad superior a las necesidades reales & RF05 (obtención de métricas), RF07 (detección de anomalías), RF09 (recomendaciones) \\
+\hline
+Detección manual de ineficiencias difícil de sistematizar & RF04 (modelado de la infraestructura), RF05, RF07 \\
+\hline
+La detección sin acción concreta no resulta útil & RF09 (recomendaciones accionables), RF10 (generación de Terraform) \\
+\hline
+Necesidad de justificar las recomendaciones con evidencia & RF08 (clasificación de anomalías), RNF09 (trazabilidad) \\
+\hline
+Revisión humana antes de aplicar cambios & RF11 (aprobación de recomendaciones), RNF11 (integridad de la infraestructura) \\
+\hline
+Desconfianza hacia agentes de terceros sobre la infraestructura & RF15 (instalación del agente nativo del proveedor, autorizada) \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Conclusiones del análisis de entrevistas}
 
 El análisis de las entrevistas permite concluir que existe una problemática concreta asociada al uso ineficiente de recursos cloud, manifestada principalmente en recursos sobredimensionados, ociosos o provisionados con una capacidad superior a las necesidades reales. Los participantes también evidencian que la identificación de estas situaciones puede requerir tareas manuales de monitoreo y análisis, especialmente cuando no se dispone de mecanismos automatizados que procesen grandes volúmenes de métricas.
@@ -1077,7 +1103,7 @@ Media.
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá garantizar la confidencialidad de las credenciales utilizadas para acceder a Huawei Cloud, evitando su almacenamiento en texto plano y utilizando mecanismos seguros para su protección.
+El sistema deberá almacenar las credenciales de acceso a Huawei Cloud cifradas en reposo mediante un esquema de cifrado autenticado (AES-128) cuya clave no resida en la base de datos, y las mismas no deberán aparecer en texto plano en la base de datos, en los archivos de registro ni en los reportes generados.
 
 \noindent \textbf{Justificación:}
 
@@ -1087,7 +1113,7 @@ Las credenciales permiten acceder a la infraestructura cloud del usuario y deben
 
 \noindent \textbf{Descripción:}
 
-Toda comunicación entre la aplicación y los servicios de Huawei Cloud deberá realizarse mediante protocolos seguros (HTTPS/TLS).
+Toda comunicación deberá realizarse mediante HTTPS con TLS 1.2 o superior, tanto la del navegador del usuario con la aplicación como la de la aplicación con los endpoints oficiales de Huawei Cloud.
 
 \noindent \textbf{Justificación:}
 
@@ -1097,7 +1123,7 @@ Garantiza la integridad y confidencialidad de la información intercambiada dura
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá procesar la información de la infraestructura y ejecutar el análisis utilizando Isolation Forest en un tiempo adecuado al tamaño de la infraestructura analizada, evitando demoras que afecten la experiencia del usuario.
+Las operaciones de consulta (listado de instancias, historial, estado de análisis) deberán responder en menos de 5 segundos. El análisis completo de una infraestructura de hasta 50 instancias deberá completarse en un máximo de 15 minutos, informando el progreso al usuario durante la ejecución.
 
 \noindent \textbf{Justificación:}
 
@@ -1107,7 +1133,7 @@ El tiempo de respuesta debe permitir realizar análisis de forma práctica inclu
 
 \noindent \textbf{Descripción:}
 
-La arquitectura del sistema deberá permitir incorporar nuevos tipos de recursos cloud y aumentar la cantidad de recursos analizados sin requerir modificaciones significativas en el diseño de la aplicación.
+El sistema deberá analizar infraestructuras de entre 1 y 100 instancias por ejecución sin requerir modificaciones en el diseño, y permitir la incorporación de nuevos tipos de recursos cloud sin alterar los módulos de análisis. El módulo de detección deberá mantener tiempos de inferencia del orden de segundos aun para miles de instancias, como se verificó en la evaluación sobre 4.023 máquinas.
 
 \noindent \textbf{Justificación:}
 
@@ -1117,7 +1143,7 @@ Las infraestructuras cloud evolucionan constantemente, por lo que el sistema deb
 
 \noindent \textbf{Descripción:}
 
-La aplicación deberá desarrollarse utilizando una arquitectura modular que permita modificar o reemplazar componentes de forma independiente, como el algoritmo de detección de anomalías o el motor de recomendaciones.
+La aplicación deberá desarrollarse con una arquitectura modular que permita modificar o reemplazar componentes de forma independiente. La suite de pruebas automatizadas deberá mantenerse en estado aprobado ante cada cambio, y la cobertura de los módulos centrales del motor de recomendaciones no deberá ser inferior al 80\%.
 
 \noindent \textbf{Justificación:}
 
@@ -1127,7 +1153,7 @@ Facilita la evolución del sistema y reduce el costo de mantenimiento.
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá diseñarse de manera que permita incorporar soporte para otros proveedores cloud, como AWS o Microsoft Azure, sin modificar el funcionamiento general de la aplicación.
+La incorporación de un nuevo proveedor cloud deberá poder realizarse implementando únicamente el módulo de integración correspondiente, sin modificaciones en el modelo de detección ni en el motor de recomendaciones.
 
 \noindent \textbf{Justificación:}
 
@@ -1137,7 +1163,7 @@ Aunque la implementación se centre en Huawei Cloud, la arquitectura debe facili
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá detectar e informar al usuario cualquier inconveniente que impida establecer comunicación con Huawei Cloud o recuperar la información necesaria para realizar el análisis.
+Ante un error de comunicación con Huawei Cloud, el sistema deberá informarlo al usuario dentro del plazo del timeout de consulta (60 segundos), identificando el recurso afectado; el fallo de un recurso no deberá interrumpir el análisis de los demás.
 
 \noindent \textbf{Justificación:}
 
@@ -1147,7 +1173,7 @@ Permite identificar rápidamente problemas externos que afecten el funcionamient
 
 \noindent \textbf{Descripción:}
 
-La interfaz deberá presentar de forma clara las anomalías detectadas, las recomendaciones generadas y los cambios propuestos sobre la infraestructura, facilitando la comprensión de los resultados por parte del usuario.
+Cada recomendación deberá presentarse acompañada de la evidencia que la fundamenta (métricas de utilización de la instancia), y el usuario deberá poder acceder desde el panel principal a la lista de anomalías, recomendaciones y código Terraform de una instancia en un máximo de tres interacciones.
 
 \noindent \textbf{Justificación:}
 
@@ -1157,7 +1183,7 @@ La información obtenida mediante el modelo de aprendizaje automático debe ser 
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá conservar las recomendaciones de optimización generadas para cada usuario, incluyendo el código Terraform asociado y una descripción de la anomalía detectada y de la acción propuesta, de modo que el usuario pueda consultar el historial de recomendaciones obtenidas para su infraestructura.
+El sistema deberá persistir la totalidad de las recomendaciones de optimización generadas para cada usuario, incluyendo el código Terraform asociado y una descripción de la anomalía detectada y de la acción propuesta, de modo que cualquier recomendación pueda recuperarse íntegramente en consultas posteriores al historial.
 
 \noindent \textbf{Justificación:}
 
@@ -1167,7 +1193,7 @@ Permite consultar el historial de recomendaciones, verificar la evidencia que re
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá validar la consistencia de la información obtenida desde Huawei Cloud antes de ejecutar el análisis, evitando que datos incompletos o inconsistentes afectan los resultados del modelo de aprendizaje automático.
+El sistema deberá excluir del análisis, informando el motivo, a las instancias apagadas y a las que presenten menos de tres muestras válidas por métrica, en lugar de incorporarlas con valores por defecto. Los datos inválidos reportados por el proveedor deberán descartarse antes del cálculo de características.
 
 \noindent \textbf{Justificación:}
 
@@ -1187,7 +1213,7 @@ Garantiza que el sistema actúe como una herramienta de apoyo a la toma de decis
 
 \noindent \textbf{Descripción:}
 
-El sistema deberá garantizar que un mismo análisis ejecutado sobre la misma versión de la infraestructura, utilizando el mismo conjunto de métricas y la misma versión del modelo de aprendizaje automático, produzca resultados consistentes.
+El sistema deberá garantizar que un mismo análisis ejecutado sobre la misma versión de la infraestructura, con el mismo conjunto de métricas y la misma versión del modelo, produzca resultados idénticos. Para ello, el modelo deberá entrenarse con una semilla aleatoria fija y las configuraciones del análisis deberán permanecer versionadas.
 
 \noindent \textbf{Justificación:}
 
