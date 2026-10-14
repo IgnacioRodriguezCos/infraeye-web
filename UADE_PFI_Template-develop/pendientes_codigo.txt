@@ -278,9 +278,37 @@ Accion:
   1. Provisionar la ECS con los creditos disponibles.
   2. Crear Dockerfile para la app (reproducibilidad) y desplegar en la
      instancia.
-  3. Configurar PostgreSQL e implementar la persistencia de recomendaciones
-     declarada en la tesis (recomendaciones + codigo Terraform + descripcion,
-     asociadas a cada usuario).
+  3. Configurar PostgreSQL e implementar la persistencia declarada en la
+     tesis, segun el DER corregido
+     (Diagramas/DER-Plataforma-Optimizacion-Cloud.drawio, 2 entidades):
+
+       USUARIO
+         - id_usuario (PK, serial)
+         - email (string, unico)
+         - ak_cifrada (texto: credencial cifrada con Fernet, ver P7)
+         - sk_cifrada (texto: idem)
+
+       RECOMENDACION
+         - id_recomendacion (PK, serial)
+         - usuario_id (FK -> USUARIO.id_usuario)
+         - fecha_generacion (datetime)
+         - infraestructura_analizada (string: identificacion de recursos)
+         - codigo_terraform (texto: plan propuesto)
+         - descripcion (texto: anomalia detectada + accion propuesta)
+
+       Relacion: USUARIO (1) -> (N) RECOMENDACION.
+
+     Las metricas NO se persisten (se re-obtienen en cada analisis desde
+     Cloud Eye). El DER anterior de 8 entidades (METRICA, ANALISIS,
+     RESULTADO_ANOMALIA, TIPO_RECOMENDACION, INSTANCIA, INFRAESTRUCTURA)
+     quedo obsoleto: la tesis declara el modelo simplificado y el DER
+     corregido ya lo refleja.
+
+     REFERENCIA IMPLEMENTADA: el iac-agent ya tiene el patron usuario +
+     credenciales cifradas en su DB (tablas users y huawei_credentials con
+     access_key_enc / secret_key_enc, en iac-agent/app/models.py, con
+     migraciones Alembic). Puede usarse como referencia de implementacion
+     para InfraEye (SQLAlchemy + Fernet).
   4. Servir por HTTPS y verificar el flujo completo contra Huawei Cloud
      desde la instancia.
 

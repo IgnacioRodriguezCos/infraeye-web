@@ -1203,7 +1203,7 @@ La calidad de los datos influye directamente en la precisión de las anomalías 
 
 \noindent \textbf{Descripción:}
 
-El sistema no deberá modificar directamente la infraestructura desplegada en Huawei Cloud. Las recomendaciones deberán implementarse únicamente sobre una representación equivalente en Terraform y requerir la aprobación del usuario antes de su utilización.
+El sistema no deberá modificar la infraestructura desplegada en Huawei Cloud sin la aprobación explícita del usuario. Las recomendaciones se materializan sobre una representación equivalente en Terraform y, cuando el usuario decide aplicarlas mediante el flujo de aprovisionamiento del agente de Infraestructura como Código, la ejecución requiere la aprobación del plan propuesto en la cola de acciones.
 
 \noindent \textbf{Justificación:}
 
@@ -1801,6 +1801,16 @@ información mostrada al usuario e incorporar mecanismos de interacción
 que facilitan la exploración de los resultados obtenidos durante el
 análisis de la infraestructura.
 
+\subsection{Agente de Infraestructura como Código}
+
+La materialización de las recomendaciones como cambios reales de infraestructura se apoya en un servicio complementario: un agente de Infraestructura como Código para Huawei Cloud, desarrollado a partir del proyecto \emph{agent-huawei-cloud} de Agustín Chiarenza —uno de los especialistas entrevistados durante el relevamiento de este trabajo—, del cual se derivó el subconjunto de funcionalidades de chat IaC y de protecciones de ejecución (\emph{guardrails}).
+
+El agente está implementado en Python sobre el framework FastAPI —stack del proyecto del cual deriva—, utiliza SQLAlchemy como mapeador objeto-relacional y Alembic para las migraciones de su base de datos PostgreSQL, y ofrece su propia interfaz web de chat desarrollada en JavaScript. Su componente central es el ejecutor de Terraform, protegido por un conjunto de \emph{guardrails}: validación sintáctica del código HCL generado, exigencia de etiquetas de propiedad sobre los recursos, estimación del costo de cada operación y una cola de aprobaciones que requiere la confirmación explícita del usuario antes de ejecutar cualquier cambio (\emph{approve} $\rightarrow$ \emph{apply}).
+
+La comunicación entre la plataforma y el agente se realiza mediante su API: una cuenta de servicio registrada automáticamente, autenticación por tokens y envío cifrado de las credenciales del usuario, que el agente almacena cifradas en su propia base de datos. Cuando el usuario decide materializar una recomendación, la plataforma envía al agente el flavor recomendado; el agente escribe el código HCL del módulo \emph{huawei-ecs}, ejecuta el ciclo \emph{init} $\rightarrow$ \emph{validate} $\rightarrow$ \emph{plan} de Terraform de manera determinística —sin intervención de modelos de lenguaje en esta etapa— y deja la operación propuesta en la cola de aprobaciones, con el plan y el costo visibles. La aplicación del cambio se ejecuta únicamente tras la aprobación del usuario.
+
+Cabe señalar que la capacidad de chat del agente se apoya en un modelo de lenguaje accesible mediante los servicios de inteligencia artificial del proveedor, orientada a consultas de infraestructura como código; el flujo de aprovisionamiento descrito, en cambio, es enteramente determinista, de modo que las operaciones críticas no dependan de la salida de un modelo generativo.
+
 \subsection{Algoritmo de detección de anomalías}
 
 El componente central del sistema corresponde al algoritmo Isolation
@@ -1984,12 +1994,12 @@ reglas de umbrales operativos y genera propuestas de optimización de
 recursos. Finalmente, el sistema
 incorpora módulos de integración con Huawei Cloud, generación de
 reportes y una aplicación web desarrollada en Flask para la interacción
-con el usuario. Esta organización modular favorece la mantenibilidad,
+con el usuario. De forma complementaria, el agente de Infraestructura como Código descrito en esta sección permite materializar las recomendaciones aprobadas como cambios reales de infraestructura mediante Terraform. Esta organización modular favorece la mantenibilidad,
 escalabilidad y reutilización de los distintos componentes del sistema.
 
 \subsection{Seguridad de credenciales y despliegue}
 
-Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado y autorizado: las operaciones de lectura —consulta de recursos y métricas— se ejecutan de manera automatizada en cada análisis, mientras que las operaciones de escritura sobre la infraestructura (instalación del agente de monitoreo, que implica el reinicio de la instancia, y encendido o apagado de instancias) requieren la autorización explícita del usuario para cada acción y no se ejecutan de manera automática. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
+Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado y autorizado: las operaciones de lectura —consulta de recursos y métricas— se ejecutan de manera automatizada en cada análisis, mientras que las operaciones de escritura sobre la infraestructura (instalación del agente de monitoreo, que implica el reinicio de la instancia, y encendido o apagado de instancias) requieren la autorización explícita del usuario para cada acción y no se ejecutan de manera automática. Para las operaciones de aprovisionamiento, las credenciales se comparten con el agente de Infraestructura como Código: viajan cifradas, se almacenan cifradas en su base de datos y toda operación queda sujeta a la aprobación del plan propuesto antes de su ejecución. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
 
 En cuanto a la comunicación, el tráfico entre el navegador del usuario y la aplicación se protege mediante HTTPS/TLS, al igual que la comunicación entre la aplicación y los servicios de Huawei Cloud, cuyos endpoints oficiales operan sobre TLS. La extensión Flask-CORS configura las políticas de intercambio de recursos de origen cruzado para restringir los orígenes habilitados a consumir la API.
 

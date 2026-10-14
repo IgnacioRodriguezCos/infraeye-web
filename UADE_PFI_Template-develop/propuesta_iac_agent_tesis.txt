@@ -1,0 +1,173 @@
+================================================================================
+PROPUESTA: IAC-AGENT EN LA TESIS (TECNOLOGIAS + CONSISTENCIA)
+================================================================================
+Decision implicita: el iac-agent entra al alcance de la tesis (al menos como
+componente tecnologico). Esto activa la ADVERTENCIA que quedo pendiente de la
+decision A/B/C: la ATRIBUCION es obligatoria porque el agente deriva del
+proyecto de Agustin Chiarenza — uno de los entrevistados. La propuesta la
+incluye en el texto; la autorizacion de Agustin para usar su codigo debe
+quedar documentada de su lado (un mail alcanza).
+
+Ubicacion de la subseccion nueva: en Tecnologias, despues de "Tecnologias
+del frontend" y antes de "Algoritmo de deteccion de anomalias".
+
+Nada de esto se aplica todavia a los .tex: esta aca para revision.
+
+--------------------------------------------------------------------------------
+PARTE 1 — NUEVA SUBSECCION EN TECNOLOGIAS
+--------------------------------------------------------------------------------
+  ----------------------------------------------------------------
+  \subsection{Agente de Infraestructura como Código}
+
+  La materialización de las recomendaciones como cambios reales de
+  infraestructura se apoya en un servicio complementario: un agente de
+  Infraestructura como Código para Huawei Cloud, desarrollado a partir del
+  proyecto \emph{agent-huawei-cloud} de Agustín Chiarenza —uno de los
+  especialistas entrevistados durante el relevamiento de este trabajo—, del
+  cual se derivó el subconjunto de funcionalidades de chat IaC y de
+  protecciones de ejecución (\emph{guardrails}).
+
+  El agente está implementado en Python sobre el framework FastAPI —stack
+  del proyecto del cual deriva—, utiliza SQLAlchemy como mapeador
+  objeto-relacional y Alembic para las migraciones de su base de datos
+  PostgreSQL, y ofrece su propia interfaz web de chat desarrollada en
+  JavaScript. Su componente central es el ejecutor de Terraform, protegido
+  por un conjunto de \emph{guardrails}: validación sintáctica del código HCL
+  generado, exigencia de etiquetas de propiedad sobre los recursos,
+  estimación del costo de cada operación y una cola de aprobaciones que
+  requiere la confirmación explícita del usuario antes de ejecutar cualquier
+  cambio (\emph{approve} $\rightarrow$ \emph{apply}).
+
+  La comunicación entre la plataforma y el agente se realiza mediante su
+  API: una cuenta de servicio registrada automáticamente, autenticación por
+  tokens y envío cifrado de las credenciales del usuario, que el agente
+  almacena cifradas en su propia base de datos. Cuando el usuario decide
+  materializar una recomendación, la plataforma envía al agente el flavor
+  recomendado; el agente escribe el código HCL del módulo \emph{huawei-ecs},
+  ejecuta el ciclo \emph{init} $\rightarrow$ \emph{validate} $\rightarrow$
+  \emph{plan} de Terraform de manera determinística —sin intervención de
+  modelos de lenguaje en esta etapa— y deja la operación propuesta en la
+  cola de aprobaciones, con el plan y el costo visibles. La aplicación del
+  cambio se ejecuta únicamente tras la aprobación del usuario.
+
+  Cabe señalar que la capacidad de chat del agente se apoya en un modelo de
+  lenguaje accesible mediante los servicios de inteligencia artificial del
+  proveedor, orientada a consultas de infraestructura como código; el flujo
+  de aprovisionamiento descrito, en cambio, es enteramente determinista, de
+  modo que las operaciones críticas no dependan de la salida de un modelo
+  generativo.
+  ----------------------------------------------------------------
+
+NOTA sobre la coherencia interna: la subseccion "Comparacion de
+alternativas" justifica Flask frente a FastAPI para la aplicacion principal;
+el uso de FastAPI en el agente se explica por su origen ("stack del proyecto
+del cual deriva") y no contradice aquella decision, que refiere al backend
+de la plataforma.
+
+--------------------------------------------------------------------------------
+PARTE 2 — AJUSTES DE CONSISTENCIA (necesarios si el agente es parte del
+           sistema)
+--------------------------------------------------------------------------------
+2a. "Arquitectura del software" — agregar al final del parrafo:
+
+  "...una aplicación web desarrollada en Flask para la interacción con el
+  usuario."
+  ->
+  "...una aplicación web desarrollada en Flask para la interacción con el
+  usuario. De forma complementaria, el agente de Infraestructura como
+  Código descrito en esta sección permite materializar las recomendaciones
+  aprobadas como cambios reales de infraestructura mediante Terraform."
+
+2b. "Seguridad de credenciales y despliegue" — principio de uso: agregar al
+    final del principio "uso acotado y autorizado":
+
+  "...requieren la autorización explícita del usuario para cada acción y no
+  se ejecutan de manera automática."
+  ->
+  "...requieren la autorización explícita del usuario para cada acción y no
+  se ejecutan de manera automática. Para las operaciones de
+  aprovisionamiento, las credenciales se comparten con el agente de
+  Infraestructura como Código: viajan cifradas, se almacenan cifradas en su
+  base de datos y toda operación queda sujeta a la aprobación del plan
+  propuesto antes de su ejecución."
+
+2c. RNF11 (Integridad de la infraestructura) — el profesor lo elogio, se
+    preserva el espiritu (puerta humana) y se cubre el aprovisionamiento:
+
+  ACTUAL: "El sistema no deberá modificar directamente la infraestructura
+  desplegada en Huawei Cloud. Las recomendaciones deberán implementarse
+  únicamente sobre una representación equivalente en Terraform y requerir
+  la aprobación del usuario antes de su utilización."
+
+  NUEVO: "El sistema no deberá modificar la infraestructura desplegada en
+  Huawei Cloud sin la aprobación explícita del usuario. Las recomendaciones
+  se materializan sobre una representación equivalente en Terraform y,
+  cuando el usuario decide aplicarlas mediante el flujo de aprovisionamiento
+  del agente de Infraestructura como Código, la ejecución requiere la
+  aprobación del plan propuesto en la cola de acciones."
+
+2d. Conclusion (Resumen de aportes) — toque menor:
+
+  "...y la generación de código Terraform que permite materializar dichas
+  propuestas dentro de los procesos de Infraestructura como Código de la
+  organización."
+  ->
+  "...y la generación de código Terraform —que puede aplicarse mediante el
+  agente de Infraestructura como Código con la aprobación del usuario—,
+  cerrando el ciclo entre detección y acción dentro del propio producto."
+
+--------------------------------------------------------------------------------
+PARTE 3 — OPCIONAL (decision pendiente): CU Y RF DEL APROVISIONAMIENTO
+--------------------------------------------------------------------------------
+El boton "Levantar instancia con Terraform" existe en la aplicacion. Si el
+tutor ve la demo, conviene que el flujo este formalizado. Texto listo si
+deciden sumarlo (serian CU10 y RF16):
+
+  \subsubsection{CU10 -- Materializar una recomendación mediante el agente
+  de Infraestructura como Código}
+
+  Objetivo: aplicar una recomendación de optimización aprovisionando la
+  instancia propuesta, con aprobación explícita del plan.
+
+  Precondiciones: sesión iniciada; cuenta vinculada; análisis con
+  recomendación de flavor disponible; agente IaC en ejecución.
+
+  Flujo principal:
+  1. El usuario selecciona la instancia con recomendación y la opción
+     "Levantar instancia con Terraform".
+  2. El sistema solicita los parámetros obligatorios (imagen y contraseña
+     de administración) y opcionales (nombre, zona, propietario).
+  3. El sistema envía al agente IaC el flavor recomendado junto con los
+     parámetros.
+  4. El agente genera el código HCL del módulo, ejecuta
+     init->validate->plan y registra la operación en la cola de
+     aprobaciones con el plan y el costo estimado.
+  5. El usuario revisa el plan y el costo, y aprueba la operación.
+  6. El agente ejecuta el apply y informa el resultado.
+  7. El sistema muestra el estado de la operación.
+
+  Alternativos: A1 el agente no está disponible (se informa, sin abortar el
+  análisis); A2 error en validate/plan (el agente reporta el error y la
+  operación no se aprueba); A3 el usuario rechaza la operación (queda
+  registrada como rechazada).
+
+  \subsubsection{RF16 -- Aprovisionamiento de instancias desde
+  recomendaciones}
+
+  Descripción: "El sistema deberá permitir, con la autorización explícita
+  del usuario, aprovisionar la instancia recomendada mediante el agente de
+  Infraestructura como Código, presentando el plan y el costo estimado para
+  su aprobación antes de la ejecución, y registrando la operación en la
+  cola de acciones con su resultado."
+  Prioridad: Baja. CU relacionados: CU10.
+
+--------------------------------------------------------------------------------
+RECORDATORIO FINAL
+--------------------------------------------------------------------------------
+- Atribucion: incluida en la subseccion (Parte 1). Verificar con Agustin la
+  autorizacion del uso de su codigo y, si es posible, dejarla documentada.
+- Si prefieren el minimo absoluto: aplicar solo la Parte 1 y dejar las
+  Partes 2 y 3 para despues — pero la 2b y la 2c son las que evitan
+  contradicciones activas (credenciales compartidas y RNF11 vs el
+  aprovisionamiento real), por lo que se recomienda aplicar 1 + 2 y decidir
+  la 3.
