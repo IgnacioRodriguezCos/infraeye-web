@@ -23,7 +23,7 @@ descuento), los flujos y todos los indicadores se recalculan automáticamente.
 
 2.1 INVERSIÓN INICIAL (AÑO 0) - TOTAL: USD 27.000
 
-    - Desarrollo del MVP (2 desarrolladores, 6 meses) ....... USD 18.000
+    - Desarrollo del MVP (2 desarrolladores, 12 meses) ...... USD 18.000
     - Infraestructura y herramientas iniciales .............. USD  2.000
     - Marketing de lanzamiento .............................. USD  3.000
     - Gastos legales y de registración ...................... USD  1.500
@@ -33,6 +33,9 @@ descuento), los flujos y todos los indicadores se recalculan automáticamente.
     SaaS que obtiene la información desde las APIs del proveedor cloud (sin agentes
     que instalar), no se requiere inversión en hardware ni en componentes on-premise:
     toda la infraestructura se contrata como servicio y se paga como gasto operativo.
+    El desarrollo se extendió a lo largo de doce meses de dedicación parcial de los
+    dos autores del proyecto; el monto refleja ese esfuerzo valorado a tasas de
+    mercado.
 
 2.2 MODELO DE INGRESOS
 

@@ -1335,7 +1335,7 @@ Desde la perspectiva del cliente, el producto ofrece una herramienta de apoyo a 
 
 Finalmente, el producto ha sido concebido bajo una arquitectura modular que favorece su evolución y escalabilidad. Si bien la implementación inicial se orienta al ecosistema de Huawei Cloud, la separación entre los componentes encargados de la obtención de información, el análisis mediante aprendizaje automático, el motor de recomendaciones y la generación de Terraform permite incorporar nuevos proveedores cloud o sustituir los algoritmos de análisis con un impacto mínimo sobre el resto de la solución. Esta característica no solo incrementa la vida útil del producto, sino que también fortalece su potencial de adopción en un mercado caracterizado por la diversidad de plataformas y la constante evolución tecnológica.
 
-\subsubsection{Precio}
+\subsubsection{Precio}\label{sec:precio}
 
 La estrategia de precios propuesta toma como referencia el modelo de comercialización utilizado por herramientas líderes del mercado como Datadog, Dynatrace y New Relic, las cuales ofrecen sus servicios bajo un esquema de \textbf{Software como Servicio (SaaS)} mediante suscripciones periódicas. En estos casos, el costo del servicio se determina principalmente en función de la cantidad de recursos monitoreados, el volumen de datos procesados o las funcionalidades contratadas. Sin embargo, estas plataformas requieren, en la mayoría de los casos, la instalación de agentes sobre los sistemas o la infraestructura del cliente para recopilar métricas en tiempo real, lo que incrementa la complejidad de implementación y las orienta principalmente a organizaciones con necesidades avanzadas de observabilidad.
 
@@ -1345,9 +1345,9 @@ Como estrategia de comercialización, la plataforma adoptará un modelo \textbf{
 
 A partir de esta capa gratuita, la plataforma ofrecerá tres niveles de suscripción adaptados a las necesidades de distintos tipos de organizaciones. El \textbf{Plan Starter (10 dólares)} estará orientado a pequeñas y medianas empresas que administren hasta diez recursos cloud, incorporando análisis ilimitados, almacenamiento del historial de recomendaciones y generación de versiones optimizadas de Terraform. El \textbf{Plan Professional (50 dólares)} estará destinado a organizaciones con infraestructuras de mayor tamaño, permitiendo administrar hasta veinticinco recursos e incorporando funcionalidades adicionales como exportación de informes, programación automática de análisis y estadísticas históricas de utilización. Finalmente, el \textbf{Plan Enterprise (a definir)} estará dirigido a grandes organizaciones, ofreciendo la administración de recursos ilimitados, gestión de múltiples proyectos y organizaciones, acceso mediante API para integraciones con otras herramientas, soporte técnico prioritario y funcionalidades avanzadas de auditoría.
 
-Este esquema de comercialización permite que el costo del servicio evolucione de forma proporcional al tamaño de la infraestructura administrada y al valor generado para cada cliente. A medida que aumenta la cantidad de recursos gestionados, también crece el potencial de ahorro derivado de la optimización de la infraestructura, justificando la incorporación de funcionalidades avanzadas y planes de mayor capacidad. De esta manera, la estrategia de precios acompaña el crecimiento de las organizaciones, permitiendo que la plataforma evolucione junto con las necesidades de sus clientes y mantenga un modelo de ingresos recurrentes alineado con las prácticas comerciales predominantes en la industria del software como servicio.
+Este esquema de comercialización permite que el costo del servicio evolucione de forma proporcional al tamaño de la infraestructura administrada y al valor generado para cada cliente. A medida que aumenta la cantidad de recursos gestionados, también crece el potencial de ahorro derivado de la optimización de la infraestructura, lo que justifica la incorporación de funcionalidades avanzadas y planes de mayor capacidad. Cabe señalar que este ahorro constituye, en la etapa actual del producto, un potencial estimado y no un beneficio medido: la validación del prototipo, presentada en la sección \ref{sec:validacion}, evaluó la capacidad de detectar recursos ineficientes y de generar recomendaciones, pero no incluyó la aplicación de los cambios ni la comparación de costos antes y después de su implementación. De esta manera, la estrategia de precios acompaña el crecimiento de las organizaciones, permitiendo que la plataforma evolucione junto con las necesidades de sus clientes y mantenga un modelo de ingresos recurrentes alineado con las prácticas comerciales predominantes en la industria del software como servicio.
 
-La estrategia de precios propuesta no solo busca establecer un modelo de ingresos recurrentes, sino también reforzar el posicionamiento de la plataforma como una solución de optimización de infraestructura cloud de rápida adopción y bajo impacto operativo. A diferencia de otras herramientas del mercado que requieren la instalación de agentes propietarios para realizar un monitoreo continuo, la solución desarrollada obtiene la información necesaria directamente desde los servicios del proveedor cloud, apoyándose —para las métricas de memoria y disco en instancias Linux— en el agente nativo de la plataforma, que la propia solución puede instalar de forma automatizada. De este modo, el análisis no introduce componentes de terceros en los entornos del cliente. Esta característica constituye un diferencial competitivo, especialmente para organizaciones que administran infraestructuras privadas o con políticas estrictas de seguridad, donde la incorporación de agentes de terceros puede representar una limitación técnica u operativa.
+La estrategia de precios propuesta no solo busca establecer un modelo de ingresos recurrentes, sino también reforzar el posicionamiento de la plataforma como una solución de optimización de infraestructura cloud de rápida adopción y bajo impacto operativo. A diferencia de otras herramientas del mercado que requieren la instalación de agentes propietarios para realizar un monitoreo continuo, la solución desarrollada obtiene la información necesaria directamente desde los servicios del proveedor cloud, apoyándose, para las métricas de memoria y disco en instancias Linux, en el agente nativo de la plataforma, que la propia solución puede instalar de forma automatizada. De este modo, el análisis no introduce componentes de terceros en los entornos del cliente. Esta característica constituye un diferencial competitivo, especialmente para organizaciones que administran infraestructuras privadas o con políticas estrictas de seguridad, donde la incorporación de agentes de terceros puede representar una limitación técnica u operativa.
 
 \subsubsection{Plaza}
 
@@ -1435,6 +1435,275 @@ Desde el punto de vista tecnológico, uno de los principales factores diferencia
 La estrategia comercial acompaña este posicionamiento mediante un modelo de distribución SaaS y un esquema Freemium, permitiendo que potenciales clientes evalúen el funcionamiento de la plataforma sin realizar una inversión inicial. Este enfoque reduce las barreras de adopción y facilita la incorporación progresiva de organizaciones de distintos tamaños, mientras que los planes de suscripción escalonados permiten que el crecimiento de los ingresos acompañe la expansión de la infraestructura administrada por cada cliente.
 
 La estrategia propuesta no busca competir por amplitud de funcionalidades frente a las grandes plataformas de observabilidad, sino por la especialización en un problema concreto: la optimización inteligente del dimensionamiento de recursos cloud. La combinación de aprendizaje automático, generación de recomendaciones sobre Infraestructura como Código, ausencia de agentes de terceros y un modelo comercial de baja barrera de entrada constituye una propuesta de valor diferenciada que permite posicionar a la solución como una alternativa innovadora dentro del mercado de herramientas para la administración y optimización de infraestructuras cloud.
+
+\section{Plan de negocios y evaluación económica}
+\label{sec:plan-de-negocios}
+
+Con el fin de evaluar la viabilidad económica del producto más allá del modelo de negocio descripto en la sección anterior, se presenta a continuación un análisis del flujo de fondos proyectado del emprendimiento y de sus indicadores de evaluación económica. Dado que la plataforma se encuentra en etapa de prototipo, las cifras involucradas constituyen estimaciones construidas sobre supuestos declarados de manera explícita, y deben interpretarse como un ejercicio de evaluación de la sensibilidad del negocio frente a distintos niveles de adopción, y no como una predicción de resultados. Todos los montos están expresados en dólares estadounidenses (USD), en coherencia con la estrategia de precios definida, y el horizonte de proyección es de cinco años, estándar para emprendimientos tecnológicos de etapa temprana. El modelo se implementó en una planilla de cálculo con fórmulas dinámicas, de modo que la modificación de cualquier supuesto (precios, clientes, costos o tasa de descuento) recalcula automáticamente los flujos y los indicadores que se presentan en esta sección.
+
+\subsection{Supuestos del modelo}
+
+\subsubsection{Inversión inicial}
+
+La inversión inicial del proyecto (año 0) se estima en USD 27.000. Su composición se detalla en la Tabla \ref{tab:inversion-inicial}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l r}
+\hline
+Concepto & Monto (USD) \\
+\hline
+Desarrollo del MVP (dos desarrolladores, doce meses) & 18.000 \\
+Infraestructura y herramientas iniciales & 2.000 \\
+Marketing de lanzamiento & 3.000 \\
+Gastos legales y de registración & 1.500 \\
+Capital de trabajo inicial & 2.500 \\
+\hline
+Total & 27.000 \\
+\hline
+\end{tabular}
+\caption{Composición de la inversión inicial}
+\label{tab:inversion-inicial}
+\end{table}
+
+El ítem dominante es el desarrollo del producto. Al tratarse de una plataforma SaaS que obtiene la información desde las APIs del proveedor cloud, sin agentes que instalar, no se requiere inversión en hardware ni en componentes on-premise: toda la infraestructura se contrata como servicio y se paga como gasto operativo.
+
+Cabe aclarar que el prototipo fue construido en el marco del presente trabajo académico, a lo largo de doce meses de dedicación parcial de sus dos autores, y que la infraestructura utilizada durante su desarrollo y validación estuvo cubierta por créditos de prueba del proveedor. A los efectos del modelo, ese esfuerzo de desarrollo se valora a tasas de mercado, por lo que la inversión inicial refleja el costo económico total de construir el producto, como si el emprendimiento debiera afrontarlo desde cero, y no únicamente los desembolsos monetarios efectivamente realizados. Esta decisión permite evaluar la viabilidad del negocio como una unidad económica independiente del proyecto académico que le dio origen.
+
+\subsubsection{Modelo de ingresos}
+
+La estrategia de precios definida en la sección anterior contempla tres planes de suscripción mensual: el plan Starter (USD 10 mensuales, hasta diez recursos), el plan Professional (USD 50 mensuales, hasta veinticinco recursos) y el plan Enterprise, cuyo precio se encuentra en etapa de definición y se estima en USD 200 mensuales a los efectos del modelo. En términos anuales, estos valores equivalen a USD 120, USD 600 y USD 2.400, respectivamente. El ingreso anual de cada plan se calcula como el producto entre la cantidad de clientes activos promedio del año, el precio mensual y doce. El plan Freemium no genera ingresos: su función es reducir la barrera de entrada y alimentar el embudo de conversión hacia los planes pagos.
+
+La proyección de la base de clientes adopta tasas de crecimiento propias de cada plan y decrecientes a lo largo del horizonte de proyección. Esta forma funcional refleja la curva de adopción de un producto tecnológico: el crecimiento es rápido mientras la base de clientes es pequeña y se modera a medida que el mercado objetivo se satura. Las tasas concretas adoptadas se definen por escenario en las secciones siguientes.
+
+\subsubsection{Estructura de costos}
+
+Los costos del modelo se analizan por separado en dos categorías: costos fijos, independientes del nivel de actividad, y costos variables, que crecen con la base de clientes y con la facturación.
+
+Los costos fijos anuales comprenden el personal, el marketing y las ventas, la infraestructura cloud sobre la que opera la plataforma, las herramientas de desarrollo y los gastos administrativos y contables. Su nivel difiere entre escenarios: el neutral contempla un desarrollador a tiempo completo y uno a tiempo parcial; el optimista incorpora desde el primer año la estructura completa, con dos desarrolladores a tiempo completo y marketing intensivo; y el pesimista asume una estructura defensiva, en la que los fundadores no perciben retiro, el soporte se contrata a tiempo parcial y el marketing se recorta. En los tres escenarios los costos fijos crecen a una tasa constante del 5\% anual, en concepto de inflación de costos. La Tabla \ref{tab:costos-fijos} presenta la composición del primer año para los tres escenarios.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l r r r}
+\hline
+Concepto & Neutral (USD) & Optimista (USD) & Pesimista (USD) \\
+\hline
+Personal & 14.400 & 24.000 & 9.600 \\
+Marketing y ventas & 3.600 & 4.800 & 2.400 \\
+Infraestructura cloud & 3.600 & 3.600 & 3.600 \\
+Herramientas y licencias & 1.200 & 1.200 & 1.200 \\
+Gastos administrativos y contables & 1.800 & 1.800 & 1.200 \\
+\hline
+Total del primer año & 24.600 & 35.400 & 18.000 \\
+Crecimiento anual & 5\% & 5\% & 5\% \\
+\hline
+\end{tabular}
+\caption{Costos fijos anuales del primer año por escenario}
+\label{tab:costos-fijos}
+\end{table}
+
+La diferencia clave entre escenarios no está solo en los ingresos: la estructura de gastos defensiva del escenario pesimista reduce el punto de equilibrio, pero también la velocidad de adquisición de clientes, mientras que la estructura completa del optimista acelera la adopción a costa de un punto de equilibrio inicial más alto.
+
+Los costos variables comprenden dos componentes con distinto driver. El primero es un costo de USD 6 por cliente por año, que representa las llamadas a las APIs del proveedor cloud, el almacenamiento del historial de recomendaciones y el consumo de servicios asociado a cada cuenta, y que crece por tanto al ritmo de la base de clientes. Se trata de un valor deliberadamente bajo, que constituye la consecuencia económica del diferencial técnico del producto: al no instalar agentes ni procesar telemetría continua, el costo marginal por cliente adicional es mínimo. El segundo componente es un costo variable atado al nivel de facturación y no a la cantidad de clientes: las comisiones de procesamiento de pagos y de facturación, estimadas en el 3,5\% de los ingresos. En conjunto, ambos componentes hacen que el costo variable total evolucione a un ritmo similar al del crecimiento de los clientes y de la facturación, y dejan un margen de contribución sobre ingresos de aproximadamente el 94\%, un rasgo típico del modelo SaaS.
+
+\subsubsection{Tasa de descuento y estructura de financiamiento}
+
+La tasa de descuento adoptada es del 17\% anual y surge del costo promedio ponderado de capital (WACC, por su sigla en inglés), que combina el costo del capital propio con el costo de la deuda en la proporción en que cada fuente financia el proyecto \parencite{Brealey2023}.
+
+El financiamiento del proyecto recae sobre los propios fundadores y sobre deuda bancaria: se estima que el 70\% de la inversión inicial (USD 18.900) se cubre con aportes de capital de los fundadores y el 30\% restante (USD 8.100) con un préstamo bancario pyme en dólares.
+
+El costo de la deuda se estima en el 10\% anual. La tasa preferencial bancaria en dólares (prime rate) se ha mantenido en torno al 7,5\% \parencite{FRED2026}, y a ella se añade un diferencial de aproximadamente 2,5 puntos porcentuales en concepto de riesgo pyme. Dado que el modelo es previo a impuestos, se toma el costo de la deuda antes de impuestos, sin computar el escudo fiscal del interés.
+
+El costo del capital propio se estima mediante el modelo de valoración de activos de capital (CAPM) \parencite{Brealey2023}, complementado con una prima por etapa temprana. La tasa libre de riesgo se toma del rendimiento de los bonos del Tesoro de los Estados Unidos a diez años, en torno al 4,3\% \parencite{USTreasury2026}; el beta del sector software se sitúa cerca de 1,2 y la prima de riesgo de mercado de la economía estadounidense, en torno al 5,5\% \parencite{Damodaran2026}. El CAPM arroja así un costo de capital propio aproximado del 10,9\% anual. Sobre este valor se añade una prima de aproximadamente 9 puntos porcentuales en concepto de riesgo de etapa temprana, concentración e iliquidez, propio de un emprendimiento sin historia comercial: la práctica del capital de riesgo exige retornos del 20\% al 30\% anual en esta etapa, y se adopta el extremo inferior del rango por conservadurismo. El costo del capital propio resulta así del 20\% anual.
+
+\begin{equation*}
+\mathrm{WACC} = 0{,}70 \times 20\% + 0{,}30 \times 10\% = 17\%
+\end{equation*}
+
+Todo flujo futuro se descuenta a esta tasa. Los flujos del modelo se presentan antes de costos financieros: los intereses del préstamo no se deducen de los flujos porque el costo del financiamiento ya queda capturado en la tasa de descuento, lo que evita la doble contabilización \parencite{Brealey2023}. El horizonte de proyección es de cinco años: el año 0 concentra la inversión inicial y los años 1 a 5 corresponden a la operación del negocio.
+
+\subsection{Escenario neutral}
+
+El escenario neutral constituye la base del análisis: describe la trayectoria que el emprendimiento considera más probable, con una adopción gradual del producto alimentada por el plan Freemium, el marketing de contenidos y las comunidades DevOps, sin asumir ni un despegue acelerado ni un estancamiento prolongado. Sobre este escenario se construye, en la sección siguiente, el análisis de sensibilidad.
+
+La proyección de clientes activos promedio aplica las tasas de crecimiento decrecientes definidas en los supuestos: la base del plan Starter crece un 82\%, 55\%, 35\% y 26\% entre los años 2 y 5; la del plan Professional, un 100\%, 64\%, 44\% y 31\%; y la del plan Enterprise, que parte de una base mínima, un 200\%, 67\%, 40\% y 29\%. El mix migra gradualmente hacia los planes superiores, por lo que el ingreso promedio por cliente sube de aproximadamente USD 233 anuales en el año 1 a USD 275 en el año 5. La Tabla \ref{tab:flujo-neutral} presenta el flujo de fondos proyectado; la columna Clientes indica los clientes activos promedio de cada plan, en el formato Starter/Professional/Enterprise.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{c c r r r r r r}
+\hline
+Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+\hline
+0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
+1 & 55/11/1 & 15.600 & 24.600 & 948 & 25.548 & -9.948 & -36.948 \\
+2 & 100/22/3 & 32.400 & 25.830 & 1.884 & 27.714 & 4.686 & -32.262 \\
+3 & 155/36/5 & 52.200 & 27.122 & 3.003 & 30.125 & 22.075 & -10.187 \\
+4 & 210/52/7 & 73.200 & 28.478 & 4.176 & 32.654 & 40.546 & 30.359 \\
+5 & 265/68/9 & 94.200 & 29.902 & 5.349 & 35.251 & 58.949 & 89.308 \\
+\hline
+\end{tabular}
+\caption{Flujo de fondos proyectado en el escenario neutral (montos en USD)}
+\label{tab:flujo-neutral}
+\end{table}
+
+La lectura de estos números permite extraer tres conclusiones. En primer lugar, el negocio opera el primer año por debajo del punto de equilibrio, con un déficit acotado de USD 9.948, y se vuelve operativamente rentable a partir del segundo año. En segundo lugar, la inversión se recupera durante el cuarto año de operación. Finalmente, a partir del año 2 los ingresos crecen mucho más rápido que los costos: entre el año 1 y el año 5 los ingresos se multiplican por 6,0 mientras que los egresos totales solo se multiplican por 1,4. Esa divergencia es la palanca de rentabilidad del modelo SaaS: los costos fijos crecen de forma moderada y el margen de contribución se mantiene en torno al 94\%.
+
+\subsection{Análisis de sensibilidad}
+
+Los escenarios optimista y pesimista se construyen como variaciones del escenario neutral: comparten precios, estructura de costos variables, tasa de descuento y horizonte, y modifican las hipótesis de adopción (la conversión del plan Freemium y la velocidad de crecimiento de cada plan) así como la estructura de costos fijos activada. Presentados de este modo, la diferencia entre escenarios puede leerse como un análisis de sensibilidad del resultado frente a las variables críticas del negocio.
+
+\subsubsection{Escenario optimista}
+
+El escenario optimista asume que el plan Freemium convierte eficazmente: la adopción inicial es fuerte y crece mediante marketing de contenidos, comunidades DevOps y alianzas con proveedores cloud, con la estructura de costos completa activada desde el primer año. Bajo estas hipótesis, el mix de clientes migra hacia los planes superiores: el ingreso promedio por cliente sube de aproximadamente USD 248 anuales en el año 1 a USD 311 en el año 5. Las tasas de crecimiento, también decrecientes, son: Starter, 100\%, 60\%, 42\% y 26\%; Professional, 140\%, 78\%, 48\% y 32\%; y Enterprise, 150\%, 100\%, 60\% y 38\%. La Tabla \ref{tab:flujo-optimista} presenta el flujo de fondos proyectado.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{c c r r r r r r}
+\hline
+Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+\hline
+0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
+1 & 75/15/2 & 22.800 & 35.400 & 1.350 & 36.750 & -13.950 & -40.950 \\
+2 & 150/36/5 & 51.600 & 37.170 & 2.952 & 40.122 & 11.478 & -29.472 \\
+3 & 240/64/10 & 91.200 & 39.029 & 5.076 & 44.105 & 47.095 & 17.623 \\
+4 & 340/95/16 & 136.200 & 40.980 & 7.473 & 48.453 & 87.747 & 105.370 \\
+5 & 430/125/22 & 179.400 & 43.029 & 9.741 & 52.770 & 126.630 & 232.000 \\
+\hline
+\end{tabular}
+\caption{Flujo de fondos proyectado en el escenario optimista (montos en USD)}
+\label{tab:flujo-optimista}
+\end{table}
+
+La lectura de estos números permite extraer tres conclusiones. En primer lugar, el negocio se vuelve operativamente rentable a partir del segundo año: el déficit inicial de USD 13.950, consecuencia de activar la estructura completa desde el año 1, se revierte con los ingresos crecientes. En segundo lugar, la inversión se recupera durante el tercer año de operación. Finalmente, entre el año 1 y el año 5 los ingresos se multiplican por 7,9 mientras que los egresos totales solo se multiplican por 1,4. El flujo acumulado al cierre del año 5 asciende a USD 232.000, es decir, 8,6 veces la inversión inicial.
+
+\subsubsection{Escenario pesimista}
+
+El escenario pesimista asume que la conversión del plan Freemium es débil (entre el 3\% y el 4\%), que el mercado adopta el producto con lentitud y que el plan Enterprise recién registra clientes en el año 2. Se aplica la estructura de gastos defensiva descripta en la subsección de costos: socios fundadores sin retiro, soporte a tiempo parcial y marketing reducido. Las tasas de crecimiento, también decrecientes, son: Starter, 78\%, 44\%, 30\% y 23\%; Professional, 100\%, 56\%, 36\% y 26\%; y Enterprise, 200\%, 33\% y 25\% a partir del año 2. La Tabla \ref{tab:flujo-pesimista} presenta el flujo de fondos proyectado bajo estas hipótesis.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{c c r r r r r r}
+\hline
+Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+\hline
+0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
+1 & 45/8/0 & 10.200 & 18.000 & 675 & 18.675 & -8.475 & -35.475 \\
+2 & 80/16/1 & 21.600 & 18.900 & 1.338 & 20.238 & 1.362 & -34.113 \\
+3 & 115/25/3 & 36.000 & 19.845 & 2.118 & 21.963 & 14.037 & -20.076 \\
+4 & 150/34/4 & 48.000 & 20.837 & 2.808 & 23.645 & 24.355 & 4.279 \\
+5 & 185/43/5 & 60.000 & 21.879 & 3.498 & 25.377 & 34.623 & 38.902 \\
+\hline
+\end{tabular}
+\caption{Flujo de fondos proyectado en el escenario pesimista (montos en USD)}
+\label{tab:flujo-pesimista}
+\end{table}
+
+Solo el primer año resulta deficitario: los ingresos de USD 10.200 cubren el 53\% del punto de equilibrio. El segundo año queda apenas por encima del equilibrio operativo, con una cobertura del 107\%, y a partir del tercer año cada año aporta entre USD 14.000 y USD 35.000. La inversión se recupera durante el cuarto año y el acumulado final es de USD 38.902. Aun así, la pérdida máxima del ciclo es acotada: el punto más profundo del flujo acumulado es de USD -35.475 al cierre del año 1, es decir, USD 8.475 por debajo de la inversión inicial, gracias a la estructura de costos flexible.
+
+\subsection{Indicadores de evaluación económica}
+
+\subsubsection{Tasa interna de retorno (TIR)}
+
+La tasa interna de retorno es la tasa de descuento que hace que el valor actual neto sea igual a cero; en otros términos, la rentabilidad anual implícita del proyecto. Se compara contra la tasa mínima exigida (17\%): si la TIR la supera, el proyecto crea valor. En el escenario neutral, la TIR es del 37,6\%: el proyecto rinde más del doble de la tasa exigida. En el optimista alcanza el 66,9\%. En el pesimista, la TIR es del 20,6\%: si bien queda lejos de los escenarios anteriores, supera el 17\% exigido, por lo que incluso la trayectoria desfavorable crea valor, aunque con un margen menor.
+
+\subsubsection{Valor actual neto (VAN)}
+
+El valor actual neto es la suma de todos los flujos descontados al 17\% anual, incluida la inversión inicial. Mide cuánto valor, en dólares de hoy, agrega el proyecto por encima de la rentabilidad exigida: un VAN positivo indica que el proyecto conviene.
+
+\begin{equation*}
+\mathrm{VAN} = -27.000 + \sum_{t=1}^{5} \frac{FN_t}{(1{,}17)^t}
+\end{equation*}
+
+donde $FN_t$ es el flujo neto del año $t$. Los tres escenarios arrojan VAN positivo al 17\%: USD 103.450 en el optimista, USD 30.228 en el neutral y USD 4.305 en el pesimista. La lectura es directa: incluso en la trayectoria desfavorable el proyecto cubre el costo promedio ponderado de capital y agrega valor, mientras que en la trayectoria base agrega más de USD 30.000 de valor presente.
+
+\subsubsection{Período de recuperación (payback)}
+
+El período de recuperación es la cantidad de años que tarda el flujo acumulado en volver a cero, es decir, en recuperar la inversión inicial. Se calcula interpolando dentro del año en que se produce el cruce. En el escenario neutral, el payback es de 3,25 años: el acumulado llega al año 3 con USD -10.187 y el año 4 genera USD 40.546, por lo que el cruce ocurre a 0,25 del cuarto año. En el optimista, el payback es de 2,63 años: el acumulado llega al año 2 con USD -29.472 y el año 3 genera USD 47.095. En el pesimista, el payback es de 3,82 años: el acumulado llega al año 3 con USD -20.076 y el año 4 genera USD 24.355, de modo que la recuperación se completa hacia el final del cuarto año.
+
+\subsubsection{Punto de equilibrio}
+
+El punto de equilibrio es el nivel de ingresos anuales necesario para cubrir todos los costos, y se calcula como el cociente entre los costos fijos y el margen de contribución:
+
+\begin{equation*}
+\mathrm{PE} = \frac{\text{Costos fijos}}{1 - \text{Costos variables}/\text{Ingresos}} = \frac{\text{Costos fijos}}{\text{margen de contribución}}
+\end{equation*}
+
+A diferencia de un modelo con costo variable puramente proporcional a los ingresos, aquí el margen de contribución varía levemente entre años, porque parte del costo variable depende de la cantidad de clientes y no del nivel de facturación; el punto de equilibrio se calcula por año con la relación costo variable/ingresos de cada año. Dado que el margen se mantiene en torno al 94\%, el punto de equilibrio queda apenas por encima del valor de los costos fijos. La Tabla \ref{tab:punto-equilibrio} presenta la evolución anual del punto de equilibrio y de los ingresos reales en los tres escenarios.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{c r r r r r r}
+\hline
+ & \multicolumn{2}{c}{Neutral} & \multicolumn{2}{c}{Optimista} & \multicolumn{2}{c}{Pesimista} \\
+\cline{2-3} \cline{4-5} \cline{6-7}
+Año & P. de equilibrio & Ingresos & P. de equilibrio & Ingresos & P. de equilibrio & Ingresos \\
+\hline
+1 & 26.193 & 15.600 & 37.628 & 22.800 & 19.235 & 10.200 \\
+2 & 27.386 & 32.400 & 39.436 & 51.600 & 20.148 & 21.600 \\
+3 & 28.786 & 52.200 & 41.328 & 91.200 & 21.085 & 36.000 \\
+4 & 30.198 & 73.200 & 43.357 & 136.200 & 22.132 & 48.000 \\
+5 & 31.703 & 94.200 & 45.497 & 179.400 & 23.229 & 60.000 \\
+\hline
+\end{tabular}
+\caption{Punto de equilibrio anual e ingresos reales por escenario (USD)}
+\label{tab:punto-equilibrio}
+\end{table}
+
+La lectura es directa: en los tres escenarios el negocio opera el primer año por debajo del punto de equilibrio, con coberturas del 60\%, 61\% y 53\% en los escenarios neutral, optimista y pesimista, respectivamente. A partir del segundo año el neutral y el optimista lo superan de forma sostenida (coberturas del 118\% y del 131\% en el año 2), mientras que el pesimista lo alcanza con un margen mínimo en el año 2 y lo supera con claridad desde el tercero.
+
+\subsection{Comparación de escenarios}
+
+La Tabla \ref{tab:comparacion-escenarios} sintetiza los indicadores de los tres escenarios.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l r r r}
+\hline
+Indicador & Neutral & Optimista & Pesimista \\
+\hline
+Inversión inicial (USD) & 27.000 & 27.000 & 27.000 \\
+TIR & 37,6\% & 66,9\% & 20,6\% \\
+VAN al 17\% (USD) & 30.228 & 103.450 & 4.305 \\
+Payback (años) & 3,25 & 2,63 & 3,82 \\
+Primer año con flujo neto positivo & Año 2 & Año 2 & Año 2 \\
+Punto de equilibrio del año 1 (USD) & 26.193 & 37.628 & 19.235 \\
+Ingresos del año 1 (USD) & 15.600 & 22.800 & 10.200 \\
+Ingresos del año 5 (USD) & 94.200 & 179.400 & 60.000 \\
+Flujo acumulado al año 5 (USD) & 89.308 & 232.000 & 38.902 \\
+\hline
+\end{tabular}
+\caption{Comparación de indicadores por escenario}
+\label{tab:comparacion-escenarios}
+\end{table}
+
+La comparación de los escenarios permite extraer cinco conclusiones para la decisión de negocio.
+
+En primer lugar, el proyecto crea valor en los tres escenarios: incluso el pesimista arroja una TIR del 20,6\%, superior al costo del capital del 17\%, y un VAN positivo. La asimetría de resultados es favorable: en el optimista el valor generado es elevado (VAN de USD 103.450 y TIR del 66,9\%), mientras que en el pesimista el margen sobre la tasa exigida es acotado pero positivo. El riesgo de pérdida se encuentra limitado por la estructura de costos flexible del modelo SaaS sin agentes: sin hardware, sin instalaciones en el cliente y con el consumo de APIs y las comisiones de cobranza como principales costos variables.
+
+En segundo lugar, la viabilidad depende de una variable crítica: la conversión del plan Freemium a los planes pagos y la retención de esos clientes. El salto entre escenarios no proviene de los precios, que son idénticos en los tres, sino de cuántas organizaciones pasan de la capa gratuita a los planes Starter, Professional o Enterprise, y a qué velocidad.
+
+En tercer lugar, el margen del escenario pesimista sobre la tasa exigida es estrecho (3,6 puntos porcentuales), lo que indica que la rentabilidad del proyecto es sensible a la adopción: un desempeño aún peor al previsto podría situar la TIR por debajo del costo del capital. Esto sugiere que el proyecto no presenta un riesgo de pérdida grave, sino un riesgo de rentabilidad insuficiente si la adopción es muy lenta.
+
+En cuarto lugar, se recomienda una gestión por etapas: lanzar con la inversión escalonada y condicionada a hitos de conversión y retención, monitorear el embudo de conversión del plan gratuito a los planes pagos como indicador principal y activar la estructura de gastos completa (segundo desarrollador a tiempo completo, marketing intensivo) solo cuando los indicadores se aproximen a la trayectoria optimista.
+
+Finalmente, el punto de equilibrio bajo (entre USD 19.000 y USD 38.000 de ingresos anuales según la estructura de costos) constituye una fortaleza estructural: equivale a entre 160 y 315 clientes Starter, o su equivalente en mix de planes, un objetivo alcanzable incluso con una conversión moderada del plan gratuito.
+
+\subsection{Limitaciones y sensibilidad del modelo}
+
+El análisis presentado está sujeto a un conjunto de limitaciones que deben considerarse al interpretar los resultados:
+
+\begin{itemize}
+\item El precio del plan Enterprise (USD 200 mensuales) es una estimación, dado que la estrategia de precios lo mantiene en etapa de definición. Es el supuesto con mayor incidencia en el resultado: en el escenario optimista, el plan Enterprise aporta entre el 21\% y el 29\% de los ingresos anuales.
+\item Los clientes activos promedio incorporan implícitamente la rotación de clientes (churn): representan cuentas pagas simultáneas durante el año, no ventas acumuladas.
+\item El modelo es previo a impuestos: no descuenta impuestos a las ganancias, IVA ni retenciones. En consecuencia, el costo de la deuda se toma antes de impuestos y no se computa el escudo fiscal del interés; la estructura de financiamiento incide únicamente a través de la tasa de descuento, sin deducir intereses de los flujos.
+\item No se modela inflación diferencial ni riesgo cambiario: todo el modelo está expresado en USD, en coherencia con un producto SaaS que cobra en dólares y opera con costos mayormente en la misma moneda, como la infraestructura cloud.
+\end{itemize}
+
+Respecto de la sensibilidad, los indicadores responden con mayor elasticidad a la conversión del plan Freemium hacia los planes pagos, a la retención anual y al precio del plan Enterprise, y con menor elasticidad a los costos variables, debido a su peso marginal en la estructura. Dado que todos los supuestos son editables en el modelo de cálculo, es posible recalcular la TIR, el VAN, el payback y el punto de equilibrio ante cualquier variante que se desee evaluar.
 
 \section{Metodología de desarrollo}
 
@@ -1635,7 +1904,7 @@ Los diagramas de secuencia detallan, para cada caso de uso, la interacción temp
 
 \subsection{Comparación de alternativas}
 
-La selección de las tres tecnologías centrales del sistema —el algoritmo de detección, el framework de backend y la herramienta de Infraestructura como Código— se realizó comparando las alternativas principales de cada categoría.
+La selección de las tres tecnologías centrales del sistema (el algoritmo de detección, el framework de backend y la herramienta de Infraestructura como Código) se realizó comparando las alternativas principales de cada categoría.
 
 \subsubsection{Algoritmo de detección de anomalías}
 
@@ -1643,7 +1912,7 @@ La elección de Isolation Forest se evaluó frente a los enfoques habituales par
 
 \subsubsection{Framework de backend}
 
-La elección de Flask se evaluó frente a Django y FastAPI. Django es un framework de alcance completo que incorpora mapeador objeto-relacional, autenticación, panel de administración y un conjunto de convenciones orientadas a aplicaciones de mayor escala; esa amplitud resulta innecesaria para un prototipo cuyo backend se limita a una API REST y a la renderización de un panel de control. FastAPI ofrece un enfoque moderno basado en anotaciones de tipos y ejecución asincrónica, especialmente adecuado para servicios de alta concurrencia; la aplicación no presenta requisitos de concurrencia que justifiquen esa complejidad adicional. Flask, como microframework, proporciona los componentes necesarios —enrutamiento, manejo de solicitudes y renderizado de plantillas— con una sobrecarga mínima, en línea con el tamaño del prototipo.
+La elección de Flask se evaluó frente a Django y FastAPI. Django es un framework de alcance completo que incorpora mapeador objeto-relacional, autenticación, panel de administración y un conjunto de convenciones orientadas a aplicaciones de mayor escala; esa amplitud resulta innecesaria para un prototipo cuyo backend se limita a una API REST y a la renderización de un panel de control. FastAPI ofrece un enfoque moderno basado en anotaciones de tipos y ejecución asincrónica, especialmente adecuado para servicios de alta concurrencia; la aplicación no presenta requisitos de concurrencia que justifiquen esa complejidad adicional. Flask, como microframework, proporciona los componentes necesarios (enrutamiento, manejo de solicitudes y renderizado de plantillas) con una sobrecarga mínima, en línea con el tamaño del prototipo.
 
 \subsubsection{Herramienta de Infraestructura como Código}
 
@@ -1803,15 +2072,15 @@ análisis de la infraestructura.
 
 \subsection{Agente de Infraestructura como Código}
 
-La materialización de las recomendaciones como cambios reales de infraestructura se apoya en un servicio complementario: un agente de Infraestructura como Código para Huawei Cloud, desarrollado a partir del proyecto \emph{agent-huawei-cloud} de Agustín Chiarenza —uno de los especialistas entrevistados durante el relevamiento de este trabajo—, del cual se derivó el subconjunto de funcionalidades de chat IaC y de protecciones de ejecución (\emph{guardrails}).
+La materialización de las recomendaciones como cambios reales de infraestructura se apoya en un servicio complementario: un agente de Infraestructura como Código para Huawei Cloud, desarrollado a partir del proyecto \emph{agent-huawei-cloud} de Agustín Chiarenza, uno de los especialistas entrevistados durante el relevamiento de este trabajo, del cual se derivó el subconjunto de funcionalidades de chat IaC y de protecciones de ejecución (\emph{guardrails}).
 
-El agente está implementado en Python sobre el framework FastAPI —stack del proyecto del cual deriva—, utiliza SQLAlchemy como mapeador objeto-relacional y Alembic para las migraciones de su base de datos PostgreSQL, y ofrece su propia interfaz web de chat desarrollada en JavaScript. Su componente central es el ejecutor de Terraform, protegido por un conjunto de \emph{guardrails}: validación sintáctica del código HCL generado, exigencia de etiquetas de propiedad sobre los recursos, estimación del costo de cada operación y una cola de aprobaciones que requiere la confirmación explícita del usuario antes de ejecutar cualquier cambio (\emph{approve} $\rightarrow$ \emph{apply}).
+El agente está implementado en Python sobre el framework FastAPI, stack del proyecto del cual deriva, utiliza SQLAlchemy como mapeador objeto-relacional y Alembic para las migraciones de su base de datos PostgreSQL, y ofrece su propia interfaz web de chat desarrollada en JavaScript. Su componente central es el ejecutor de Terraform, protegido por un conjunto de \emph{guardrails}: validación sintáctica del código HCL generado, exigencia de etiquetas de propiedad sobre los recursos, estimación del costo de cada operación y una cola de aprobaciones que requiere la confirmación explícita del usuario antes de ejecutar cualquier cambio (\emph{approve} $\rightarrow$ \emph{apply}).
 
-La comunicación entre la plataforma y el agente se realiza mediante su API: una cuenta de servicio registrada automáticamente, autenticación por tokens y envío cifrado de las credenciales del usuario, que el agente almacena cifradas en su propia base de datos. Cuando el usuario decide materializar una recomendación, la plataforma envía al agente el flavor recomendado; el agente escribe el código HCL del módulo \emph{huawei-ecs}, ejecuta el ciclo \emph{init} $\rightarrow$ \emph{validate} $\rightarrow$ \emph{plan} de Terraform de manera determinística —sin intervención de modelos de lenguaje en esta etapa— y deja la operación propuesta en la cola de aprobaciones, con el plan y el costo visibles. La aplicación del cambio se ejecuta únicamente tras la aprobación del usuario.
+La comunicación entre la plataforma y el agente se realiza mediante su API: una cuenta de servicio registrada automáticamente, autenticación por tokens y envío cifrado de las credenciales del usuario, que el agente almacena cifradas en su propia base de datos. Cuando el usuario decide materializar una recomendación, la plataforma envía al agente el flavor recomendado; el agente escribe el código HCL del módulo \emph{huawei-ecs}, ejecuta el ciclo \emph{init} $\rightarrow$ \emph{validate} $\rightarrow$ \emph{plan} de Terraform de manera determinística, sin intervención de modelos de lenguaje en esta etapa, y deja la operación propuesta en la cola de aprobaciones, con el plan y el costo visibles. La aplicación del cambio se ejecuta únicamente tras la aprobación del usuario.
 
 Cabe señalar que la capacidad de chat del agente se apoya en un modelo de lenguaje accesible mediante los servicios de inteligencia artificial del proveedor, orientada a consultas de infraestructura como código; el flujo de aprovisionamiento descrito, en cambio, es enteramente determinista, de modo que las operaciones críticas no dependan de la salida de un modelo generativo.
 
-\subsection{Algoritmo de detección de anomalías}
+\subsection{Algoritmo de detección de anomalías}\label{sec:algoritmo}
 
 El componente central del sistema corresponde al algoritmo Isolation
 Forest, una técnica de aprendizaje automático no supervisado diseñada
@@ -1999,13 +2268,17 @@ escalabilidad y reutilización de los distintos componentes del sistema.
 
 \subsection{Seguridad de credenciales y despliegue}
 
-Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado y autorizado: las operaciones de lectura —consulta de recursos y métricas— se ejecutan de manera automatizada en cada análisis, mientras que las operaciones de escritura sobre la infraestructura (instalación del agente de monitoreo, que implica el reinicio de la instancia, y encendido o apagado de instancias) requieren la autorización explícita del usuario para cada acción y no se ejecutan de manera automática. Para las operaciones de aprovisionamiento, las credenciales se comparten con el agente de Infraestructura como Código: viajan cifradas, se almacenan cifradas en su base de datos y toda operación queda sujeta a la aprobación del plan propuesto antes de su ejecución. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
+Las credenciales de acceso a Huawei Cloud (AK/SK) que el usuario registra en la plataforma constituyen el activo más sensible del sistema, dado que habilitan operaciones sobre su infraestructura. Su tratamiento sigue tres principios. Primero, cifrado en reposo: las credenciales se almacenan cifradas mediante un esquema de cifrado autenticado y reversible (Fernet, de la biblioteca cryptography, basado en AES-128-CBC y HMAC-SHA256), dado que el sistema necesita recuperarlas en cada análisis para autenticarse contra las APIs del proveedor; la clave de cifrado no reside en la base de datos sino en la configuración del entorno de ejecución, de modo que un eventual compromiso del almacenamiento no expone las credenciales por sí solo. Segundo, uso acotado y autorizado: las operaciones de lectura (consulta de recursos y métricas) se ejecutan de manera automatizada en cada análisis, mientras que las operaciones de escritura sobre la infraestructura (instalación del agente de monitoreo, que implica el reinicio de la instancia, y encendido o apagado de instancias) requieren la autorización explícita del usuario para cada acción y no se ejecutan de manera automática. Para las operaciones de aprovisionamiento, las credenciales se comparten con el agente de Infraestructura como Código: viajan cifradas, se almacenan cifradas en su base de datos y toda operación queda sujeta a la aprobación del plan propuesto antes de su ejecución. Tercero, no exposición: las credenciales no se registran en los archivos de registro ni se incluyen en los reportes generados.
+
+Dado que la plataforma únicamente realiza operaciones de lectura, las credenciales registradas pueden corresponder a un usuario de Identity and Access Management (IAM) del proveedor configurado según el principio de privilegios mínimos: una política dedicada que otorgue exclusivamente las acciones de listado y consulta sobre los servicios que la plataforma consume (instancias Elastic Cloud Server, métricas de Cloud Eye, volúmenes Elastic Volume Service y configuraciones de red virtual), sin permisos de creación, modificación ni eliminación de recursos. Esta configuración, recomendada para el despliegue del producto, limita la superficie de ataque ante un eventual compromiso de las credenciales a la exposición de información de solo lectura, en línea con el requerimiento de integridad definido para el sistema.
+
+Si la plataforma debiera desplegar de manera directa las recomendaciones generadas, el alcance de permisos requerido se ampliaría de forma considerable. Además de las acciones de lectura, las credenciales necesitarían permisos de escritura sobre los recursos gestionados: modificación de las especificaciones y migración de tipo de las instancias Elastic Cloud Server para las recomendaciones de redimensionamiento, eliminación de instancias y de sus volúmenes asociados para las recomendaciones de recursos ociosos, liberación de las direcciones IP elásticas asociadas y administración de los recursos de red implicados en cada cambio. Estas acciones equivalen a las que el proveedor de Terraform para Huawei Cloud ejecuta durante la aplicación de un plan, y habilitan la modificación e incluso la eliminación de infraestructura productiva, por lo que un compromiso de las credenciales tendría consecuencias directamente destructivas. Esta asimetría de riesgo fundamenta la decisión de diseño adoptada: el prototipo restringe las credenciales al ámbito de solo lectura y mantiene la aplicación de las recomendaciones como un proceso externo a la plataforma, revisado y aprobado por el usuario, en cumplimiento del requerimiento de integridad definido para el sistema.
 
 En cuanto a la comunicación, el tráfico entre el navegador del usuario y la aplicación se protege mediante HTTPS/TLS, al igual que la comunicación entre la aplicación y los servicios de Huawei Cloud, cuyos endpoints oficiales operan sobre TLS. La extensión Flask-CORS configura las políticas de intercambio de recursos de origen cruzado para restringir los orígenes habilitados a consumir la API.
 
 La aplicación se despliega en una instancia Elastic Cloud Server (ECS) de Huawei Cloud junto con el servicio de base de datos PostgreSQL que persiste las recomendaciones generadas. Esta decisión aprovecha los créditos de prueba disponibles en dicho proveedor y permite operar el producto en el mismo ecosistema al que se orienta. El acceso a la aplicación se realiza mediante HTTPS, y las actualizaciones del servicio consisten en el despliegue de una nueva versión del código en la instancia y el reinicio del proceso correspondiente.
 
-\section{Validación del prototipo}
+\section{Validación del prototipo}\label{sec:validacion}
 
 La validación del prototipo se organizó en tres instancias complementarias: las pruebas automatizadas del software desarrollado, la evaluación del modelo de detección contra etiquetas humanas y la verificación funcional del circuito completo de análisis sobre infraestructura desplegada en Huawei Cloud. El propósito de esta etapa fue evaluar la capacidad del sistema para detectar ineficiencias y generar recomendaciones efectivas de optimización, en concordancia con el alcance definido para el prototipo.
 
@@ -2019,12 +2292,12 @@ Para evaluar la capacidad del modelo de detección de identificar instancias ine
 
 Se seleccionó de forma aleatoria y reproducible (semilla fija) una muestra de 400 de las 4.023 máquinas con registros de utilización del conjunto Alibaba Cluster Trace 2018. Para cada máquina se calcularon las mismas quince características utilizadas por el modelo (media, percentil 5 y percentil 95 de cada métrica) y los autores del presente trabajo las etiquetaron como ineficientes o normales aplicando el criterio del administrador: si la utilización sostenida de la máquina justificaría una acción de redimensionamiento o eliminación. En la práctica, el criterio se centró primordialmente en el nivel de utilización de CPU, considerando ineficiente a toda máquina cuyo uso promedio resultara claramente inferior al nivel esperable para su rol. El etiquetado arrojó 85 máquinas ineficientes y 315 normales. Se definió de antemano una regla de extensión de la muestra para el caso de obtener menos de 30 casos positivos; dado que se obtuvieron 85, no resultó necesario aplicarla.
 
-El modelo se entrenó con las características de las 3.623 máquinas restantes —excluyendo las 400 de la muestra, de modo que la evaluación se realizara sobre instancias disjuntas del conjunto de entrenamiento— y se evaluó sobre la muestra etiquetada para distintos valores del parámetro de contaminación. La Tabla \ref{tab:evaluacion} presenta los resultados.
+El criterio de aceptación del modelo se definió a partir del rol asignado a la detección no supervisada dentro de la arquitectura, previo a la ejecución de la evaluación. Dado que cada instancia señalada demanda trabajo de revisión por parte del administrador, el modelo debía operar como un mecanismo de señalización de alta confianza: se priorizó la precisión por sobre la exhaustividad y se estableció como condición de aceptación que la precisión superara de manera clara a la de la línea base definida por el criterio de etiquetado, manteniendo los falsos positivos en niveles reducidos. La exhaustividad se aceptó como métrica secundaria, ya que las reglas del motor de recomendaciones se aplican sobre la totalidad de las instancias analizadas y cubren los casos que el modelo no señala.
+
+El modelo se entrenó con las características de las 3.623 máquinas restantes (excluyendo las 400 de la muestra, de modo que la evaluación se realizara sobre instancias disjuntas del conjunto de entrenamiento) y se evaluó sobre la muestra etiquetada para distintos valores del parámetro de contaminación. La Tabla \ref{tab:evaluacion} presenta los resultados.
 
 \begin{table}[H]
 \centering
-\caption{Evaluación del modelo contra etiquetas humanas para distintos valores de contaminación}
-\label{tab:evaluacion}
 \begin{tabular}{c c c c c c c}
 \hline
 Contaminación & Marcadas & VP & FP & Precisión & Exhaustividad & F1 \\
@@ -2038,19 +2311,23 @@ Contaminación & Marcadas & VP & FP & Precisión & Exhaustividad & F1 \\
 0,25 & 98 & 52 & 46 & 0,53 & 0,61 & 0,57 \\
 \hline
 \end{tabular}
+\caption{Evaluación del modelo contra etiquetas humanas para distintos valores de contaminación}
+\label{tab:evaluacion}
 \end{table}
 
 Los resultados muestran el compromiso esperado entre precisión y exhaustividad: con el valor adoptado (0,03), el modelo señala 19 instancias de las cuales 18 son genuinamente ineficientes según las etiquetas (precisión de 0,95), aunque deja de detectar la mayoría de los casos moderados (exhaustividad de 0,21). Valores mayores de contaminación incrementan la exhaustividad a costa de reducir la precisión de forma sostenida.
 
-Como línea base de comparación se evaluó una regla de umbral simple equivalente al criterio de etiquetado (utilización media de CPU inferior a un umbral de referencia): dicha regla alcanza una exhaustividad de 0,99 y una precisión de 0,84. La comparación es elocuente: para la noción de ineficiencia basada en niveles de utilización —la que primó en el juicio del etiquetador—, un umbral directo resulta más efectivo que el detector no supervisado, cuyo conjunto de instancias señaladas queda prácticamente contenido dentro del de la regla. El aporte del modelo en este escenario es acotado pero distintivo: su precisión (0,95) supera a la de la línea base, por lo que opera como un mecanismo de señalización de alta confianza, útil para priorizar la revisión del administrador.
+Como línea base de comparación se evaluó una regla de umbral simple equivalente al criterio de etiquetado (utilización media de CPU inferior a un umbral de referencia): dicha regla alcanza una exhaustividad de 0,99 y una precisión de 0,84. La comparación es elocuente: para la noción de ineficiencia basada en niveles de utilización, la que primó en el juicio del etiquetador, un umbral directo resulta más efectivo que el detector no supervisado, cuyo conjunto de instancias señaladas queda prácticamente contenido dentro del de la regla. El aporte del modelo en este escenario es acotado pero distintivo: su precisión (0,95) supera a la de la línea base, por lo que opera como un mecanismo de señalización de alta confianza, útil para priorizar la revisión del administrador.
 
-La comparación contra las reglas de umbrales operativos del propio motor de recomendaciones añade, sin embargo, un matiz a favor del enfoque no supervisado. Las reglas del motor operan como bandas con condiciones conjuntas —la condición de subutilización exige simultáneamente utilización baja de CPU y de memoria, y la de CPU sobredimensionado exige un uso de CPU muy bajo junto con una memoria alta—, lo que deja fuera una zona intermedia: instancias con utilización de CPU baja y memoria moderada que ninguna banda alcanza. Aplicadas a la muestra etiquetada, las reglas del motor detectan 32 de las 85 instancias ineficientes, y el modelo aporta 5 detecciones únicas que ninguna regla captura: instancias con utilización de CPU de entre el 6\% y el 30\% y memoria de entre el 33\% y el 76\%, situadas precisamente en esa zona intermedia. Este aporte es estructural y no desaparece al recalibrar los umbrales de las reglas: las bandas con condiciones conjuntas no pueden alcanzar configuraciones intermedias por diseño, mientras que el detector no supervisado, que mide la desviación global respecto del patrón de referencia, sí lo hace.
+La comparación contra las reglas de umbrales operativos del propio motor de recomendaciones añade, sin embargo, un matiz a favor del enfoque no supervisado. Las reglas del motor operan como bandas con condiciones conjuntas (la condición de subutilización exige simultáneamente utilización baja de CPU y de memoria, y la de CPU sobredimensionado exige un uso de CPU muy bajo junto con una memoria alta), lo que deja fuera una zona intermedia: instancias con utilización de CPU baja y memoria moderada que ninguna banda alcanza. Aplicadas a la muestra etiquetada, las reglas del motor detectan 32 de las 85 instancias ineficientes, y el modelo aporta 5 detecciones únicas que ninguna regla captura: instancias con utilización de CPU de entre el 6\% y el 30\% y memoria de entre el 33\% y el 76\%, situadas precisamente en esa zona intermedia. Este aporte es estructural y no desaparece al recalibrar los umbrales de las reglas: las bandas con condiciones conjuntas no pueden alcanzar configuraciones intermedias por diseño, mientras que el detector no supervisado, que mide la desviación global respecto del patrón de referencia, sí lo hace.
 
-Estos resultados deben leerse a la luz de las características del conjunto de datos disponible. El clúster del trace es homogéneo y está fuertemente optimizado: tres cuartas partes de sus máquinas operan con utilización de CPU entre el 35\% y el 44\%, y la memoria se mantiene en torno al 90\% en prácticamente todas ellas. En un espacio de características tan concentrado, las desviaciones presentes son primordialmente de nivel —territorio en el que los umbrales resultan más efectivos— y las combinaciones atípicas detectables se limitan a configuraciones intermedias como las descriptas en el párrafo anterior. El valor diferencial del enfoque no supervisado —señalar configuraciones cuya combinación de métricas resulta inusual sin una definición previa— no puede demostrarse en toda su extensión sobre este conjunto de datos. Validarlo requeriría datos de infraestructuras de negocio reales, con cargas de trabajo heterogéneas y patrones conjuntos más ricos; dichos datos son de acceso restringido, lo que motivó el uso de un conjunto público.
+Estos resultados deben leerse a la luz de las características del conjunto de datos disponible. El clúster del trace es homogéneo y está fuertemente optimizado: tres cuartas partes de sus máquinas operan con utilización de CPU entre el 35\% y el 44\%, y la memoria se mantiene en torno al 90\% en prácticamente todas ellas. En un espacio de características tan concentrado, las desviaciones presentes son primordialmente de nivel, territorio en el que los umbrales resultan más efectivos, y las combinaciones atípicas detectables se limitan a configuraciones intermedias como las descriptas en el párrafo anterior. El valor diferencial del enfoque no supervisado, señalar configuraciones cuya combinación de métricas resulta inusual sin una definición previa, no puede demostrarse en toda su extensión sobre este conjunto de datos. Validarlo requeriría datos de infraestructuras de negocio reales, con cargas de trabajo heterogéneas y patrones conjuntos más ricos; dichos datos son de acceso restringido, lo que motivó el uso de un conjunto público.
 
-Sobre la base de esta evaluación se adoptaron tres decisiones de diseño. La primera, mantener el valor de contaminación en 0,03: es el único punto de operación en el que el modelo supera a la línea base en precisión (0,95 frente a 0,84), lo que respalda su rol de mecanismo de señalización de alta confianza. La segunda, aplicar las reglas de recomendación sobre la totalidad de las instancias analizadas y no únicamente sobre las señaladas por el modelo: dado que el criterio del administrador se basa primordialmente en niveles de utilización, las reglas capturan directamente esos casos, mientras que el modelo complementa con sus señales de alta precisión. La tercera, recalibrar el umbral de CPU de la regla de migración hacia tipos de instancia optimizados para memoria, elevándolo del 30\% al 35\%: la evaluación mostró que un conjunto de instancias con utilización de CPU levemente superior al umbral y memoria alta —que el administrador consideró ineficientes— quedaba fuera de la regla por un margen mínimo; tras la recalibración, el conjunto de reglas del motor pasa de detectar 32 a 74 de las 85 instancias ineficientes de la muestra.
+Sobre la base de esta evaluación se adoptaron tres decisiones de diseño. La primera, mantener el valor de contaminación en 0,03: es el único punto de operación que satisface el criterio de aceptación definido, al superar a la línea base en precisión (0,95 frente a 0,84), lo que respalda su rol de mecanismo de señalización de alta confianza. La segunda, aplicar las reglas de recomendación sobre la totalidad de las instancias analizadas y no únicamente sobre las señaladas por el modelo: dado que el criterio del administrador se basa primordialmente en niveles de utilización, las reglas capturan directamente esos casos, mientras que el modelo complementa con sus señales de alta precisión. La tercera, recalibrar el umbral de CPU de la regla de migración hacia tipos de instancia optimizados para memoria, elevándolo del 30\% al 35\%: la evaluación mostró que un conjunto de instancias con utilización de CPU levemente superior al umbral y memoria alta, que el administrador consideró ineficientes, quedaba fuera de la regla por un margen mínimo; tras la recalibración, el conjunto de reglas del motor pasa de detectar 32 a 74 de las 85 instancias ineficientes de la muestra.
 
 Como limitaciones de la evaluación deben señalarse: las etiquetas provienen del juicio de los propios autores (un único etiquetador), por lo que idealmente deberían validarse con especialistas externos; el criterio aplicado se centró en el nivel de utilización de CPU, dejando de lado posibles ineficiencias expresables solo en combinaciones de métricas; y la muestra proviene de un único clúster, por lo que los resultados no generalizan a otros entornos.
+
+A estas limitaciones se suma un sesgo de dominio que conviene explicitar. El modelo se entrena sobre un clúster de Alibaba caracterizado por cargas de trabajo de procesamiento por lotes y servicios de larga duración fuertemente optimizados, mientras que la inferencia se realiza sobre instancias Elastic Cloud Server de Huawei Cloud pertenecientes a infraestructuras de negocio, cuyos perfiles de utilización suelen ser más heterogéneos. La correspondencia entre las métricas de ambos entornos, argumentada en la sección \ref{sec:algoritmo}, garantiza que las características estadísticas puedan calcularse de la misma manera en el entrenamiento y en la inferencia, pero no que la noción de comportamiento normal aprendida durante el entrenamiento coincida con la distribución de los entornos analizados. En consecuencia, la precisión y la exhaustividad reportadas deben interpretarse como una evaluación de la mecánica de detección sobre un dominio acotado, y no como una estimación del desempeño esperable sobre infraestructuras reales de Huawei Cloud. La validación sobre dichos entornos, que requeriría datos de acceso restringido, queda delimitada como trabajo futuro.
 
 \subsection{Verificación funcional en entorno controlado}
 
@@ -2058,4 +2335,8 @@ La verificación funcional se realizó sobre infraestructura desplegada en Huawe
 
 La visualización de los resultados en el dashboard web permitió comprobar que el usuario puede revisar el estado de la infraestructura analizada, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto antes de aprobar cualquier modificación, manteniendo la validación humana como parte del proceso de optimización. La persistencia de las recomendaciones en la base de datos, junto con su código Terraform y su descripción asociada, verifica la trazabilidad entre la detección realizada y la acción recomendada.
 
-En conjunto, las tres instancias de validación permitieron tomar decisiones de diseño fundamentadas en resultados y evaluar la viabilidad técnica de la propuesta. La evaluación con etiquetas humanas respaldó la adopción del valor 0,03 para el parámetro de contaminación (precisión de 0,95) y la decisión de aplicar las reglas de recomendación sobre la totalidad de las instancias, en concordancia con el rol de apoyo a la decisión que cumple la plataforma. La suite de pruebas automatizadas verificó el comportamiento del motor de recomendaciones y de las reglas de negocio, y quedó disponible como base de regresión para el mantenimiento del sistema. La verificación funcional comprobó el funcionamiento del circuito completo de análisis, desde la obtención de métricas hasta la generación y visualización del código Terraform, incluyendo la persistencia trazable de las recomendaciones. Sobre la base de estos resultados, el prototipo se considera apto para asistir la identificación de recursos ineficientes y la generación de recomendaciones de optimización dentro del alcance definido, y establece las bases para desarrollos futuros que incorporen funcionalidades adicionales.
+Esta persistencia constituye, además, la base del registro auditable del proceso de decisión: queda documentado qué ineficiencias se detectaron, qué acciones se propusieron y qué código se generó para cada caso. En el prototipo, el registro se limita a la persistencia en la base de datos de la aplicación; las funcionalidades de auditoría de mayor alcance, como el historial de aprobaciones por usuario o los registros inmutables de decisiones, quedan delimitadas como trabajo futuro, en línea con las funcionalidades avanzadas previstas para el plan Enterprise. En cuanto al control de cambios, el código Terraform generado se almacena asociado a su recomendación y está pensado para incorporarse a los repositorios de Infraestructura como Código de la organización, donde los mecanismos estándar de versionado y revisión de código gobiernan su evolución antes de cualquier aplicación sobre la infraestructura.
+
+En conjunto, las tres instancias de validación permitieron tomar decisiones de diseño fundamentadas en resultados y evaluar la viabilidad técnica de la propuesta. La evaluación con etiquetas humanas respaldó la adopción del valor 0,03 para el parámetro de contaminación (precisión de 0,95) y la decisión de aplicar las reglas de recomendación sobre la totalidad de las instancias, en concordancia con el rol de apoyo a la decisión que cumple la plataforma. La suite de pruebas automatizadas verificó el comportamiento del motor de recomendaciones y de las reglas de negocio, y quedó disponible como base de regresión para el mantenimiento del sistema. La verificación funcional comprobó el funcionamiento del circuito completo de análisis, desde la obtención de métricas hasta la generación y visualización del código Terraform, incluyendo la persistencia trazable de las recomendaciones. El alcance de la verificación se detuvo allí: no incluyó la aplicación efectiva de los cambios sobre la infraestructura ni la comparación de costos antes y después de implementarlos, por lo que el ahorro económico asociado a las recomendaciones no fue medido. Sobre la base de estos resultados, el prototipo se considera apto para asistir la identificación de recursos ineficientes y la generación de recomendaciones de optimización dentro del alcance definido, y establece las bases para desarrollos futuros que incorporen funcionalidades adicionales.
+
+En ausencia de una medición directa, el orden de magnitud del potencial de ahorro puede ilustrarse mediante una estimación con supuestos explícitos. Si se toma como referencia el desperdicio promedio del 32\% del gasto cloud reportado por Flexera \parencite{Flexera2023} y se asume, de manera conservadora, que la aplicación de las recomendaciones permite recuperar la mitad de ese desperdicio en los recursos efectivamente optimizados, una organización con un gasto mensual de USD 1.000 en cómputo recuperaría aproximadamente USD 160 por mes, cifra que supera ampliamente el costo de los planes de suscripción definidos en la sección \ref{sec:precio}. Se trata de una ilustración construida sobre supuestos declarados y no de un resultado medido: su verificación exigiría comparar los costos de la infraestructura antes y después de aplicar las recomendaciones generadas, lo cual queda delimitado como trabajo futuro.
