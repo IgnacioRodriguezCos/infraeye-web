@@ -1,0 +1,240 @@
+\documentclass[a4paper, 12pt, oneside, openany]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{float}
+\usepackage{array}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{vmargin}
+\setmarginsrb{2.7cm}{2cm}{2.3cm}{1.5cm}{0cm}{2cm}{0cm}{1cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titlesec}
+\titleformat{\chapter}{\bfseries\fontsize{14pt}{14pt}\selectfont}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{12pt}{6pt}
+\titleformat{\section}{\bfseries\fontsize{14pt}{14pt}\selectfont}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titleformat{\subsection}{\bfseries\fontsize{14pt}{14pt}\selectfont}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+\setlength{\parindent}{36pt}
+\usepackage{lastpage}
+\usepackage{indentfirst}
+
+\begin{document}
+
+% ============================================================================
+% SECCIÓN 3.1 — ANÁLISIS DE LOS RESULTADOS DE LA ENCUESTA (NUEVA)
+% ============================================================================
+
+\chapter{Descripción}
+
+\section{Análisis de los resultados de la encuesta}
+
+Con el objetivo de relevar la percepción de los usuarios respecto de la administración y optimización de recursos en entornos de computación en la nube, se realizó una encuesta mediante Google Forms. Se obtuvieron un total de 162 respuestas, de las cuales 59 participantes manifestaron contar con experiencia práctica en la administración de infraestructura cloud y 103 declararon no poseerla. El cuestionario permitió recopilar información tanto de usuarios con experiencia directa como de personas sin ella, diferenciando posteriormente ambos grupos para evitar que la falta de experiencia condicionara el análisis de las preguntas de carácter técnico. Los resultados agregados se presentan en el Anexo correspondiente.
+
+En primer lugar, se analizó la existencia de dificultades relacionadas con la utilización eficiente de los recursos cloud. Dentro del grupo de 59 participantes con experiencia práctica, 43 indicaron haber experimentado gastos inesperados o sobrecostos asociados al uso de servicios cloud —28 de ellos en alguna ocasión y 15 en varias oportunidades—, mientras que los 16 restantes indicaron no haber atravesado esta situación. En consecuencia, aproximadamente el 72,9\% de los participantes con experiencia práctica manifestó haber experimentado algún grado de sobrecosto. Este resultado permite observar que los costos derivados de una utilización ineficiente de los recursos constituyen una problemática extendida entre los usuarios con experiencia en este tipo de infraestructura.
+
+Se consultó a los participantes con experiencia sobre la dificultad para identificar recursos ineficientes dentro de una infraestructura cloud, utilizando una escala de 1 a 5. Las respuestas se concentraron principalmente en los valores intermedios y altos, obteniéndose un promedio de 3,56 sobre 5. Esto permite caracterizar la identificación de recursos ineficientes como una tarea de dificultad moderada a elevada.
+
+En relación con las métricas utilizadas para evaluar el estado de los recursos, los costos fueron el indicador mencionado con mayor frecuencia entre los participantes con experiencia (41 menciones), seguido por el uso de memoria RAM (34), CPU (32) y almacenamiento (32). La disponibilidad (30) y el tráfico de red (25) también presentaron frecuencias elevadas, mientras que el uso de contenedores tuvo una presencia menor (17). Estos resultados respaldan la selección inicial de métricas consideradas por la solución propuesta, particularmente aquellas relacionadas con el consumo de CPU, memoria y almacenamiento, complementadas por información económica asociada a los recursos.
+
+Por otra parte, se relevó qué herramientas utilizan actualmente los participantes con experiencia práctica para monitorear, administrar y optimizar sus infraestructuras cloud. Entre las soluciones mencionadas con mayor frecuencia se encontraron Grafana (24 menciones), Amazon CloudWatch (18), Terraform (17), Kubernetes Dashboard (16), Prometheus (12), Datadog (9) y New Relic (7). Resulta particularmente relevante que varios de los participantes indicaron utilizar herramientas que constituyen alternativas o competidores directos respecto de distintas funcionalidades contempladas en la solución propuesta. La presencia de estas herramientas entre las respuestas permite considerar que una parte de la muestra posee conocimiento y experiencia real con soluciones existentes en el mercado. A su vez, la diversidad de herramientas utilizadas evidencia que los usuarios recurren a diferentes soluciones para cubrir necesidades específicas, lo que confirma la fragmentación del ecosistema y la oportunidad de una solución integrada.
+
+Respecto de las principales limitaciones percibidas en las herramientas utilizadas actualmente, la complejidad fue el aspecto mencionado con mayor frecuencia (34 menciones), seguida por los costos elevados (28), la dificultad de integración entre herramientas (18), las recomendaciones poco útiles (14) y la poca capacidad de visualización (14). También se identificó la falta de automatización como una limitación relevante (9 menciones). Estos resultados permiten observar que la problemática no se limita exclusivamente a la disponibilidad de métricas, sino que también comprende la capacidad de interpretar dicha información y transformarla en acciones concretas de optimización.
+
+La encuesta también permitió analizar el interés de los participantes respecto de las funcionalidades que podría ofrecer una plataforma orientada a la optimización de recursos cloud. Sobre el total de 162 participantes, las funcionalidades seleccionadas con mayor frecuencia fueron las recomendaciones para optimizar costos (88 menciones) y el monitoreo del uso de recursos (87), seguidas por la detección automática de desperdicio de recursos (71). También se identificó interés en la automatización del despliegue (43), la generación de reportes y visualizaciones (40) y las alertas (37). Estos resultados presentan una correspondencia directa con los objetivos de la solución propuesta, dado que las principales funcionalidades demandadas pueden organizarse en un flujo compuesto por la observación del comportamiento de los recursos, la detección de situaciones ineficientes y la generación de recomendaciones orientadas a su optimización.
+
+Un aspecto particularmente relevante fue la valoración general de una plataforma destinada a administrar recursos cloud de manera más eficiente. Sobre el total de 162 participantes, 124 calificaron su utilidad con un valor de 4 o 5 sobre 5, lo que representa aproximadamente el 76,5\% de la muestra, mientras que la valoración promedio obtenida fue de 4,06 sobre 5. Entre los 59 participantes que declararon contar con experiencia práctica, 46 calificaron la utilidad de la plataforma con 4 o 5, lo que representa el 78\% de este grupo. Las 8 valoraciones más bajas, correspondientes a valores de 1 o 2, provinieron tanto de participantes con experiencia como sin ella. En conjunto, estos resultados evidencian un nivel elevado de interés potencial en una solución orientada a facilitar la administración eficiente de recursos cloud.
+
+Sin embargo, la aceptación de las recomendaciones automatizadas presentó un comportamiento más moderado. La confianza promedio declarada por el total de participantes fue de 3,41 sobre 5, mientras que el 47,5\% de la muestra otorgó una valoración de 4 o 5. Al analizar específicamente a los participantes con experiencia práctica en infraestructura cloud, el promedio se incrementó a 3,49 y el porcentaje de valoraciones de 4 o 5 alcanzó el 55,9\%. Esto permite identificar una diferencia entre el interés por utilizar una herramienta de optimización y la disposición a delegar decisiones de infraestructura en un sistema automatizado. En consecuencia, los resultados sugieren que la automatización constituye una funcionalidad valorada, pero debe estar acompañada por mecanismos que permitan al usuario comprender, revisar y controlar las acciones recomendadas.
+
+La seguridad se identificó como el principal factor que condiciona la confianza en las recomendaciones automatizadas, siendo mencionada por 73 participantes. Otros factores señalados fueron el riesgo de errores (28), la experiencia previa (23), los costos (20) y la falta de transparencia (14). Este resultado tiene implicancias directas sobre el diseño de la solución propuesta. En lugar de plantear una modificación automática e irreversible de la infraestructura, resulta conveniente adoptar un enfoque basado en recomendaciones explicables y controladas por el usuario. Bajo este enfoque, el sistema puede detectar una situación potencialmente ineficiente, explicar los datos que justifican la recomendación, proponer una acción de optimización y, posteriormente, permitir al usuario decidir si desea aplicarla.
+
+Esta consideración resulta especialmente relevante para la integración con Terraform planteada en el proyecto. En lugar de modificar directamente los recursos productivos, la plataforma puede utilizar los resultados del análisis para generar una propuesta de infraestructura como código optimizada. De esta manera, el usuario conserva el control sobre el cambio y puede revisar el código generado antes de aplicarlo. Este mecanismo permite combinar automatización con supervisión humana, reduciendo el riesgo asociado a modificaciones automáticas sobre infraestructura crítica.
+
+En conjunto, los resultados obtenidos permiten identificar tres aspectos principales. En primer lugar, existe evidencia extendida de que los usuarios con experiencia en infraestructura cloud enfrentan problemas relacionados con sobrecostos (72,9\%) y con la identificación de recursos ineficientes (dificultad promedio de 3,56 sobre 5). En segundo lugar, las funcionalidades consideradas más relevantes por los participantes —recomendaciones de optimización de costos, monitoreo de recursos y detección automática de desperdicio— presentan una correspondencia directa con los objetivos de la solución propuesta. Finalmente, aunque existe una valoración positiva hacia una plataforma de este tipo (76,5\% de valoraciones de 4 o 5), la confianza en las recomendaciones automatizadas se encuentra condicionada principalmente por cuestiones de seguridad y transparencia.
+
+Por lo tanto, los resultados de la encuesta proporcionan evidencia favorable para continuar con el desarrollo de una plataforma orientada a la detección de ineficiencias en infraestructuras cloud y a la generación de recomendaciones de optimización. Al mismo tiempo, permiten establecer criterios de diseño que trascienden la detección de anomalías: las recomendaciones deben ser comprensibles, justificables y revisables por el usuario, y las acciones de modificación de infraestructura deberían mantener un mecanismo de supervisión antes de su aplicación. De esta manera, la encuesta no solo contribuye a validar la problemática abordada, sino que también aporta evidencia para definir las características funcionales y de seguridad de la solución desarrollada.
+
+% ============================================================================
+% ANEXO — RESULTADOS CONSOLIDADOS (OPCIÓN B)
+% ============================================================================
+
+\chapter{Anexo: Resultados de la Encuesta}
+
+La encuesta se realizó mediante Google Forms durante el período de desarrollo del presente trabajo. Se obtuvieron 162 respuestas, de las cuales 59 corresponden a participantes con experiencia práctica en la administración de infraestructura cloud. A continuación se presentan los resultados agregados por pregunta.
+
+\section{Perfil de los participantes}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Perfil de los participantes de la encuesta}
+\label{tab:enc-perfil}
+\begin{tabular}{|p{8cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Pregunta} & \textbf{Respuesta} & \textbf{Cantidad} \\
+\hline
+¿Tiene experiencia práctica administrando infraestructura cloud? & Sí & 59 \\
+& No & 103 \\
+\hline
+¿Actualmente monitoreas el consumo de recursos cloud? (con experiencia) & Sí & 35 \\
+& No & 24 \\
+\hline
+¿Utiliza herramientas de Infrastructure as Code? (con experiencia) & Sí & 31 \\
+& No & 28 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Problemática detectada}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Sobrecostos y dificultad de detección (participantes con experiencia)}
+\label{tab:enc-problematica}
+\begin{tabular}{|p{8cm}|p{2.5cm}|p{2cm}|}
+\hline
+\textbf{Pregunta} & \textbf{Respuesta} & \textbf{Cantidad} \\
+\hline
+¿Alguna vez tuviste gastos inesperados o sobrecostos en la nube? & Sí, alguna vez & 28 \\
+& Sí, varias veces & 15 \\
+& No & 16 \\
+\hline
+\multicolumn{3}{|l|}{\textbf{Total con sobrecostos: 43 de 59 (72,9\%)}} \\
+\hline
+¿Qué tan difícil te resulta identificar recursos ineficientes? & Promedio (escala 1--5) & 3,56 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Métricas consideradas más importantes}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Métricas consideradas más importantes (participantes con experiencia, selección múltiple)}
+\label{tab:enc-metricas}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Métrica} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Costos & 41 & 69,5\% \\
+Memoria RAM & 34 & 57,6\% \\
+CPU & 32 & 54,2\% \\
+Almacenamiento & 32 & 54,2\% \\
+Disponibilidad & 30 & 50,8\% \\
+Tráfico de red & 25 & 42,4\% \\
+Uso de contenedores & 17 & 28,8\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Herramientas utilizadas actualmente}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Herramientas utilizadas (participantes con experiencia, selección múltiple)}
+\label{tab:enc-herramientas}
+\begin{tabular}{|p{6cm}|p{2cm}|}
+\hline
+\textbf{Herramienta} & \textbf{Menciones} \\
+\hline
+Grafana & 24 \\
+Amazon CloudWatch & 18 \\
+Terraform & 17 \\
+Kubernetes Dashboard & 16 \\
+Prometheus & 12 \\
+Datadog & 9 \\
+New Relic & 7 \\
+AWS Cost Explorer & 5 \\
+Zabbix & 3 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Limitaciones de las herramientas actuales}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Limitaciones percibidas (participantes con experiencia, selección múltiple)}
+\label{tab:enc-limitaciones}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Limitación} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Complejidad & 34 & 57,6\% \\
+Costos elevados & 28 & 47,5\% \\
+Integración difícil & 18 & 30,5\% \\
+Recomendaciones poco útiles & 14 & 23,7\% \\
+Poca visualización & 14 & 23,7\% \\
+Falta de automatización & 9 & 15,3\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Funcionalidades de interés}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Funcionalidades de interés (total de participantes, selección múltiple)}
+\label{tab:enc-funcionalidades}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Funcionalidad} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Recomendaciones para optimizar costos & 88 & 54,3\% \\
+Monitoreo del uso de recursos & 87 & 53,7\% \\
+Detección automática de desperdicio & 71 & 43,8\% \\
+Automatización del despliegue & 43 & 26,5\% \\
+Reportes y visualizaciones & 40 & 24,7\% \\
+Alertas & 37 & 22,8\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Valoración de la plataforma propuesta}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Valoración de la plataforma y confianza en recomendaciones automatizadas}
+\label{tab:enc-valoracion}
+\begin{tabular}{|p{5cm}|p{3.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Indicador} & \textbf{Grupo} & \textbf{Promedio} & \textbf{\% con 4--5} \\
+\hline
+Utilidad de la plataforma & Todos (n=162) & 4,06 & 76,5\% \\
+& Con experiencia (n=59) & 4,03 & 78,0\% \\
+\hline
+Confianza en recomendaciones automatizadas & Todos (n=162) & 3,41 & 47,5\% \\
+& Con experiencia (n=59) & 3,49 & 55,9\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Factores que condicionan la confianza}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Factores que influyen en la confianza (total de participantes)}
+\label{tab:enc-factores}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Factor} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Seguridad & 73 & 45,1\% \\
+Riesgo de errores & 28 & 17,3\% \\
+Experiencia previa & 23 & 14,2\% \\
+Costos & 20 & 12,3\% \\
+Falta de transparencia & 14 & 8,6\% \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}
