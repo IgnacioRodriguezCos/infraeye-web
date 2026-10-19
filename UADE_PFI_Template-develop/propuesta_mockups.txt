@@ -1,0 +1,99 @@
+PROPUESTA: Seccion "Mockups de la interfaz" en chapter03_descripcion.tex
+========================================================================
+
+UBICACION
+---------
+Al final de la seccion "Diagramas" (linea ~1752), como ultima subseccion,
+despues de "Diagramas de secuencia" y antes de \section{Tecnologias}.
+La seccion "Diagramas" NO se renombra (decision del usuario).
+
+CONTENIDO PROPUESTO
+-------------------
+
+\subsection{Mockups de la interfaz}
+
+Párrafo introductorio propuesto:
+
+"Los mockups de la interfaz materializan el diseño de la experiencia de
+usuario de la plataforma y traducen a lo visual los casos de uso
+especificados en la sección de requerimientos. El diseño adopta un tema
+oscuro como identidad visual principal, con una variante en modo claro
+que preserva la misma estructura de navegación, y organiza la aplicación
+en tres áreas: la configuración inicial de la cuenta de Huawei Cloud, el
+análisis de servidores con sus recomendaciones, y el panel de
+Infraestructura como Código con el historial de operaciones. Para las
+acciones de mayor criticidad, como la provisión de recursos mediante el
+agente de Infraestructura como Código o la instalación del agente de
+monitoreo CES, se emplean ventanas modales que guían al usuario paso a
+paso y requieren confirmación explícita antes de ejecutar cambios sobre
+la infraestructura."
+
+Luego, 8 figuras (caption ABAJO, como toda la tesis):
+
+1.  mockups/01-configuracion-inicial.png
+    Caption: "Mockup de la pantalla de configuración inicial"
+    Label:   fig:mockup-configuracion
+    Ancho:   0.9\textwidth
+
+2.  mockups/02-analisis-servidores.png
+    Caption: "Mockup de la pantalla de análisis de servidores"
+    Label:   fig:mockup-analisis
+    Ancho:   0.9\textwidth
+
+3.  mockups/03-panel-iac-historial.png
+    Caption: "Mockup del panel de Infraestructura como Código y el historial de operaciones"
+    Label:   fig:mockup-iac
+    Ancho:   0.9\textwidth
+
+4.  mockups/04-modal-provision-formulario.png
+    Caption: "Mockup del formulario de provisión de recursos"
+    Label:   fig:mockup-provision-form
+    Ancho:   0.7\textwidth (es un modal, mas chico que una pantalla completa)
+
+5.  mockups/05-modal-provision-revision.png
+    Caption: "Mockup de la revisión y confirmación de la provisión de recursos"
+    Label:   fig:mockup-provision-review
+    Ancho:   0.7\textwidth
+
+6.  mockups/06-modal-instalacion-ces.png
+    Caption: "Mockup de la instalación del agente de monitoreo CES"
+    Label:   fig:mockup-ces
+    Ancho:   0.7\textwidth
+
+7.  mockups/07-analisis-modo-claro.png
+    Caption: "Mockup de la pantalla de análisis de servidores en modo claro"
+    Label:   fig:mockup-analisis-claro
+    Ancho:   0.9\textwidth
+
+8.  mockups/08-configuracion-modo-claro.png
+    Caption: "Mockup de la pantalla de configuración inicial en modo claro"
+    Label:   fig:mockup-configuracion-claro
+    Ancho:   0.9\textwidth
+
+NOTAS
+-----
+1. Las captions estan basadas en los NOMBRES DE ARCHIVO (no pude
+   visualizar las imagenes). Revisar/ajustar si el contenido real
+   difiere.
+
+2. Los anchos (0.9 para pantallas completas, 0.7 para modales) son una
+   primera aproximacion. Si los modales son capturas de ventana completa
+   grande, conviene subirlos a 0.8-0.9. Se puede ajustar despues de
+   compilar y ver el resultado.
+
+3. No hay referencias cruzadas nuevas en el texto (los mockups no se
+   citan desde otras secciones). Si queres, se puede agregar una
+   referencia en "Tecnologias del frontend" apuntando a los mockups.
+
+4. La carpeta mockups/ ya esta en la raiz del proyecto LaTeX, las rutas
+   \includegraphics{mockups/...} funcionan directo.
+
+5. Las imagenes 07 y 08 son variantes en modo claro de 01 y 02. Se
+   incluyen igual (el usuario pidio las 8).
+
+ALTERNATIVAS DESCARTADAS
+------------------------
+- Seccion propia entre Diagramas y Tecnologias: demasiado peso para un
+  insumo complementario (decision del usuario).
+- Validacion del prototipo: corresponde solo si fueran capturas del
+  sistema real funcionando; se tratan como artefactos de diseno.
