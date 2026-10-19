@@ -1,141 +1,176 @@
-\anexo{Resultados de la encuesta}
+\anexo{Resultados de la Encuesta}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/1.jpg}
-\caption{Resultado de encuesta 1}
-\label{fig:encuesta1}
-\end{figure}
+La encuesta se realizó mediante Google Forms durante el período de desarrollo del presente trabajo. Se obtuvieron 162 respuestas, de las cuales 59 corresponden a participantes con experiencia práctica en la administración de infraestructura cloud. Los datos crudos se encuentran disponibles en el repositorio del proyecto. A continuación se presentan los resultados agregados por pregunta.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/2.jpg}
-\caption{Resultado de encuesta 2}
-\label{fig:encuesta2}
-\end{figure}
+\subsection{Perfil de los participantes}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/3.jpg}
-\caption{Resultado de encuesta 3}
-\label{fig:encuesta3}
-\end{figure}
+\scriptsize
+\caption{Perfil de los participantes de la encuesta}
+\label{tab:enc-perfil}
+\begin{tabular}{|p{8cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Pregunta} & \textbf{Respuesta} & \textbf{Cantidad} \\
+\hline
+¿Tiene experiencia práctica administrando infraestructura cloud? & Sí & 59 \\
+& No & 103 \\
+\hline
+¿Actualmente monitoreas el consumo de recursos cloud? (con experiencia) & Sí & 35 \\
+& No & 24 \\
+\hline
+¿Utiliza herramientas de Infrastructure as Code? (con experiencia) & Sí & 31 \\
+& No & 28 \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/4.jpg}
-\caption{Resultado de encuesta 4}
-\label{fig:encuesta4}
-\end{figure}
+\subsection{Problemática detectada}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/5.jpg}
-\caption{Resultado de encuesta 5}
-\label{fig:encuesta5}
-\end{figure}
+\scriptsize
+\caption{Sobrecostos y dificultad de detección (participantes con experiencia)}
+\label{tab:enc-problematica}
+\begin{tabular}{|p{8cm}|p{2.5cm}|p{2cm}|}
+\hline
+\textbf{Pregunta} & \textbf{Respuesta} & \textbf{Cantidad} \\
+\hline
+¿Alguna vez tuviste gastos inesperados o sobrecostos en la nube? & Sí, alguna vez & 28 \\
+& Sí, varias veces & 15 \\
+& No & 16 \\
+\hline
+\multicolumn{3}{|l|}{\textbf{Total con sobrecostos: 43 de 59 (72,9\%)}} \\
+\hline
+¿Qué tan difícil te resulta identificar recursos ineficientes? & Promedio (escala 1--5) & 3,56 \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/6.jpg}
-\caption{Resultado de encuesta 6}
-\label{fig:encuesta6}
-\end{figure}
+\subsection{Métricas consideradas más importantes}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/7.jpg}
-\caption{Resultado de encuesta 7}
-\label{fig:encuesta7}
-\end{figure}
+\scriptsize
+\caption{Métricas consideradas más importantes (participantes con experiencia, selección múltiple)}
+\label{tab:enc-metricas}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Métrica} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Costos & 41 & 69,5\% \\
+Memoria RAM & 34 & 57,6\% \\
+CPU & 32 & 54,2\% \\
+Almacenamiento & 32 & 54,2\% \\
+Disponibilidad & 30 & 50,8\% \\
+Tráfico de red & 25 & 42,4\% \\
+Uso de contenedores & 17 & 28,8\% \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/8.jpg}
-\caption{Resultado de encuesta 8}
-\label{fig:encuesta8}
-\end{figure}
+\subsection{Herramientas utilizadas actualmente}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/9.jpg}
-\caption{Resultado de encuesta 9}
-\label{fig:encuesta9}
-\end{figure}
+\scriptsize
+\caption{Herramientas utilizadas (participantes con experiencia, selección múltiple)}
+\label{tab:enc-herramientas}
+\begin{tabular}{|p{6cm}|p{2cm}|}
+\hline
+\textbf{Herramienta} & \textbf{Menciones} \\
+\hline
+Grafana & 24 \\
+Amazon CloudWatch & 18 \\
+Terraform & 17 \\
+Kubernetes Dashboard & 16 \\
+Prometheus & 12 \\
+Datadog & 9 \\
+New Relic & 7 \\
+AWS Cost Explorer & 5 \\
+Zabbix & 3 \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/10.jpg}
-\caption{Resultado de encuesta 10}
-\label{fig:encuesta10}
-\end{figure}
+\subsection{Limitaciones de las herramientas actuales}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/11.jpg}
-\caption{Resultado de encuesta 11}
-\label{fig:encuesta11}
-\end{figure}
+\scriptsize
+\caption{Limitaciones percibidas (participantes con experiencia, selección múltiple)}
+\label{tab:enc-limitaciones}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Limitación} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Complejidad & 34 & 57,6\% \\
+Costos elevados & 28 & 47,5\% \\
+Integración difícil & 18 & 30,5\% \\
+Recomendaciones poco útiles & 14 & 23,7\% \\
+Poca visualización & 14 & 23,7\% \\
+Falta de automatización & 9 & 15,3\% \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/12.jpg}
-\caption{Resultado de encuesta 12}
-\label{fig:encuesta12}
-\end{figure}
+\subsection{Funcionalidades de interés}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/13.jpg}
-\caption{Resultado de encuesta 13}
-\label{fig:encuesta13}
-\end{figure}
+\scriptsize
+\caption{Funcionalidades de interés (total de participantes, selección múltiple)}
+\label{tab:enc-funcionalidades}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Funcionalidad} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Recomendaciones para optimizar costos & 88 & 54,3\% \\
+Monitoreo del uso de recursos & 87 & 53,7\% \\
+Detección automática de desperdicio & 71 & 43,8\% \\
+Automatización del despliegue & 43 & 26,5\% \\
+Reportes y visualizaciones & 40 & 24,7\% \\
+Alertas & 37 & 22,8\% \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/14.jpg}
-\caption{Resultado de encuesta 14}
-\label{fig:encuesta14}
-\end{figure}
+\subsection{Valoración de la plataforma propuesta}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/15.jpg}
-\caption{Resultado de encuesta 15}
-\label{fig:encuesta15}
-\end{figure}
+\scriptsize
+\caption{Valoración de la plataforma y confianza en recomendaciones automatizadas}
+\label{tab:enc-valoracion}
+\begin{tabular}{|p{5cm}|p{3.5cm}|p{2cm}|p{2.5cm}|}
+\hline
+\textbf{Indicador} & \textbf{Grupo} & \textbf{Promedio} & \textbf{\% con 4--5} \\
+\hline
+Utilidad de la plataforma & Todos (n=162) & 4,06 & 76,5\% \\
+& Con experiencia (n=59) & 4,03 & 78,0\% \\
+\hline
+Confianza en recomendaciones automatizadas & Todos (n=162) & 3,41 & 47,5\% \\
+& Con experiencia (n=59) & 3,49 & 55,9\% \\
+\hline
+\end{tabular}
+\end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/16.jpg}
-\caption{Resultado de encuesta 16}
-\label{fig:encuesta16}
-\end{figure}
+\subsection{Factores que condicionan la confianza}
 
-\begin{figure}[htbp]
+\begin{table}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Encuestas/17.jpg}
-\caption{Resultado de encuesta 17}
-\label{fig:encuesta17}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/18.jpg}
-\caption{Resultado de encuesta 18}
-\label{fig:encuesta18}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/19.jpg}
-\caption{Resultado de encuesta 19}
-\label{fig:encuesta19}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.9\textwidth]{Encuestas/20.jpg}
-\caption{Resultado de encuesta 20}
-\label{fig:encuesta20}
-\end{figure}
+\scriptsize
+\caption{Factores que influyen en la confianza (total de participantes)}
+\label{tab:enc-factores}
+\begin{tabular}{|p{6cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Factor} & \textbf{Menciones} & \textbf{Porcentaje} \\
+\hline
+Seguridad & 73 & 45,1\% \\
+Riesgo de errores & 28 & 17,3\% \\
+Experiencia previa & 23 & 14,2\% \\
+Costos & 20 & 12,3\% \\
+Falta de transparencia & 14 & 8,6\% \\
+\hline
+\end{tabular}
+\end{table}
