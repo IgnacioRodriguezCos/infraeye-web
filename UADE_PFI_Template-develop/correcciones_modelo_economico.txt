@@ -1,0 +1,94 @@
+================================================================================
+CORRECCIONES AL MODELO ECONOMICO — PARA EL COMPAÑERO QUE ARMÓ EL FLUJO
+================================================================================
+Feedback del equipo sobre la evaluacion economica actual (WACC 17%, TIR
+37,6% neutral / 66,9% optimista / 20,6% pesimista).
+
+--------------------------------------------------------------------------------
+1. ESTRUCTURA DE COSTOS: FIJOS -> VARIABLES
+--------------------------------------------------------------------------------
+El modelo actual trata personal, marketing, infraestructura y licencias
+como costos fijos. Esto es irrealista: si crecen los clientes, crecen los
+costos.
+
+Cambiar a VARIABLES (escalar con cantidad de clientes / ingresos):
+
+  COSTO              | COMO DEBERIA ESCALAR
+  --------------------+----------------------------------------------------------
+  Personal           | Contratar mas personas a medida que crecen los clientes
+                      (ej: 1 soporte cada 50 clientes, 1 dev cada 200)
+  Marketing          | Mas publicidad para sostener el crecimiento
+                      (ej: % de los ingresos, o crece con el plan de ventas)
+  Infraestructura    | Mas ECS/storage/bandwidth para servir mas clientes
+                      (ej: crece con el numero de instancias analizadas)
+  Licencias          | Mas licencias si contratamos mas personas
+                      (ej: por empleado, no fijo)
+
+  Mantener como FIJOS:
+  - Desarrollo inicial (ya realizado, sunk cost)
+  - Dominio, certificados SSL, contabilidad basica
+
+  IMPACTO ESPERADO: los margenes mejoran en el optimista (mas ingresos
+  que costos marginales) pero el punto de equilibrio sube en el pesimista
+  (los costos crecen aunque los ingresos no acompanen).
+
+--------------------------------------------------------------------------------
+2. DIFERENCIACION DE ESCENARIOS
+--------------------------------------------------------------------------------
+  OPTIMISTA:
+  - El plan Enterprise deberia aportar mas ingresos que en el neutral
+    (mas clientes Enterprise, o un precio mayor)
+  - O bien: achicar el neutral para que la brecha optimista-neutral sea
+    mas clara
+  - Con costos variables: el margen del optimista deberia ser MEJOR que
+    el neutral (los costos marginales por cliente son bajos en SaaS)
+
+  PESIMISTA:
+  - Verificar que la progresion pesimista < neutral < optimista se
+    mantenga con los costos variables
+  - Con costos variables que crecen aunque los ingresos no acompanen,
+    el pesimista deberia quedar mas apretado que en el modelo actual
+
+--------------------------------------------------------------------------------
+3. AJUSTES AL PESIMISTA
+--------------------------------------------------------------------------------
+  TIR: deberia quedar mas cerca de la tasa exigida (WACC 17%).
+  Objetivo: TIR ~18% (apenas 1 punto sobre el WACC), en lugar del
+  20,6% actual que ya esta 3,6 puntos arriba.
+
+  PAYBACK: deberia ser mas largo que en el modelo actual.
+  Si el payback actual del pesimista es de ~3-4 anos, deberia estar
+  mas cerca de 4-5 anos (o incluso no alcanzarse dentro del horizonte
+  de 5 anos, lo que reforzaria la narrativa de riesgo).
+
+  COMO LOGRARLO (combinar):
+  - Costos variables que crecen desde el ano 1 aunque la conversion
+    sea debil
+  - Menos clientes Enterprise en el pesimista
+  - Churn mas alto (perdida de clientes recurrentes)
+  - CAC (costo de adquisicion) mas alto por la competencia
+
+--------------------------------------------------------------------------------
+4. VERIFICACION POST-CAMBIO
+--------------------------------------------------------------------------------
+  Despues de ajustar el modelo, verificar:
+
+  [ ] TIR pesimista < TIR neutral < TIR optimista
+  [ ] TIR pesimista cercana a 18% (1 punto sobre WACC)
+  [ ] Payback pesimista > payback neutral > payback optimista
+  [ ] Payback pesimista >= 4 anos
+  [ ] VAN pesimista positivo pero pequeno (cerca de cero)
+  [ ] Costos totales crecen con los clientes en los 3 escenarios
+  [ ] El punto de equilibrio (break-even) es alcanzable en neutral
+      y optimista, dificil pero posible en pesimista
+
+--------------------------------------------------------------------------------
+5. ACTUALIZAR LA TESIS
+--------------------------------------------------------------------------------
+  Una vez ajustado el Excel, actualizar en chapter03_descripcion.tex:
+  - Los numeros de TIR, VAN y payback en la seccion de evaluacion economica
+  - La descripcion de la estructura de costos (mencionar costos variables)
+  - La conclusion (los numeros de TIR/VAN citados)
+  - Verificar que la narrativa sea coherente: "los tres escenarios superan
+    el costo del capital" sigue siendo cierto si el pesimista da TIR ~18%
+    (apenas por encima del 17%)

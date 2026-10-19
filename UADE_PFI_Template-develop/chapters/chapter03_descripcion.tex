@@ -1329,9 +1329,9 @@ La proyección de la base de clientes adopta tasas de crecimiento propias de cad
 
 \subsubsection{Estructura de costos}
 
-Los costos del modelo se analizan por separado en dos categorías: costos fijos, independientes del nivel de actividad, y costos variables, que crecen con la base de clientes y con la facturación.
+Los costos del modelo se analizan en tres categorías: una base fija mínima, un componente de escalamiento que crece con la base de clientes, y costos variables estrictos ligados a la facturación.
 
-Los costos fijos anuales comprenden el personal, el marketing y las ventas, la infraestructura cloud sobre la que opera la plataforma, las herramientas de desarrollo y los gastos administrativos y contables. Su nivel difiere entre escenarios: el neutral contempla un desarrollador a tiempo completo y uno a tiempo parcial; el optimista incorpora desde el primer año la estructura completa, con dos desarrolladores a tiempo completo y marketing intensivo; y el pesimista asume una estructura defensiva, en la que los fundadores no perciben retiro, el soporte se contrata a tiempo parcial y el marketing se recorta. En los tres escenarios los costos fijos crecen a una tasa constante del 5\% anual, en concepto de inflación de costos. La Tabla \ref{tab:costos-fijos} presenta la composición del primer año para los tres escenarios.
+La base fija anual comprende únicamente los gastos administrativos y contables, y crece a una tasa constante del 5\% anual. El componente de escalamiento reconoce que personal, marketing, infraestructura y licencias no permanecen constantes a medida que crece la base de clientes: contratar más personal de soporte y desarrollo, ampliar la infraestructura cloud que sirve la plataforma, adquirir más licencias por empleado y sostener el esfuerzo comercial son costos que escalan con el nivel de actividad. Este componente se activa a partir de un umbral de clientes propio de cada escenario y crece a una tasa por cliente adicional: en el escenario neutral, USD 30 por cliente por encima de 80 clientes; en el optimista, USD 35 por cliente por encima de 100; y en el pesimista, USD 15 por cliente por encima de 70, reflejando una contratación más defensiva. Adicionalmente, el marketing por encima de los USD 20.000 de ingresos anuales consume un porcentaje adicional de la facturación.
 
 \begin{table}[H]
 \centering
@@ -1384,14 +1384,14 @@ La proyección de clientes activos promedio aplica las tasas de crecimiento decr
 \footnotesize
 \begin{tabular}{c c r r r r r r}
 \hline
-Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+Año & Clientes & Ingresos & Base fija & Escalam. + var. & Egresos & Flujo neto & Acumulado \\
 \hline
 0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
 1 & 55/11/1 & 15.600 & 24.600 & 948 & 25.548 & -9.948 & -36.948 \\
-2 & 100/22/3 & 32.400 & 25.830 & 1.884 & 27.714 & 4.686 & -32.262 \\
-3 & 155/36/5 & 52.200 & 27.122 & 3.003 & 30.125 & 22.075 & -10.187 \\
-4 & 210/52/7 & 73.200 & 28.478 & 4.176 & 32.654 & 40.546 & 30.359 \\
-5 & 265/68/9 & 94.200 & 29.902 & 5.349 & 35.251 & 58.949 & 89.308 \\
+2 & 100/22/3 & 32.400 & 25.830 & 3.482 & 29.312 & 3.088 & -33.860 \\
+3 & 155/36/5 & 52.200 & 27.122 & 7.126 & 34.248 & 17.952 & -15.908 \\
+4 & 210/52/7 & 73.200 & 28.478 & 10.910 & 39.388 & 33.812 & 17.904 \\
+5 & 265/68/9 & 94.200 & 29.902 & 14.692 & 44.594 & 49.606 & 67.509 \\
 \hline
 \end{tabular}
 \caption{Flujo de fondos proyectado en el escenario neutral (montos en USD)}
@@ -1413,14 +1413,14 @@ El escenario optimista asume que el plan Freemium convierte eficazmente: la adop
 \footnotesize
 \begin{tabular}{c c r r r r r r}
 \hline
-Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+Año & Clientes & Ingresos & Base fija & Escalam. + var. & Egresos & Flujo neto & Acumulado \\
 \hline
 0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
-1 & 75/15/2 & 22.800 & 35.400 & 1.350 & 36.750 & -13.950 & -40.950 \\
-2 & 150/36/5 & 51.600 & 37.170 & 2.952 & 40.122 & 11.478 & -29.472 \\
-3 & 240/64/10 & 91.200 & 39.029 & 5.076 & 44.105 & 47.095 & 17.623 \\
-4 & 340/95/16 & 136.200 & 40.980 & 7.473 & 48.453 & 87.747 & 105.370 \\
-5 & 430/125/22 & 179.400 & 43.029 & 9.741 & 52.770 & 126.630 & 232.000 \\
+1 & 75/15/2 & 22.800 & 35.400 & 1.406 & 36.806 & -14.006 & -41.006 \\
+2 & 150/36/6 & 54.000 & 37.170 & 6.942 & 44.112 & 9.888 & -31.118 \\
+3 & 240/64/14 & 100.800 & 39.029 & 14.681 & 53.710 & 47.090 & 15.972 \\
+4 & 340/95/22 & 150.600 & 40.980 & 23.120 & 64.100 & 86.500 & 102.472 \\
+5 & 430/125/32 & 203.400 & 43.029 & 31.354 & 74.383 & 129.017 & 231.489 \\
 \hline
 \end{tabular}
 \caption{Flujo de fondos proyectado en el escenario optimista (montos en USD)}
@@ -1438,14 +1438,14 @@ El escenario pesimista asume que la conversión del plan Freemium es débil (ent
 \footnotesize
 \begin{tabular}{c c r r r r r r}
 \hline
-Año & Clientes & Ingresos & Costos fijos & Costos var. & Egresos & Flujo neto & Acumulado \\
+Año & Clientes & Ingresos & Base fija & Escalam. + var. & Egresos & Flujo neto & Acumulado \\
 \hline
 0 & -- & -- & -- & -- & -- & -27.000 & -27.000 \\
 1 & 45/8/0 & 10.200 & 18.000 & 675 & 18.675 & -8.475 & -35.475 \\
-2 & 80/16/1 & 21.600 & 18.900 & 1.338 & 20.238 & 1.362 & -34.113 \\
-3 & 115/25/3 & 36.000 & 19.845 & 2.118 & 21.963 & 14.037 & -20.076 \\
-4 & 150/34/4 & 48.000 & 20.837 & 2.808 & 23.645 & 24.355 & 4.279 \\
-5 & 185/43/5 & 60.000 & 21.879 & 3.498 & 25.377 & 34.623 & 38.902 \\
+2 & 80/16/1 & 21.600 & 18.900 & 1.767 & 20.667 & 933 & -34.542 \\
+3 & 115/25/3 & 36.000 & 19.845 & 3.453 & 23.298 & 12.702 & -21.840 \\
+4 & 150/34/4 & 48.000 & 20.837 & 4.998 & 25.835 & 22.165 & 325 \\
+5 & 185/43/5 & 60.000 & 21.879 & 6.543 & 28.422 & 31.578 & 31.903 \\
 \hline
 \end{tabular}
 \caption{Flujo de fondos proyectado en el escenario pesimista (montos en USD)}
@@ -1458,7 +1458,7 @@ Solo el primer año resulta deficitario: los ingresos de USD 10.200 cubren el 53
 
 \subsubsection{Tasa interna de retorno (TIR)}
 
-La tasa interna de retorno es la tasa de descuento que hace que el valor actual neto sea igual a cero; en otros términos, la rentabilidad anual implícita del proyecto. Se compara contra la tasa mínima exigida (17\%): si la TIR la supera, el proyecto crea valor. En el escenario neutral, la TIR es del 37,6\%: el proyecto rinde más del doble de la tasa exigida. En el optimista alcanza el 66,9\%. En el pesimista, la TIR es del 20,6\%: si bien queda lejos de los escenarios anteriores, supera el 17\% exigido, por lo que incluso la trayectoria desfavorable crea valor, aunque con un margen menor.
+La tasa interna de retorno es la tasa de descuento que hace que el valor actual neto sea igual a cero; en otros términos, la rentabilidad anual implícita del proyecto. Se compara contra la tasa mínima exigida (17\%): si la TIR la supera, el proyecto crea valor. En el escenario neutral, la TIR es del 30,5\%: el proyecto rinde casi el doble de la tasa exigida. En el optimista alcanza el 66,1\%. En el pesimista, la TIR es del 17,5\%: apenas 0,5 puntos porcentuales por encima de la tasa exigida, lo que indica que la trayectoria desfavorable cubre el costo del capital con un margen mínimo.
 
 \subsubsection{Valor actual neto (VAN)}
 
@@ -1468,11 +1468,11 @@ El valor actual neto es la suma de todos los flujos descontados al 17\% anual, i
 \mathrm{VAN} = -27.000 + \sum_{t=1}^{5} \frac{FN_t}{(1{,}17)^t}
 \end{equation*}
 
-donde $FN_t$ es el flujo neto del año $t$. Los tres escenarios arrojan VAN positivo al 17\%: USD 103.450 en el optimista, USD 30.228 en el neutral y USD 4.305 en el pesimista. La lectura es directa: incluso en la trayectoria desfavorable el proyecto cubre el costo promedio ponderado de capital y agrega valor, mientras que en la trayectoria base agrega más de USD 30.000 de valor presente.
+donde $FN_t$ es el flujo neto del año $t$. Los tres escenarios arrojan VAN positivo al 17\%: USD 102.661 en el optimista, USD 18.631 en el neutral y USD 600 en el pesimista. La lectura es directa: en la trayectoria base el proyecto agrega más de USD 18.000 de valor presente, mientras que en la desfavorable apenas cubre el costo del capital, con un VAN marginal pero positivo.
 
 \subsubsection{Período de recuperación (payback)}
 
-El período de recuperación es la cantidad de años que tarda el flujo acumulado en volver a cero, es decir, en recuperar la inversión inicial. Se calcula interpolando dentro del año en que se produce el cruce. En el escenario neutral, el payback es de 3,25 años: el acumulado llega al año 3 con USD -10.187 y el año 4 genera USD 40.546, por lo que el cruce ocurre a 0,25 del cuarto año. En el optimista, el payback es de 2,63 años: el acumulado llega al año 2 con USD -29.472 y el año 3 genera USD 47.095. En el pesimista, el payback es de 3,82 años: el acumulado llega al año 3 con USD -20.076 y el año 4 genera USD 24.355, de modo que la recuperación se completa hacia el final del cuarto año.
+El período de recuperación es la cantidad de años que tarda el flujo acumulado en volver a cero, es decir, en recuperar la inversión inicial. Se calcula interpolando dentro del año en que se produce el cruce. En el escenario neutral, el payback es de 3,47 años: el acumulado llega al año 3 con USD -15.908 y el año 4 genera USD 33.812, por lo que el cruce ocurre a mitad del cuarto año. En el optimista, el payback es de 2,66 años: el acumulado llega al año 2 con USD -31.118 y el año 3 genera USD 47.090. En el pesimista, el payback es de 3,99 años: el acumulado llega al año 3 con USD -21.840 y el año 4 genera USD 22.165, de modo que la inversión se recupera recién hacia el final del cuarto año.
 
 \subsubsection{Punto de equilibrio}
 
@@ -1517,14 +1517,13 @@ La Tabla \ref{tab:comparacion-escenarios} sintetiza los indicadores de los tres 
 Indicador & Neutral & Optimista & Pesimista \\
 \hline
 Inversión inicial (USD) & 27.000 & 27.000 & 27.000 \\
-TIR & 37,6\% & 66,9\% & 20,6\% \\
-VAN al 17\% (USD) & 30.228 & 103.450 & 4.305 \\
-Payback (años) & 3,25 & 2,63 & 3,82 \\
+TIR & 30,5\% & 66,1\% & 17,5\% \\
+VAN al 17\% (USD) & 18.631 & 102.661 & 600 \\
+Payback (años) & 3,47 & 2,66 & 3,99 \\
 Primer año con flujo neto positivo & Año 2 & Año 2 & Año 2 \\
-Punto de equilibrio del año 1 (USD) & 26.193 & 37.628 & 19.235 \\
 Ingresos del año 1 (USD) & 15.600 & 22.800 & 10.200 \\
-Ingresos del año 5 (USD) & 94.200 & 179.400 & 60.000 \\
-Flujo acumulado al año 5 (USD) & 89.308 & 232.000 & 38.902 \\
+Ingresos del año 5 (USD) & 94.200 & 203.400 & 60.000 \\
+Flujo acumulado al año 5 (USD) & 67.509 & 231.489 & 31.903 \\
 \hline
 \end{tabular}
 \caption{Comparación de indicadores por escenario}
