@@ -1,0 +1,142 @@
+================================================================================
+RESUMEN PARA PRESENTACION TECNICA — INFRAEYE
+================================================================================
+
+--------------------------------------------------------------------------------
+1. EL PROBLEMA
+--------------------------------------------------------------------------------
+- Las organizaciones desperdician ~32% de su gasto cloud (Flexera 2023)
+- 72,9% de los encuestados con experiencia reportó sobrecostos (162 respuestas)
+- Dificultad promedio de 3,56/5 para identificar recursos ineficientes
+- Las herramientas existentes: dependencia del proveedor, recomendaciones
+  en caja negra, escasa integración con IaC
+
+--------------------------------------------------------------------------------
+2. LA SOLUCIÓN: INFRAEYE
+--------------------------------------------------------------------------------
+Plataforma web que detecta recursos ineficientes en Huawei Cloud y genera
+recomendaciones de optimización materializadas en Terraform.
+
+Flujo: obtención de métricas → detección → recomendación → Terraform →
+aprobación humana → (opcional) aprovisionamiento vía agente IaC
+
+Diferenciales clave:
+- Sin agentes de terceros (usa el agente nativo del proveedor, CES Agent)
+- Ciclo cerrado: detecta → recomienda → genera código → aplica (con gate)
+- Arquitectura híbrida: reglas de umbrales sobre TODAS las instancias +
+  Isolation Forest como señalador de alta precisión
+
+--------------------------------------------------------------------------------
+3. ARQUITECTURA HÍBRIDA (decisión clave respaldada por evaluación)
+--------------------------------------------------------------------------------
+Dos mecanismos complementarios:
+
+  REGLAS (motor de recomendaciones):
+  - Evalúan TODAS las instancias (no solo las que el modelo marca)
+  - Capturan ineficiencias basadas en niveles de utilización
+  - Umbrales operativos: CPU >85%/95%, memoria <20%, etc.
+
+  ISOLATION FOREST (modelo no supervisado):
+  - Señala instancias con desviación atípica del patrón de referencia
+  - Contaminación = 0,03 → precisión 0,95 (18 de 19 correctas)
+  - Aporta 5 detecciones únicas que las reglas no alcanzan por diseño
+    (CPU bajo + memoria moderada: la "zona gris" entre bandas)
+
+POR QUÉ HÍBRIDA: la evaluación con etiquetas humanas mostró que para
+ineficiencia basada en niveles, un umbral directo es más efectivo que el
+detector no supervisado. Las reglas llevan la cobertura; el IF aporta
+precisión y detecta lo que las bandas estructuralmente no pueden.
+
+--------------------------------------------------------------------------------
+4. EVALUACIÓN CON ETIQUETAS HUMANAS
+--------------------------------------------------------------------------------
+Metodología:
+- 400 máquinas aleatorias del dataset oficial Alibaba Cluster Trace 2018
+  (verificado con SHA256 contra el artefacto publicado)
+- Etiquetadas por juicio experto: 85 ineficientes / 315 normales
+- Modelo reentrenado SIN esas 400 (conjuntos disjuntos: 3.623/400)
+- Cero datos sintéticos
+
+Resultados clave (contaminación 0,03):
+- Precisión: 0,95 (de 20 instancias señaladas, 19 son realmente ineficientes)
+- Exhaustividad: 0,21 (encuentra los casos extremos, no los moderados)
+- Línea base (regla umbral): precisión 0,84 / exhaustividad 0,99
+- El IF supera a la línea base SOLO en precisión (0,95 vs 0,84)
+- Las 5 detecciones únicas del IF: CPU 6-30% + memoria 33-76%
+
+Limitación declarada: el clúster público es homogéneo y optimizado
+(CPU 35-44% en 75% de las máquinas, memoria ~90% en todas), lo que impide
+demostrar el valor multivariado del enfoque. Validarlo en infraestructuras
+de negocio reales queda como línea futura.
+
+--------------------------------------------------------------------------------
+5. DETALLES TÉCNICOS RELEVANTES
+--------------------------------------------------------------------------------
+- Dataset: Alibaba Cluster Trace 2018 oficial (246,9M filas, 4.023 máquinas,
+  8 días, ~11s entre muestras), verificado con checksum
+- Features: 15 variables (media, p5, p95 × 5 métricas: CPU, memoria, disco,
+  red entrante, red saliente)
+- Ventana de análisis: 30 días por defecto, granularidad adaptativa según
+  retención de Cloud Eye (3.600s para 30 días; 300s para ventanas ≤10 días)
+- Agente CES: instalación automatizada vía user data + reinicio, para
+  habilitar métricas de memoria y disco en Linux
+- Credenciales AK/SK: cifradas en reposo (Fernet, AES-128), clave fuera de
+  la BD, escrituras solo con autorización explícita del usuario
+- Suite de pruebas: 291 tests automatizados, cobertura 84-100% en módulos
+  centrales
+
+--------------------------------------------------------------------------------
+6. AGENTE IaC (iac-agent)
+--------------------------------------------------------------------------------
+- Derivado del proyecto de Agustín Chiarenza (entrevistado), podado a
+  Chat IaC + guardrails
+- FastAPI + PostgreSQL + SQLAlchemy, frontend de chat en JavaScript
+- Flujo de aprovisionamiento: flavor recomendado → HCL del módulo huawei-ecs
+  → init → validate → plan (determinístico, sin LLM) → cola de aprobaciones
+  → approve → apply
+- Guardrails: validación HCL, tags de propiedad obligatorios, costo visible
+- La plataforma NUNCA ejecuta Terraform directamente: solo habla con la API
+  del agente
+
+--------------------------------------------------------------------------------
+7. EVALUACIÓN ECONÓMICA
+--------------------------------------------------------------------------------
+Inversión inicial: USD 27.000 (incluye esfuerzo de desarrollo monetizado)
+WACC: 17% (tasa de descuento derivada del costo promedio ponderado de capital)
+Horizonte: 5 años
+
+Resultados por escenario:
+  NEUTRAL:   TIR 37,6%  | VAN USD 30.228
+  OPTIMISTA: TIR 66,9%  | VAN USD 103.450
+  PESIMISTA: TIR 20,6%  | VAN USD 4.305
+
+Los tres escenarios superan el costo del capital (17%):
+- El pesimista, aun con conversión débil del plan gratuito, genera TIR
+  positiva y VAN positivo
+- Estructura de costos SaaS sin agentes: desarrollo ya realizado, costos
+  fijos bajos, costo marginal por cliente ~cero
+- La sustentabilidad depende de lograr una conversión mínima desde el plan
+  gratuito
+
+Modelo comercial:
+- Plan Freemium: 3 recursos por 60 días
+- Starter: USD 10/mes (hasta 10 recursos)
+- Professional: USD 50/mes (hasta 25 recursos)
+- Enterprise: precio por negociación según volumen
+- Posicionamiento: deliberadamente por debajo del costo por host de las
+  suites de observabilidad líderes (US$15-25/host/mes), por alcance acotado
+
+--------------------------------------------------------------------------------
+8. CONCLUSIONES PARA LA PRESENTACIÓN
+--------------------------------------------------------------------------------
+1. La problemática es real y extendida (72,9% de sobrecostos en encuesta)
+2. La solución cierra el ciclo detección→acción dentro del producto
+3. La arquitectura híbrida está respaldada por evaluación empírica con
+   etiquetas humanas (no por intuición)
+4. El IF tiene un rol acotado pero distintivo: señalización de alta precisión
+   + detección de patrones que las reglas no alcanzan
+5. La validación humana (RNF11) está justificada por los datos: la confianza
+   en automatización es moderada (47,5%) y la seguridad es el factor #1
+6. Los tres escenarios económicos superan el costo del capital
+7. Las líneas futuras: validación en infraestructuras reales, enfoque
+   supervisado con las 400 etiquetas generadas, expansión multi-cloud
