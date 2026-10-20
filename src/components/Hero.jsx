@@ -2,75 +2,34 @@ export default function Hero() {
   return (
     <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-500/20 rounded-full mb-8">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-sm text-primary-400">Monitoreo en tiempo real</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-500/25 rounded-full mb-8">
+          <span className="w-2 h-2 bg-mint rounded-full shadow-[0_0_8px_#00FFB8] animate-pulse-dot"></span>
+          <span className="text-sm text-primary-400">Monitoreo y optimización cloud</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-          Controla tus costos
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+          Optimizá tu infraestructura cloud
           <br />
-          <span className="gradient-text">sin perder visibilidad</span>
+          <span className="gradient-text">con machine learning</span>
         </h1>
 
-        <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-          InfraEye te ayuda a monitorear, analizar y optimizar los costos de tu infraestructura cloud en AWS, Azure y Google Cloud.
+        <p className="text-lg sm:text-xl text-cloud-muted max-w-2xl mx-auto mb-10">
+          InfraEye detecta recursos mal dimensionados con el algoritmo Isolation Forest, genera recomendaciones de optimización y las traduce a código Terraform para que reduzcas costos sin perder el control.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="#contact"
-            className="px-8 py-4 bg-primary-500 hover:bg-primary-600 rounded-xl font-semibold text-lg transition-all hover:scale-105"
+            href="#pricing"
+            className="px-8 py-4 bg-brand-gradient text-navy-800 rounded-xl font-semibold text-lg shadow-glow-mint transition-all hover:-translate-y-0.5 hover:shadow-glow-mint-lg hover:brightness-110"
           >
-            Prueba gratis
+            Empezar gratis
           </a>
           <a
             href="#how-it-works"
-            className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-semibold text-lg transition-all"
+            className="px-8 py-4 bg-cloud/5 hover:bg-mint/10 border border-mint/20 hover:border-mint/40 rounded-xl font-semibold text-lg transition-all hover:-translate-y-0.5"
           >
-            Ver demo
+            Cómo funciona
           </a>
-        </div>
-
-        <div className="mt-16 relative">
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent z-10 pointer-events-none" />
-          <div className="bg-dark-800 rounded-2xl border border-white/10 p-4 overflow-hidden">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
-            </div>
-            <div className="bg-dark-900 rounded-xl p-6 font-mono text-sm">
-              <p className="text-gray-500 mb-4">// Resumen de costos este mes</p>
-              <div className="space-y-2">
-                <p><span className="text-primary-400">AWS</span> <span className="text-gray-400">$12,450.00</span> <span className="text-red-400">↑ 8%</span></p>
-                <p><span className="text-blue-400">Azure</span> <span className="text-gray-400">$8,230.00</span> <span className="text-green-400">↓ 3%</span></p>
-                <p><span className="text-yellow-400">GCP</span> <span className="text-gray-400">$4,120.00</span> <span className="text-green-400">↓ 12%</span></p>
-                <p className="pt-2 border-t border-white/10 mt-4">
-                  <span className="text-gray-400">Total estimado:</span> <span className="text-white font-bold">$24,800.00</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-        <div>
-          <div className="text-3xl font-bold gradient-text">98%</div>
-          <div className="text-gray-400 mt-1">Precisión en datos</div>
-        </div>
-        <div>
-          <div className="text-3xl font-bold gradient-text">50K+</div>
-          <div className="text-gray-400 mt-1">Recursos monitoreados</div>
-        </div>
-        <div>
-          <div className="text-3xl font-bold gradient-text">30%</div>
-          <div className="text-gray-400 mt-1">Ahorro promedio</div>
-        </div>
-        <div>
-          <div className="text-3xl font-bold gradient-text">24/7</div>
-          <div className="text-gray-400 mt-1">Monitoreo continuo</div>
         </div>
       </div>
     </section>

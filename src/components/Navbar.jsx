@@ -11,12 +11,20 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-navy-900/85 backdrop-blur-xl border-b border-brand shadow-navbar">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2">
-            <img src="/eye.svg" alt="InfraEye" className="w-8 h-8" />
-            <span className="text-xl font-bold gradient-text">InfraEye</span>
+          <a href="#" className="flex items-center gap-2.5">
+            <img
+              src="/infraeye-logo-512.png"
+              alt="InfraEye"
+              className="w-9 h-9 rounded-full ring-1 ring-mint/25 shadow-glow-mint"
+            />
+            <img
+              src="/infraeye-texto-fondo-oscuro.png"
+              alt="InfraEye"
+              className="h-7 w-auto"
+            />
           </a>
 
           <div className="hidden md:flex items-center gap-8">
@@ -24,21 +32,21 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-gray-300 hover:text-white transition-colors"
+                className="text-cloud-muted hover:text-cloud hover:bg-navy-600/60 px-3 py-2 rounded-lg transition-colors"
               >
                 {link.name}
               </a>
             ))}
             <a
               href="#contact"
-              className="px-4 py-2 bg-primary-500 hover:bg-primary-600 rounded-lg font-medium transition-colors"
+              className="px-4 py-2 bg-brand-gradient text-navy-800 rounded-lg font-semibold text-sm shadow-glow-mint hover:brightness-110 hover:-translate-y-0.5 transition-all"
             >
               Comenzar
             </a>
           </div>
 
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2 text-cloud"
             onClick={() => setIsOpen(!isOpen)}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,13 +61,13 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-dark-800 border-t border-white/5">
+        <div className="md:hidden bg-navy-800 border-t border-brand">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="block text-gray-300 hover:text-white transition-colors py-2"
+                className="block text-cloud-muted hover:text-cloud transition-colors py-2"
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
@@ -67,7 +75,7 @@ export default function Navbar() {
             ))}
             <a
               href="#contact"
-              className="block px-4 py-2 bg-primary-500 hover:bg-primary-600 rounded-lg font-medium text-center transition-colors"
+              className="block px-4 py-2 bg-brand-gradient text-navy-800 rounded-lg font-semibold text-center shadow-glow-mint"
               onClick={() => setIsOpen(false)}
             >
               Comenzar

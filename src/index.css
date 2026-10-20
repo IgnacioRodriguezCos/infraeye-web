@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root {
+  --gradient-primary: linear-gradient(135deg, #00FFB8 0%, #05F29B 35%, #03C098 70%, #078279 100%);
+  --gradient-cta: linear-gradient(to right, #03C098, #078279);
+  --glow-mint: 0 4px 18px rgba(3, 192, 152, 0.35);
+}
 
 html {
   scroll-behavior: smooth;
@@ -10,6 +16,36 @@ html {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
+  background:
+    radial-gradient(1100px 520px at 85% -10%, rgba(3, 192, 152, 0.14), transparent 60%),
+    radial-gradient(900px 480px at -15% 110%, rgba(0, 255, 184, 0.08), transparent 55%),
+    #0B2E4F;
+  background-attachment: fixed;
+  color: #F4F8FB;
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(0, 255, 184, 0.35);
+  color: #F4F8FB;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(3, 192, 152, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(3, 192, 152, 0.6);
+  background-clip: content-box;
 }
 
 @keyframes float {
@@ -22,6 +58,11 @@ body {
   100% { transform: scale(1.5); opacity: 0; }
 }
 
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -30,9 +71,25 @@ body {
   animation: pulse-ring 2s ease-out infinite;
 }
 
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
 .gradient-text {
-  background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.bg-brand-gradient {
+  background: var(--gradient-primary);
+}
+
+.bg-cta-gradient {
+  background: var(--gradient-cta);
+}
+
+.text-glow {
+  text-shadow: 0 0 24px rgba(3, 192, 152, 0.35);
 }
