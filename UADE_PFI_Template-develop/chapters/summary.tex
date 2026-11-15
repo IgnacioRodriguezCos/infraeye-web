@@ -1,33 +1,11 @@
 \chapter*{Resumen}
+\phantomsection
+\addcontentsline{toc}{chapter}{Resumen}
 
-%% Si se quiere enviar este resumen en una p\'agina a alguien, descomentar esto.
+La adopción masiva de la computación en la nube transformó la gestión de la infraestructura tecnológica, pero también introdujo un problema persistente: una parte sustancial del gasto en la nube se desperdicia en recursos subutilizados o sobredimensionados, en torno a un tercio según los estudios de la industria, y la detección manual de estas ineficiencias resulta cada vez más difícil en arquitecturas dinámicas y complejas. El presente trabajo describe el diseño, el desarrollo y la validación de InfraEye, una plataforma orientada a la optimización de infraestructura cloud en el ecosistema de Huawei Cloud. La solución obtiene métricas de utilización directamente desde las APIs del proveedor, sin instalar agentes de terceros, y combina dos mecanismos complementarios: un motor de recomendaciones basado en reglas de umbrales operativos que evalúa la totalidad de las instancias, y el algoritmo no supervisado Isolation Forest, que señala con alta precisión los comportamientos que se apartan del patrón de referencia. A partir de las detecciones, la plataforma genera recomendaciones explicables y produce código Terraform que materializa los cambios propuestos, sujetos en todo momento a la revisión y aprobación del usuario.
 
-%\begin{center}
-%\textbf{\large Universidad Argentina De la Empresa}
+Los requerimientos se fundamentaron en un relevamiento propio, compuesto por una encuesta con 48 respuestas y tres entrevistas a especialistas, que confirmó la problemática y definió criterios de diseño centrados en la transparencia de las recomendaciones y la supervisión humana de los cambios. La validación comprendió una suite de 267 pruebas automatizadas, la evaluación del modelo de detección contra etiquetas humanas sobre una muestra de 400 máquinas de un conjunto público de trazas de clúster, que arrojó una precisión de 0,95 con un parámetro de contaminación de 0,03, y la verificación funcional del circuito completo de análisis en un entorno controlado de Huawei Cloud; la medición del ahorro económico efectivo queda delimitada como trabajo futuro. Finalmente, el trabajo evalúa la viabilidad comercial de la propuesta mediante un modelo SaaS con capa gratuita y planes escalonados, calibrado con precios y tasas de conversión de soluciones activas del mercado: con una tasa de descuento del 17\%, los tres escenarios proyectados arrojan valor actual neto positivo, con una TIR del 30,1\% en el escenario neutral y un margen mínimo en la trayectoria desfavorable, lo que respalda la viabilidad técnica y económica de la plataforma, condicionada a la conversión del plan gratuito.
 
-%\textbf{Facultad de Ingenier\'{\i}a y Ciencias Exactas}
+\vspace{1cm}
 
-%\textbf{Departamento de Tecnolog\'{\i}a Inform\'atica}
-
-%\end{center}
-
-%\begin{center}
-%\large Ingenier\'{\i}a en Inform\'atica
-%\end{center}
-
-%\begin{center}
-%\textbf{\large Título de la PFI}
-%\end{center}
-
-%\begin{center}
-%Apellido, Nombres
-%Apellido, Nombres
-%\end{center}
-
-%\noindent 
-Acá va el resumen. \Fermat{He encontrado una demostración absolutamente maravillosa, pero el margen de esta hoja es demasiado estrecho para incluirla}
-
-Con el siguiente comando se imprime el interlineado en el documento pdf. \\
-Interlineado simple: 12pt.\\
-Interlineado esperado: 18pt.\\
-Interlineado exacto de este documento: \the\baselineskip.
+\noindent\textbf{Palabras clave:} computación en la nube, optimización de costos, FinOps, detección de anomalías, Isolation Forest, Infraestructura como Código, Terraform, Huawei Cloud, aprendizaje automático no supervisado.
