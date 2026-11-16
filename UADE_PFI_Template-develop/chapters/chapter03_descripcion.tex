@@ -2257,7 +2257,47 @@ La validación del prototipo se organizó en tres instancias complementarias: la
 
 \subsection{Pruebas automatizadas del software}
 
-El funcionamiento de los módulos desarrollados se verificó mediante una suite de 267 pruebas automatizadas, unitarias y de integración, construidas con el framework Pytest. Las pruebas del motor de recomendaciones cubren los principales casos de clasificación: instancias con utilización normal, infrautilización, sobreutilización crítica y alta de CPU y memoria, instancias sobredimensionadas, cuellos de botella de disco y de red, comportamientos mixtos y casos límite tales como valores exactamente en los umbrales, valores extremos y valores nulos o negativos. De forma complementaria, la extensión Pytest-cov se empleó para medir la cobertura del código fuente: los componentes centrales del módulo de recomendaciones presentan coberturas elevadas, con el clasificador de anomalías y las reglas de clasificación integradas cubiertos en su totalidad, el calculador de confianza en un 96\% y el analizador de métricas en un 93\%. Este conjunto de pruebas constituye además una base de regresión que permite verificar que modificaciones posteriores sobre los módulos no introduzcan errores en funcionalidades ya verificadas.
+El funcionamiento de los módulos desarrollados se verificó mediante una suite de 317 pruebas automatizadas, unitarias y de integración, construidas con el framework Pytest. Las pruebas del motor de recomendaciones cubren los principales casos de clasificación: instancias con utilización normal, infrautilización, sobreutilización crítica y alta de CPU y memoria, instancias sobredimensionadas, cuellos de botella de disco y de red, comportamientos mixtos y casos límite tales como valores exactamente en los umbrales, valores extremos y valores nulos o negativos. De forma complementaria, la extensión Pytest-cov se empleó para medir la cobertura del código fuente: los componentes centrales del módulo de recomendaciones presentan coberturas elevadas, con el clasificador de anomalías y las reglas de clasificación integradas cubiertos en su totalidad, el calculador de confianza en un 96\% y el analizador de métricas en un 93\%. Este conjunto de pruebas constituye además una base de regresión que permite verificar que modificaciones posteriores sobre los módulos no introduzcan errores en funcionalidades ya verificadas.
+
+Para explicitar la trazabilidad entre requerimientos y pruebas, la Tabla \ref{tab:req-pruebas} relaciona cada grupo de requerimientos con la suite de pruebas automatizadas que lo verifica y con el resultado obtenido. Las suites listadas suman la totalidad de las 317 pruebas de la suite. Los requerimientos sin suite dedicada se verificaron mediante la verificación funcional del circuito completo, presentada más adelante en esta sección.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{2.5cm}|p{5.9cm}|p{1.2cm}|p{2.2cm}|}
+\hline
+\textbf{Requerimientos} & \textbf{Suite de pruebas (archivo)} & \textbf{Pruebas} & \textbf{Resultado} \\
+\hline
+RF02, RF03, RF05, RF15 & \texttt{tests/cloud/test\_huawei\_pipeline.py} & 36 & Aprobada \\
+\hline
+RF05, RF06, RNF10 & \texttt{tests/test\_huawei\_metrics\_pipeline.py} & 71 & Aprobada \\
+\hline
+RF08 & \texttt{tests/recommendations/test\_anomaly\_classifier.py} & 39 & Aprobada \\
+\hline
+RF08, RNF08 & \texttt{tests/recommendations/test\_confidence\_calculator.py} & 28 & Aprobada \\
+\hline
+RF09, RNF05 & \texttt{tests/recommendations/test\_rule\_engine.py} y \texttt{test\_rule\_engine\_comprehensive.py} & 95 & Aprobada \\
+\hline
+RF09 & \texttt{tests/cloud/test\_flavor\_recommender.py} & 22 & Aprobada \\
+\hline
+RF04, RF10 & \texttt{tests/iac/test\_tf\_generator.py} & 4 & Aprobada \\
+\hline
+RF10, RF11, RNF11 & \texttt{tests/iac/test\_bridge.py} & 13 & Aprobada \\
+\hline
+RNF01, RNF02 & \texttt{tests/test\_web\_security.py} & 9 & Aprobada \\
+\hline
+RNF05 & Cobertura medida con Pytest-cov: clasificador y reglas 100\%, calculador de confianza 96\%, analizador de métricas 93\% (criterio: no inferior al 80\%) & -- & Verificada \\
+\hline
+RNF12 & Semilla aleatoria fija y configuraciones versionadas (verificado en la evaluación del modelo) & -- & Verificada \\
+\hline
+RF01, RF12, RF13, RF14 & Sin suite dedicada; verificados en la verificación funcional del circuito completo & -- & Verificación funcional \\
+\hline
+\end{tabular}
+\caption{Matriz de trazabilidad requerimientos-pruebas}
+\label{tab:req-pruebas}
+\end{table}
 
 \subsection{Evaluación del modelo de detección frente a un criterio experto}
 

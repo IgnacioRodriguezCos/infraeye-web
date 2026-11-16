@@ -39,3 +39,33 @@ El objetivo general de este trabajo es diseñar y desarrollar una plataforma de 
 \item Implementar una interfaz gráfica que permita visualizar el estado de la infraestructura, las anomalías detectadas, las recomendaciones generadas y el código Terraform propuesto.
 \item Validar el funcionamiento del prototipo mediante pruebas en un entorno controlado, evaluando la capacidad del sistema para detectar ineficiencias y generar recomendaciones efectivas de optimización.
 \end{itemize}
+
+La Tabla \ref{tab:objetivos-requerimientos} explicita la trazabilidad entre los objetivos específicos y los requerimientos funcionales y no funcionales definidos en el capítulo 3: cada objetivo se materializa en un conjunto identificable de requerimientos, que a su vez se verifican mediante las pruebas automatizadas y la verificación funcional presentadas en la sección de validación.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{6.2cm}|p{7.2cm}|}
+\hline
+\textbf{Objetivo específico} & \textbf{Requerimientos que lo materializan} \\
+\hline
+Definir la arquitectura de la plataforma de optimización & RF03, RF04, RNF04, RNF05, RNF06 \\
+\hline
+Implementar mecanismos de recolección de datos sobre Huawei Cloud & RF02, RF05, RF15, RNF07, RNF10 \\
+\hline
+Desarrollar el módulo de análisis basado en Isolation Forest & RF06, RF07, RF08, RNF12 \\
+\hline
+Implementar el componente de generación de recomendaciones & RF09, RNF09 \\
+\hline
+Desarrollar el módulo de integración con Terraform & RF04, RF10, RF11, RNF11 \\
+\hline
+Implementar la interfaz gráfica & RF12, RF13, RF14, RNF08 \\
+\hline
+Validar el funcionamiento del prototipo & Transversal: suite de pruebas automatizadas, evaluación del modelo y verificación funcional (sección \ref{sec:validacion}) \\
+\hline
+\end{tabular}
+\caption{Trazabilidad entre objetivos específicos y requerimientos}
+\label{tab:objetivos-requerimientos}
+\end{table}
