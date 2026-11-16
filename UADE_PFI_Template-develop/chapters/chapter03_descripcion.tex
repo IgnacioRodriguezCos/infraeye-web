@@ -1627,22 +1627,22 @@ En este diagrama se visualiza la arquitectura de componentes de la plataforma, m
 
 \subsection{Diagrama de flujo}
 
-El siguiente diagrama presenta el flujo general de información de la plataforma, desde la obtención de las métricas de la infraestructura cloud hasta la generación y visualización de los resultados. Se detallan las principales etapas de procesamiento, incluyendo el preprocesamiento, la generación de características y la normalización, tras lo cual el análisis se bifurca en dos mecanismos complementarios: las reglas de umbrales operativos del motor de recomendaciones, que evalúan la totalidad de las instancias, y el modelo de Isolation Forest, que señala con alta precisión las instancias cuyo comportamiento se aparta del patrón de referencia. Las instancias señaladas únicamente por el modelo, sin activación de ninguna regla, se presentan como casos que requieren revisión. De esta manera, el diagrama permite visualizar de forma integral el recorrido de los datos dentro de la solución.
+El diagrama presenta cinco etapas del flujo de información: recolección de métricas, preparación de datos, evaluación complementaria mediante Isolation Forest y reglas de detección, evaluación y optimización, y registro y visualización. Si se detecta una anomalía, el sistema clasifica el tipo y genera recomendaciones; de lo contrario, finaliza el análisis sin recomendaciones. Ambos resultados se almacenan y se muestran en el Dashboard Web.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Flujo.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Diagrama-de-Flujo-Informacion-Plataforma-Cloud-redisenado.png}
 \caption{Diagrama de flujo de la plataforma}
 \label{fig:flujo}
 \end{figure}
 
 \subsection{Diagrama de arquitectura}
 
-El diagrama de arquitectura presenta una visión general de la estructura tecnológica de la solución, mostrando la organización de los diferentes componentes y servicios que conforman la plataforma. Se observa la separación entre el frontend desarrollado con tecnologías web estándar, el backend implementado en Flask que actúa como intermediario entre la interfaz y los módulos de procesamiento, y los componentes especializados encargados de la comunicación con Huawei Cloud, la detección de anomalías mediante Isolation Forest y la generación de recomendaciones de optimización. Esta arquitectura modular permite que cada componente cumpla una función específica, facilitando la mantenibilidad del sistema y la incorporación de nuevas funcionalidades o proveedores cloud con un impacto mínimo sobre el resto de la solución.
+El diagrama organiza la arquitectura de InfraEye en las capas de presentación, aplicación y orquestación, servicios de análisis y persistencia. El usuario interactúa con el Dashboard Web, que se comunica mediante la API REST con el backend Flask. Este orquesta la recolección de métricas desde Huawei Cloud, el preprocesamiento y la detección mediante Isolation Forest; el motor de recomendaciones evalúa las instancias anómalas y sus resultados se presentan y almacenan en PostgreSQL. Alibaba Cluster Trace 2018 se utiliza como fuente de entrenamiento del modelo.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Arquitectura.png}
+\includegraphics[width=0.9\textwidth]{Diagramas/imagenes/Arquitectura-InfraEye-redisenada.png}
 \caption{Diagrama de arquitectura de la solución}
 \label{fig:arquitectura}
 \end{figure}
@@ -2039,11 +2039,11 @@ instancias cuya utilización de recursos presenta un comportamiento
 significativamente diferente respecto del patrón de utilización
 aprendido a partir de un conjunto de datos de referencia. La finalidad
 de esta etapa no consiste directamente en determinar qué recurso debe
-ser redimensionado, sino en reducir el universo de instancias que
-posteriormente serán evaluadas por el motor de recomendaciones. De esta
-manera, el modelo de aprendizaje automático funciona como una primera
-etapa de filtrado, mientras que la determinación de una posible acción
-de optimización queda a cargo del módulo de recomendaciones.
+ser redimensionado, sino en aportar una clasificación complementaria
+basada en el patrón multivariado de cada instancia. El motor de
+recomendaciones aplica sus reglas operativas sobre la totalidad de las
+instancias analizadas, independientemente de la clasificación de
+Isolation Forest.
 
 El motor de recomendaciones analiza las métricas de las instancias mediante
 reglas basadas en umbrales operativos (por ejemplo, utilización máxima de
@@ -2052,11 +2052,10 @@ niveles esperados) para caracterizar el tipo de comportamiento y determinar
 la acción de optimización correspondiente. Las reglas se aplican sobre la
 totalidad de las instancias analizadas, de modo que la detección de
 ineficiencias resulta de la combinación de dos mecanismos complementarios:
-las reglas, que capturan de manera directa las ineficiencias basadas en
-niveles de utilización, y el modelo no supervisado, que señala con alta
-precisión las instancias cuyo comportamiento se aparta del patrón de
-referencia. Esta decisión de diseño se respalda en la evaluación con
-etiquetas humanas presentada en la sección de validación.
+las reglas operativas y el modelo no supervisado, que aporta una
+clasificación adicional basada en el patrón multivariado. Esta decisión
+de diseño se respalda en la evaluación del detector frente al criterio
+operativo numérico presentado en la sección de validación.
 
 El modelo utiliza como fuente de entrenamiento el conjunto de datos
 Alibaba Cluster Trace 2018, publicado por Alibaba Group dentro de su
@@ -2134,23 +2133,14 @@ entrenamiento del modelo Isolation Forest. El algoritmo construye un
 conjunto de árboles de aislamiento mediante particiones aleatorias del
 espacio de características.
 
-El modelo utilizado se configura con 100 árboles y un parámetro de
-contaminación de 0,03, buscando obtener una
-representación estable del espacio de características a partir de
-múltiples particiones aleatorias. Asimismo, se establece una semilla
-aleatoria fija para garantizar que los experimentos puedan ser
-reproducidos bajo las mismas condiciones.
-
-Durante el entrenamiento se establece el parámetro contamination,
-utilizado por Isolation Forest para determinar la proporción esperada de
-observaciones anómalas dentro del conjunto de entrenamiento. Dado que este
-parámetro incide directamente en el umbral de clasificación, su valor se
-adoptó priorizando la precisión de las detecciones: en un sistema donde
-cada recomendación es revisada por un administrador antes de aplicarse,
-conviene que las instancias señaladas sean confiables. La evaluación con
-etiquetas humanas presentada en la sección de validación respaldó esta
-elección: con el valor 0,03 adoptado, el 95\% de las instancias señaladas
-resultó genuinamente ineficiente según el criterio del etiquetador.
+Para la evaluación cuantitativa se utilizó Isolation Forest con 100
+árboles, una semilla aleatoria fija y un parámetro de contaminación de
+0,09. Este parámetro interviene en la determinación del umbral de decisión
+del modelo a partir de los datos de entrenamiento; no representa
+directamente la proporción de máquinas que serán clasificadas como
+anómalas en una muestra externa. El valor de contaminación se seleccionó
+maximizando el F1-score en una muestra de validación separada, frente a un
+criterio experto basado en la utilización media de CPU.
 
 Una vez finalizada la etapa de entrenamiento, el modelo Isolation Forest
 queda disponible para analizar nuevas infraestructuras sin necesidad de
@@ -2227,54 +2217,33 @@ La aplicación se despliega en una instancia Elastic Cloud Server (ECS) de Huawe
 
 \section{Validación del prototipo}\label{sec:validacion}
 
-La validación del prototipo se organizó en tres instancias complementarias: las pruebas automatizadas del software desarrollado, la evaluación del modelo de detección contra etiquetas humanas y la verificación funcional del circuito completo de análisis sobre infraestructura desplegada en Huawei Cloud. El propósito de esta etapa fue evaluar la capacidad del sistema para detectar ineficiencias y generar recomendaciones efectivas de optimización, en concordancia con el alcance definido para el prototipo.
+La validación del prototipo se organizó en tres instancias complementarias: las pruebas automatizadas del software desarrollado, la evaluación del modelo de detección frente a un criterio experto y la verificación funcional del circuito completo de análisis sobre infraestructura desplegada en Huawei Cloud. El propósito de esta etapa fue evaluar el funcionamiento del detector frente al criterio declarado y verificar el circuito de análisis, en concordancia con el alcance definido para el prototipo.
 
 \subsection{Pruebas automatizadas del software}
 
 El funcionamiento de los módulos desarrollados se verificó mediante una suite de 267 pruebas automatizadas, unitarias y de integración, construidas con el framework Pytest. Las pruebas del motor de recomendaciones cubren los principales casos de clasificación: instancias con utilización normal, infrautilización, sobreutilización crítica y alta de CPU y memoria, instancias sobredimensionadas, cuellos de botella de disco y de red, comportamientos mixtos y casos límite tales como valores exactamente en los umbrales, valores extremos y valores nulos o negativos. De forma complementaria, la extensión Pytest-cov se empleó para medir la cobertura del código fuente: los componentes centrales del módulo de recomendaciones presentan coberturas elevadas, con el clasificador de anomalías y las reglas de clasificación integradas cubiertos en su totalidad, el calculador de confianza en un 96\% y el analizador de métricas en un 93\%. Este conjunto de pruebas constituye además una base de regresión que permite verificar que modificaciones posteriores sobre los módulos no introduzcan errores en funcionalidades ya verificadas.
 
-\subsection{Evaluación del modelo de detección contra etiquetas humanas}
+\subsection{Evaluación del modelo de detección frente a un criterio experto}
 
-Para evaluar la capacidad del modelo de detección de identificar instancias ineficientes se utilizó una muestra de instancias reales etiquetadas por juicio experto. Dado que el conjunto de datos no incluye etiquetas que indiquen qué instancias eran efectivamente ineficientes, la evaluación se construyó etiquetando manualmente una muestra de sus máquinas, de modo que mide directamente la coincidencia entre las detecciones del modelo y el criterio de un administrador de infraestructura.
+El conjunto de datos Alibaba Cluster Trace 2018 no incluye etiquetas que indiquen si cada máquina se encuentra infrautilizada. Para construir una referencia reproducible se aplicó un criterio experto basado en la utilización media de CPU para clasificar las máquinas como ineficientes o normales. En la muestra de prueba, este criterio identificó 31 máquinas ineficientes y 369 normales. La clasificación representa el criterio adoptado para esta evaluación y no constituye una frontera universal de eficiencia ni prueba suficiente, por sí sola, de que una máquina desperdicie recursos en cualquier infraestructura.
 
-Se seleccionó de forma aleatoria y reproducible (semilla fija) una muestra de 400 de las 4.023 máquinas con registros de utilización del conjunto Alibaba Cluster Trace 2018. Para cada máquina se calcularon las mismas quince características utilizadas por el modelo (media, percentil 5 y percentil 95 de cada métrica) y los autores del presente trabajo las etiquetaron como ineficientes o normales aplicando el criterio del administrador: si la utilización sostenida de la máquina justificaría una acción de redimensionamiento o eliminación. En la práctica, el criterio se centró primordialmente en el nivel de utilización de CPU, considerando ineficiente a toda máquina cuyo uso promedio resultara claramente inferior al nivel esperable para su rol. El etiquetado arrojó 85 máquinas ineficientes y 315 normales. Se definió de antemano una regla de extensión de la muestra para el caso de obtener menos de 30 casos positivos; dado que se obtuvieron 85, no resultó necesario aplicarla.
+Se seleccionó de forma aleatoria y reproducible, mediante una semilla fija, una muestra de 400 máquinas de las 4.023 máquinas con registros de utilización del conjunto Alibaba Cluster Trace 2018. Para cada máquina se calcularon quince características estadísticas: la media, el percentil 5 y el percentil 95 de CPU, memoria, disco, tráfico de red entrante y tráfico de red saliente. La etiqueta de referencia se define solo con CPU media; el detector recibe las quince características para realizar su análisis multivariado.
 
-El criterio de aceptación del modelo se definió a partir del rol asignado a la detección no supervisada dentro de la arquitectura, previo a la ejecución de la evaluación. Dado que cada instancia señalada demanda trabajo de revisión por parte del administrador, el modelo debía operar como un mecanismo de señalización de alta confianza: se priorizó la precisión por sobre la exhaustividad y se estableció como condición de aceptación que la precisión superara de manera clara a la de la línea base definida por el criterio de etiquetado, manteniendo los falsos positivos en niveles reducidos. La exhaustividad se aceptó como métrica secundaria, ya que las reglas del motor de recomendaciones se aplican sobre la totalidad de las instancias analizadas y cubren los casos que el modelo no señala.
+Para la selección de \texttt{contamination}, las 4.023 máquinas se distribuyeron en tres conjuntos disjuntos: 3.223 máquinas para entrenamiento inicial, 400 para validación y 400 para prueba. La muestra de validación se seleccionó aleatoriamente, con semilla 2026, entre las máquinas que no pertenecían al conjunto de prueba. La muestra de validación quedó compuesta por 20 máquinas positivas y 380 negativas; la muestra de prueba contuvo 31 positivas y 369 negativas.
 
-El modelo se entrenó con las características de las 3.623 máquinas restantes (excluyendo las 400 de la muestra, de modo que la evaluación se realizara sobre instancias disjuntas del conjunto de entrenamiento) y se evaluó sobre la muestra etiquetada para distintos valores del parámetro de contaminación. La Tabla \ref{tab:evaluacion} presenta los resultados.
+El modelo y el normalizador se ajustaron inicialmente solo con las 3.223 máquinas de entrenamiento; la normalización se ajustó exclusivamente sobre ese conjunto. Se utilizaron 100 árboles y la semilla aleatoria 42. El valor de \texttt{contamination} se seleccionó maximizando el F1-score en la muestra de validación: se eligió \texttt{contamination=0.09}, con un F1-score de validación de 0,816. Las muestras de validación y prueba permanecieron fuera del ajuste final del modelo.
 
-\begin{table}[H]
-\centering
-\begin{tabular}{c c c c c c c}
-\hline
-Contaminación & Marcadas & VP & FP & Precisión & Exhaustividad & F1 \\
-\hline
-0,03 & 19 & 18 & 1 & 0,95 & 0,21 & 0,35 \\
-0,05 & 28 & 26 & 2 & 0,93 & 0,31 & 0,46 \\
-0,08 & 39 & 34 & 5 & 0,87 & 0,40 & 0,55 \\
-0,10 & 45 & 36 & 9 & 0,80 & 0,42 & 0,55 \\
-0,15 & 63 & 41 & 22 & 0,65 & 0,48 & 0,55 \\
-0,20 & 81 & 48 & 33 & 0,59 & 0,56 & 0,58 \\
-0,25 & 98 & 52 & 46 & 0,53 & 0,61 & 0,57 \\
-\hline
-\end{tabular}
-\caption{Evaluación del modelo contra etiquetas humanas para distintos valores de contaminación}
-\label{tab:evaluacion}
-\end{table}
+El parámetro \texttt{contamination} controla el umbral de decisión estimado por Isolation Forest durante el ajuste; no representa directamente la proporción de máquinas que serán clasificadas como anómalas en una muestra externa. Con \texttt{contamination=0.09}, en la muestra de prueba el modelo marcó 39 máquinas como anómalas: 31 verdaderos positivos y 8 falsos positivos. Detectó las 31 máquinas positivas, sin falsos negativos, y clasificó correctamente como normales 361 máquinas.
 
-Los resultados muestran el compromiso esperado entre precisión y exhaustividad: con el valor adoptado (0,03), el modelo señala 19 instancias de las cuales 18 son genuinamente ineficientes según las etiquetas (precisión de 0,95), aunque deja de detectar la mayoría de los casos moderados (exhaustividad de 0,21). Valores mayores de contaminación incrementan la exhaustividad a costa de reducir la precisión de forma sostenida.
+La matriz de confusión queda definida por VP=31, FP=8, FN=0 y VN=361. A partir de estos conteos, el modelo obtuvo un accuracy de 0,980, una precisión de 0,795, un recall de 1,000 y un F1-score de 0,886. El recall de 1,000 indica que detectó todos los casos positivos de esta muestra; la precisión de 0,795 indica que 31 de las 39 máquinas señaladas cumplen el criterio experto.
 
-Como línea base de comparación se evaluó una regla de umbral simple equivalente al criterio de etiquetado (utilización media de CPU inferior a un umbral de referencia): dicha regla alcanza una exhaustividad de 0,99 y una precisión de 0,84. La comparación es elocuente: para la noción de ineficiencia basada en niveles de utilización, la que primó en el juicio del etiquetador, un umbral directo resulta más efectivo que el detector no supervisado, cuyo conjunto de instancias señaladas queda prácticamente contenido dentro del de la regla. El aporte del modelo en este escenario es acotado pero distintivo: su precisión (0,95) supera a la de la línea base, por lo que opera como un mecanismo de señalización de alta confianza, útil para priorizar la revisión del administrador.
+El accuracy de 0,980 se interpreta teniendo en cuenta que 369 de las 400 máquinas fueron clasificadas como normales según el criterio experto. Una clasificación que asignara todas las máquinas a la clase normal obtendría un accuracy de 0,923 (369/400), pero un recall nulo para los casos positivos definidos por dicho criterio. Por ello, el resultado se interpreta conjuntamente mediante accuracy, precisión, recall, F1-score y los conteos de la matriz de confusión.
 
-La comparación contra las reglas de umbrales operativos del propio motor de recomendaciones añade, sin embargo, un matiz a favor del enfoque no supervisado. Las reglas del motor operan como bandas con condiciones conjuntas (la condición de subutilización exige simultáneamente utilización baja de CPU y de memoria, y la de CPU sobredimensionado exige un uso de CPU muy bajo junto con una memoria alta), lo que deja fuera una zona intermedia: instancias con utilización de CPU baja y memoria moderada que ninguna banda alcanza. Aplicadas a la muestra etiquetada, las reglas del motor detectan 32 de las 85 instancias ineficientes, y el modelo aporta 5 detecciones únicas que ninguna regla captura: instancias con utilización de CPU de entre el 6\% y el 30\% y memoria de entre el 33\% y el 76\%, situadas precisamente en esa zona intermedia. Este aporte es estructural y no desaparece al recalibrar los umbrales de las reglas: las bandas con condiciones conjuntas no pueden alcanzar configuraciones intermedias por diseño, mientras que el detector no supervisado, que mide la desviación global respecto del patrón de referencia, sí lo hace.
+La referencia se basa en el criterio experto aplicado a la utilización media de CPU, mientras que Isolation Forest utiliza quince características y evalúa perfiles de forma multivariada. Como CPU media participa tanto en la definición de las etiquetas como entre las características del modelo, el resultado mide concordancia con el criterio aplicado a una de las variables observadas por el modelo; no constituye una validación completamente independiente ni prueba por sí solo que cada caso positivo requiera una acción real de redimensionamiento o eliminación. La conclusión se limita a que, en esta muestra y bajo el criterio experto adoptado, el detector identificó los 31 casos positivos y produjo 8 falsos positivos.
 
-Estos resultados deben leerse a la luz de las características del conjunto de datos disponible. El clúster del trace es homogéneo y está fuertemente optimizado: tres cuartas partes de sus máquinas operan con utilización de CPU entre el 35\% y el 44\%, y la memoria se mantiene en torno al 90\% en prácticamente todas ellas. En un espacio de características tan concentrado, las desviaciones presentes son primordialmente de nivel, territorio en el que los umbrales resultan más efectivos, y las combinaciones atípicas detectables se limitan a configuraciones intermedias como las descriptas en el párrafo anterior. El valor diferencial del enfoque no supervisado, señalar configuraciones cuya combinación de métricas resulta inusual sin una definición previa, no puede demostrarse en toda su extensión sobre este conjunto de datos. Validarlo requeriría datos de infraestructuras de negocio reales, con cargas de trabajo heterogéneas y patrones conjuntos más ricos; dichos datos son de acceso restringido, lo que motivó el uso de un conjunto público.
+Las reglas del motor de recomendaciones se aplican sobre la totalidad de las instancias analizadas, mientras que Isolation Forest aporta una clasificación adicional basada en el patrón multivariado. Las métricas de esta evaluación describen el detector frente al criterio experto y no el rendimiento total del motor híbrido; la cobertura de las reglas debe calcularse por separado frente a las mismas etiquetas positivas.
 
-Sobre la base de esta evaluación se adoptaron tres decisiones de diseño. La primera, mantener el valor de contaminación en 0,03: es el único punto de operación que satisface el criterio de aceptación definido, al superar a la línea base en precisión (0,95 frente a 0,84), lo que respalda su rol de mecanismo de señalización de alta confianza. La segunda, aplicar las reglas de recomendación sobre la totalidad de las instancias analizadas y no únicamente sobre las señaladas por el modelo: dado que el criterio del administrador se basa primordialmente en niveles de utilización, las reglas capturan directamente esos casos, mientras que el modelo complementa con sus señales de alta precisión. La tercera, recalibrar el umbral de CPU de la regla de migración hacia tipos de instancia optimizados para memoria, elevándolo del 30\% al 35\%: la evaluación mostró que un conjunto de instancias con utilización de CPU levemente superior al umbral y memoria alta, que el administrador consideró ineficientes, quedaba fuera de la regla por un margen mínimo; tras la recalibración, el conjunto de reglas del motor pasa de detectar 32 a 74 de las 85 instancias ineficientes de la muestra.
-
-Como limitaciones de la evaluación deben señalarse: las etiquetas provienen del juicio de los propios autores (un único etiquetador), por lo que idealmente deberían validarse con especialistas externos; el criterio aplicado se centró en el nivel de utilización de CPU, dejando de lado posibles ineficiencias expresables solo en combinaciones de métricas; y la muestra proviene de un único clúster, por lo que los resultados no generalizan a otros entornos.
-
-A estas limitaciones se suma un sesgo de dominio que conviene explicitar. El modelo se entrena sobre un clúster de Alibaba caracterizado por cargas de trabajo de procesamiento por lotes y servicios de larga duración fuertemente optimizados, mientras que la inferencia se realiza sobre instancias Elastic Cloud Server de Huawei Cloud pertenecientes a infraestructuras de negocio, cuyos perfiles de utilización suelen ser más heterogéneos. La correspondencia entre las métricas de ambos entornos, argumentada en la sección \ref{sec:algoritmo}, garantiza que las características estadísticas puedan calcularse de la misma manera en el entrenamiento y en la inferencia, pero no que la noción de comportamiento normal aprendida durante el entrenamiento coincida con la distribución de los entornos analizados. En consecuencia, la precisión y la exhaustividad reportadas deben interpretarse como una evaluación de la mecánica de detección sobre un dominio acotado, y no como una estimación del desempeño esperable sobre infraestructuras reales de Huawei Cloud. La validación sobre dichos entornos, que requeriría datos de acceso restringido, queda delimitada como trabajo futuro.
+La evaluación presenta limitaciones que deben considerarse al interpretar los resultados. El criterio experto adoptado constituye una referencia para este estudio y no una regla universal de eficiencia. Además, CPU media participa tanto en la definición de las etiquetas como entre las características del modelo, por lo que las métricas expresan concordancia con el criterio declarado y no una validación externa independiente. Finalmente, las máquinas evaluadas pertenecen a un único clúster público, por lo que los resultados no garantizan el mismo desempeño en otros entornos cloud ni en infraestructuras productivas de Huawei Cloud. La validación con especialistas independientes y con trazas de otros entornos queda como trabajo futuro. Los IDs de prueba habían sido revisados en análisis exploratorios previos bajo criterios distintos; en esta partición se mantuvieron fuera del entrenamiento y no intervinieron en la selección de \texttt{contamination}. Por consiguiente, los resultados son una evaluación holdout respecto del entrenamiento y del ajuste del parámetro en esta ejecución, aunque no corresponden a máquinas nunca examinadas previamente por los autores.
 
 \subsection{Verificación funcional en entorno controlado}
 
@@ -2284,6 +2253,6 @@ La visualización de los resultados en el dashboard web permitió comprobar que 
 
 Esta persistencia constituye, además, la base del registro auditable del proceso de decisión: queda documentado qué ineficiencias se detectaron, qué acciones se propusieron y qué código se generó para cada caso. En el prototipo, el registro se limita a la persistencia en la base de datos de la aplicación; las funcionalidades de auditoría de mayor alcance, como el historial de aprobaciones por usuario o los registros inmutables de decisiones, quedan delimitadas como trabajo futuro, en línea con las funcionalidades avanzadas previstas para el plan Enterprise. En cuanto al control de cambios, el código Terraform generado se almacena asociado a su recomendación y está pensado para incorporarse a los repositorios de Infraestructura como Código de la organización, donde los mecanismos estándar de versionado y revisión de código gobiernan su evolución antes de cualquier aplicación sobre la infraestructura.
 
-En conjunto, las tres instancias de validación permitieron tomar decisiones de diseño fundamentadas en resultados y evaluar la viabilidad técnica de la propuesta. La evaluación con etiquetas humanas respaldó la adopción del valor 0,03 para el parámetro de contaminación (precisión de 0,95) y la decisión de aplicar las reglas de recomendación sobre la totalidad de las instancias, en concordancia con el rol de apoyo a la decisión que cumple la plataforma. La suite de pruebas automatizadas verificó el comportamiento del motor de recomendaciones y de las reglas de negocio, y quedó disponible como base de regresión para el mantenimiento del sistema. La verificación funcional comprobó el funcionamiento del circuito completo de análisis, desde la obtención de métricas hasta la generación y visualización del código Terraform, incluyendo la persistencia trazable de las recomendaciones. El alcance de la verificación se detuvo allí: no incluyó la aplicación efectiva de los cambios sobre la infraestructura ni la comparación de costos antes y después de implementarlos, por lo que el ahorro económico asociado a las recomendaciones no fue medido. Sobre la base de estos resultados, el prototipo se considera apto para asistir la identificación de recursos ineficientes y la generación de recomendaciones de optimización dentro del alcance definido, y establece las bases para desarrollos futuros que incorporen funcionalidades adicionales.
+En conjunto, las tres instancias de validación permitieron tomar decisiones de diseño fundamentadas en resultados y evaluar la viabilidad técnica de la propuesta. La evaluación frente al criterio experto permitió seleccionar \texttt{contamination=0.09} maximizando el F1-score de validación (0,816) y medir en la muestra de prueba un accuracy de 0,980, una precisión de 0,795, un recall de 1,000 y un F1-score de 0,886. El detector identificó los 31 casos positivos definidos por el criterio experto y produjo 8 falsos positivos; estos resultados describen su concordancia con dicho criterio, no el rendimiento total del motor híbrido. La suite de pruebas automatizadas verificó el comportamiento del motor de recomendaciones y de las reglas de negocio, y quedó disponible como base de regresión para el mantenimiento del sistema. La verificación funcional comprobó el funcionamiento del circuito completo de análisis, desde la obtención de métricas hasta la generación y visualización del código Terraform, incluyendo la persistencia trazable de las recomendaciones. El alcance de la verificación se detuvo allí: no incluyó la aplicación efectiva de los cambios sobre la infraestructura ni la comparación de costos antes y después de implementarlos, por lo que el ahorro económico asociado a las recomendaciones no fue medido. Sobre la base de estos resultados, el prototipo se considera apto para asistir la identificación de recursos ineficientes y la generación de recomendaciones de optimización dentro del alcance definido, y establece las bases para desarrollos futuros que incorporen funcionalidades adicionales.
 
 En ausencia de una medición directa, el orden de magnitud del potencial de ahorro puede ilustrarse mediante una estimación con supuestos explícitos. Si se toma como referencia el desperdicio promedio del 32\% del gasto cloud reportado por Flexera \parencite{Flexera2023} y se asume, de manera conservadora, que la aplicación de las recomendaciones permite recuperar la mitad de ese desperdicio en los recursos efectivamente optimizados, una organización con un gasto mensual de USD 1.000 en cómputo recuperaría aproximadamente USD 160 por mes, cifra que supera ampliamente el costo de los planes de suscripción definidos en la sección \ref{sec:precio}. Se trata de una ilustración construida sobre supuestos declarados y no de un resultado medido: su verificación exigiría comparar los costos de la infraestructura antes y después de aplicar las recomendaciones generadas, lo cual queda delimitado como trabajo futuro.
